@@ -107,9 +107,12 @@ namespace Helper
 		float startTime = lastStartedMS;
 		float currentTime = I::GlobalVars->realtime;
 		float endInTime = lastStartedMS + 1000;
-		float converted = std::min((currentTime - startTime) / (endInTime - startTime), 1.0f);
-		float easedValue = easeInOutQuint(std::min(1.0f, converted));
+		float converted = ((currentTime - startTime) / 1000.0f) / ((endInTime - startTime) / 1000.0f);
+		float easedValue = easeInOutQuint(converted);
 		currentPosition = currentPosition + (diffPosition * easedValue);
-
+		if (distance(currentPosition,targetPosition) <= 1)
+		{
+			lastStartedMS = I::GlobalVars->realtime;
+		}
 	}
 }
