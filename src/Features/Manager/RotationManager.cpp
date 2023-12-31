@@ -86,9 +86,9 @@ namespace Helper
 	{
 		Vector diffPosition = targetPosition - currentPosition;
 		float d = distance(targetPosition, currentPosition);
-		float a1 = (-cos(d / 700.f * M_PI) * 0.5f + 0.5f);
-		float a2 = (1.f - (-cos(d / 700.f * M_PI) * 0.5f + 0.5f));
-		float realisticTurnSpeed = realisticTurnSpeed = static_cast<float>(pow(a1, 2.0)) * 500 + static_cast<float>(pow(a2, 2.0)) * 200;
+		float a1 = (-cos(d / 1400.f * M_PI) * 0.5f + 0.5f);
+		float a2 = (1.f - (-cos(d / 1400.f * M_PI) * 0.5f + 0.5f));
+		float realisticTurnSpeed = realisticTurnSpeed = static_cast<float>(pow(a1, 2.0)) * 140 + static_cast<float>(pow(a2, 2.0)) * 10;
 
 		if (diffPosition.x > realisticTurnSpeed)
 		{
