@@ -23,7 +23,7 @@ namespace Helper
 		if (currentPosition.IsZero())
 		{
 			Vector vec = U::Math.AngleVectors(GetLocalViewAngles());
-			Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * 2.0f);
+			Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * distance(pLocal->Weapon_ShootPosition(), targetPosition));
 			if (!targetPosition.IsZero()) {
 				Vector vtest = pLocal->Weapon_ShootPosition() + (vec * 1400.0f);
 				float v1 = distance(vtest, pLocal->Weapon_ShootPosition());
@@ -38,7 +38,7 @@ namespace Helper
 		{
 			currentRotation = GetLocalViewAngles();
 			Vector vec = U::Math.AngleVectors(GetLocalViewAngles());
-			Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * 2.0f);
+			Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec);
 			currentPosition = vViewAngleOnWorld;
 			return;
 		}
@@ -47,7 +47,7 @@ namespace Helper
 			if (isRotateBack())
 			{
 				Vector vec = U::Math.AngleVectors(GetLocalViewAngles());
-				Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * 2.0f);
+				Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * distance(pLocal->Weapon_ShootPosition(), targetPosition));
 				targetPosition = vViewAngleOnWorld;
 			}
 			calcPosition();
@@ -91,7 +91,7 @@ namespace Helper
 		float d = distance(targetPosition, currentPosition);
 		float a1 = (-cos(d / 1400.f * M_PI) * 0.5f + 0.5f);
 		float a2 = (1.f - (-cos(d / 1400.f * M_PI) * 0.5f + 0.5f));
-		float realisticTurnSpeed = realisticTurnSpeed = static_cast<float>(pow(a1, 2.0)) * 140 + static_cast<float>(pow(a2, 2.0)) * 10;
+		float realisticTurnSpeed = realisticTurnSpeed = static_cast<float>(pow(a1, 2.0)) * 70 + static_cast<float>(pow(a2, 2.0)) * 10;
 
 		if (diffPosition.x > realisticTurnSpeed)
 		{
