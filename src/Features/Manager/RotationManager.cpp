@@ -106,8 +106,8 @@ namespace Helper
 		Vector diffPosition = targetPosition - currentPosition;
 		float startTime = lastStartedMS;
 		float endInTime = lastStartedMS + 1000;
-		float converted = (1 - (startTime - endInTime)) / 1000;//convert in to scale from 0 to 1;
-		float easedValue = easeInOutQuint(converted);
+		float converted = std::min(((startTime - endInTime) / 1000) / 0.5f, 1.0f);//convert in to scale from 0 to 1;
+		float easedValue = easeInOutQuint(std::min(1.0f,converted));
 		currentPosition = currentPosition + (diffPosition * easedValue);
 		if (distance(currentPosition, targetPosition) <= 1) {
 			lastStartedMS = I::GlobalVars->realtime;
