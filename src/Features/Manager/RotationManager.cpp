@@ -106,7 +106,7 @@ namespace Helper
 		Vector diffPosition = targetPosition - currentPosition;
 		float startTime = lastStartedMS;
 		float endInTime = lastStartedMS + 1000;
-		float converted = (endInTime - startTime) / 1000;//convert in to scale from 0 to 1;
+		float converted = 1 + ((endInTime - startTime) / 1000);//convert in to scale from 0 to 1;
 		float easedValue = easeInOutQuint(converted);
 		currentPosition = currentPosition + (diffPosition * easedValue);
 		if (distance(currentPosition, targetPosition) <= 1) {
