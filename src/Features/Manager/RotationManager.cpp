@@ -37,6 +37,9 @@ namespace Helper
 		if (DisabledRotation)
 		{
 			currentRotation = GetLocalViewAngles();
+			Vector vec = U::Math.AngleVectors(GetLocalViewAngles());
+			Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * 2.0f);
+			currentPosition = vViewAngleOnWorld;
 			return;
 		}
 		else
