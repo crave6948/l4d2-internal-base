@@ -2,24 +2,11 @@
 #include "random"
 namespace Helper
 {
-	inline Vector startPosition = Vector();
-	inline float lastStartedMS = 0;
 	inline Vector GetLocalViewAngles()
 	{
 		Vector viewAngles;
 		I::EngineClient->GetViewAngles(viewAngles);
 		return viewAngles;
-	}
-	float easeInOutQuint(float t)
-	{
-		if (t < 0.5)
-		{
-			return 16 * pow(t, 5);
-		}
-		else
-		{
-			return 1 + 16 * pow(t - 1, 5);
-		}
 	}
 	void RotationManager::onUpdate(C_TerrorPlayer *pLocal)
 	{
@@ -67,10 +54,6 @@ namespace Helper
 	}
 	void RotationManager::setTargetPosition(Vector targetPosition, float keepLength)
 	{
-		if (this->targetPosition.IsZero()) {
-			startPosition = currentPosition;
-			lastStartedMS = I::GlobalVars->realtime;
-		}
 		this->targetPosition = targetPosition;
 		this->keepRotation = keepLength;
 		lastMS = I::GlobalVars->realtime;
@@ -101,17 +84,33 @@ namespace Helper
 	}
 	void RotationManager::calcPosition()
 	{
-		Vector diffPosition = targetPosition - startPosition;
-		float startTime = lastStartedMS;
-		float currentTime = I::GlobalVars->realtime;
-		float endInTime = lastStartedMS + 1000;
-		float converted = ((currentTime - startTime) / 1000.0f) / ((endInTime - startTime) / 1000.0f);
-		float easedValue = easeInOutQuint(converted);
-		currentPosition = startPosition + (diffPosition * easedValue);
-		if (distance(currentPosition,targetPosition) <= 1)
+		Vector diffPosition = targetPosition - currentPosition;
+		float d = distance(targetPosition, currentPosition);
+		float a1 = (-cos(d / 700.f * M_PI) * 0.5f + 0.5f);
+		float a2 = (1.f - (-cos(d / 700.f * M_PI) * 0.5f + 0.5f));
+		float realisticTurnSpeed = realisticTurnSpeed = static_cast<float>(pow(a1, 2.0)) * 500 + static_cast<float>(pow(a2, 2.0)) * 200;
+
+		if (diffPosition.x > realisticTurnSpeed)
 		{
-			lastStartedMS = I::GlobalVars->realtime;
-			startPosition = currentPosition;
+			diffPosition.x = realisticTurnSpeed;
 		}
+		else {
+			diffPosition.x = U::Math.Max(diffPosition.x, -realisticTurnSpeed);
+		}
+		if (diffPosition.y > realisticTurnSpeed)
+		{
+			diffPosition.y = realisticTurnSpeed;
+		}
+		else {
+			diffPosition.y = U::Math.Max(diffPosition.y, -realisticTurnSpeed);
+		}
+		if (diffPosition.z > realisticTurnSpeed)
+		{
+			diffPosition.z = realisticTurnSpeed;
+		}
+		else {
+			diffPosition.z = U::Math.Max(diffPosition.z, -realisticTurnSpeed);
+		}
+		currentPosition = currentPosition + diffPosition;
 	}
 }
