@@ -2,7 +2,7 @@
 #include "random"
 namespace Helper
 {
-	inline Vector lastRotation = Vector();
+	inline Vector startPosition = Vector();
 	inline float lastStartedMS = 0;
 	inline Vector GetLocalViewAngles()
 	{
@@ -49,11 +49,7 @@ namespace Helper
 		}
 		if (DisabledRotation)
 		{
-			targetPosition = Vector();
-			currentPosition = Vector();
 			currentRotation = GetLocalViewAngles();
-			lastMS = 0;
-			keepRotation = 0;
 			return;
 		}
 		else
@@ -71,8 +67,10 @@ namespace Helper
 	}
 	void RotationManager::setTargetPosition(Vector targetPosition, float keepLength)
 	{
-		if (this->targetPosition.IsZero())
+		if (this->targetPosition.IsZero()) {
+			startPosition = currentPosition;
 			lastStartedMS = I::GlobalVars->realtime;
+		}
 		this->targetPosition = targetPosition;
 		this->keepRotation = keepLength;
 		lastMS = I::GlobalVars->realtime;
@@ -103,16 +101,17 @@ namespace Helper
 	}
 	void RotationManager::calcPosition()
 	{
-		Vector diffPosition = targetPosition - currentPosition;
+		Vector diffPosition = targetPosition - startPosition;
 		float startTime = lastStartedMS;
 		float currentTime = I::GlobalVars->realtime;
 		float endInTime = lastStartedMS + 1000;
 		float converted = ((currentTime - startTime) / 1000.0f) / ((endInTime - startTime) / 1000.0f);
 		float easedValue = easeInOutQuint(converted);
-		currentPosition = currentPosition + (diffPosition * easedValue);
+		currentPosition = startPosition + (diffPosition * easedValue);
 		if (distance(currentPosition,targetPosition) <= 1)
 		{
 			lastStartedMS = I::GlobalVars->realtime;
+			startPosition = currentPosition;
 		}
 	}
 }
