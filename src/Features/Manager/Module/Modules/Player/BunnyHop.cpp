@@ -2,7 +2,7 @@
 #include <random>
 namespace F {
 	namespace BunnyHopModule {
-		int generateRandomNumber(int min, int max) {
+		inline int generateRandomNumber(int min, int max) {
 			std::random_device rd;
 
 			std::mt19937 gen(rd());
@@ -12,7 +12,7 @@ namespace F {
 
 			return random_number;
 		}
-		inline int delayedTicks = 13;
+		inline int delayedTicks = 0;
 		void BunnyHop::onPreCreateMove(CUserCmd* cmd, C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal)
 		{
 			if (cmd->buttons & IN_JUMP) {
@@ -23,9 +23,11 @@ namespace F {
 						cmd->buttons &= ~IN_JUMP;
 						delayedTicks--;
 					}else {
-						delayedTicks = generateRandomNumber(13,20);
+						delayedTicks = generateRandomNumber(2,4);
 					}
 				}
+			}else {
+				delayedTicks = 0;
 			}
 		}
 
