@@ -101,6 +101,21 @@ namespace Helper
 	void RotationManager::calcPosition()
 	{
 		Vector diffPosition = targetPosition - currentPosition;
+		float realisticTurnSpeed = 30;
+		if (diffPosition.x > realisticTurnSpeed)
+		{
+			diffPosition.x = realisticTurnSpeed;
+		}
+		else {
+			diffPosition.x = U::Math.Max(diffPosition.x, -realisticTurnSpeed);
+		}
+		if (diffPosition.y > realisticTurnSpeed)
+		{
+			diffPosition.y = realisticTurnSpeed;
+		}
+		else {
+			diffPosition.y = U::Math.Max(diffPosition.y, -realisticTurnSpeed);
+		}
 		currentPosition += diffPosition / 2;
 	}
 }
