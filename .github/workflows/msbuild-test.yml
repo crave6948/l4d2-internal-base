@@ -42,17 +42,18 @@ jobs:
 
     - name: Build
       working-directory: ${{env.GITHUB_WORKSPACE}}
-      # Add additional options to the MSBuild command line here (like platform or verbosity level).
-      # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      # run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
       run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x86 /p:PlatformToolset=v143 /p:WindowsTargetPlatformVersion=10.0 /p:UseWindowsSDK=true /p:CharacterSet=Unicode /p:UseUnicodeCharacterSet=true /p:NoWarn=** /p:LanguageStandard=c++17 ${{env.SOLUTION_FILE_PATH}}
-      # run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x64 /p:PlatformToolset=v142 /p:WindowsTargetPlatformVersion=10.0 /p:UseWindowsSDK=true /p:CharacterSet=Unicode /p:UseUnicodeCharacterSet=true /p:LanguageStandard=c++17 ${{env.SOLUTION_FILE_PATH}}
+    
     - name: Rename File
       working-directory: ${{env.GITHUB_WORKSPACE}}
       run: |
         mv src/Release/pol.dll src/Release/pol-crave-git.dll
+
+    - name: List Files
+      run: |
+        ls -R $GITHUB_WORKSPACE
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: MyTest-BuildArtifacts
-        path: ${{env.GITHUB_WORKSPACE}}\src\Release\pol-crave-git.dll # Replace with the actual path to your build artifacts
+        path: $env.GITHUB_WORKSPACE\src\Release\pol-crave-git.dll # Replace with the actual path to your build artifacts
