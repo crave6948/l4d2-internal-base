@@ -27,8 +27,9 @@ jobs:
   build:
     runs-on: windows-latest
     defaults:
-        run:
-          working-directory: ${{env.GITHUB_WORKSPACE}}
+      run:
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+          
     steps:
     - uses: actions/checkout@v3
 
