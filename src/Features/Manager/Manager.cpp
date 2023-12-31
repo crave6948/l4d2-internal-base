@@ -62,8 +62,7 @@ namespace F {
 					if (mod->getName() == "NoSpread") continue;
 					mod->onPreCreateMove(cmd, pWeapon, pLocal);
 				}
-				Helper::rotationManager.onUpdate();
-				Helper::rotationManager.onCreateMove();
+				Helper::rotationManager.onUpdate(pLocal);
 				if (!Helper::rotationManager.getCurrentRotation().IsZero() && !Helper::rotationManager.DisabledRotation) {
 					cmd->viewangles = Helper::rotationManager.getCurrentRotation();
 					//I::EngineClient->SetViewAngles(cmd->viewangles);

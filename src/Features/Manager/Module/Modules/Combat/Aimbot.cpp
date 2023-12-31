@@ -14,7 +14,7 @@ namespace F
 			bool Slient = true;
 			int holdAttackForTick = 0;
 			int holdTick = 0;
-			float switchTimer = 200, RotateSetTimer = 100;
+			float switchTimer = 200;
 		}
 		namespace RenderLocal
 		{
@@ -118,7 +118,6 @@ namespace F
 		{
 			if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000) || !ShouldRun(pLocal,pWeapon,cmd))
 			{
-				Helper::rotationManager.acceletion = 0;
 				target = nullptr;
 				aiming = false;
 				return;
@@ -137,13 +136,11 @@ namespace F
 				}
 				if (target == nullptr)
 					return;
-				Helper::rotationManager.acceletion = 0;
 			}
 			else {
 				bool isDead = Utils::target.CheckInvaidOrDead(pLocal, target);
 				if (isDead)
 				{
-					Helper::rotationManager.acceletion = 0;
 					lastTime = I::GlobalVars->realtime;
 					target = nullptr;
 					return;
@@ -154,20 +151,11 @@ namespace F
 			Vector destination = getHitBoxPos(target, pLocal);
 			if (destination.IsZero()) return;
 			targetPosition = U::Math.GetAngleToPosition(pLocalPos, destination);
-			if (I::GlobalVars->realtime - lastRotateSet >= AttackConfig::RotateSetTimer / 1000)
-			{
-				Helper::rotationManager.setTargetRotation(targetPosition,250);
-				lastRotateSet = I::GlobalVars->realtime;
-			}
+			Helper::rotationManager.setTargetPosition(destination,250);
 		}
 		void Aimbot::onPostCreateMove(CUserCmd* cmd, C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal)
 		{
 			CanAttack = pWeapon->CanPrimaryAttack(-0.2);
-			/*if (CanAttack && cmd->buttons & IN_ATTACK)
-			{
-				cmd->buttons -= IN_ATTACK;
-			}
-			RenderLocal::IsLeftClick = cmd->buttons;*/
 			if (!aiming || target == nullptr)
 			{
 				return;

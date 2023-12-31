@@ -1,110 +1,81 @@
 #include "RotationManager.h"
 #include "random"
-inline Vector lastRotation = Vector();
-inline float getAngleDifference(float a, float b) {
-	return (
-		std::fmod(
-			std::fmod(a - b, 360.f) + 540.f
-			, 360.f)
-		) - 180.f;
-}
-
-bool Helper::RotationManager::hasKeepRotationReachedLimit() {
-	return I::GlobalVars->realtime - lastMS >= keepRotation / 1000;
-}
-
-bool Helper::RotationManager::ShouldDisabledRotation()
+namespace Helper
 {
-	if (!hasKeepRotationReachedLimit()) return false;
-	return DisabledRotation || hypot(getAngleDifference(target.y, current.y), target.x - current.x) < 1;
-}
-
-void Helper::RotationManager::calcRotation()
-{
-	if (DisabledRotation) {
-		return;
-	}
-	Vector diffRotation = target - current;
-	U::Math.ClampAngles(diffRotation);
-	float rotationDiff = hypot(getAngleDifference(target.y, current.y), diffRotation.x);
-	double min = 3.0, max = 7.0;
-	float supposedTurnSpeed = 35;
-	std::default_random_engine generator;
-	std::uniform_real_distribution<double> distribution(min, max);
-	double nextGassain = distribution(generator);
-	float realisticTurnSpeed = rotationDiff * (U::Math.Min<float>(supposedTurnSpeed + acceletion, 180.0f) / 180.0f);
-	if (rotationDiff > 30)
+	inline Vector lastRotation = Vector();
+	inline float getAngleDifference(float a, float b)
 	{
-		float a1 = (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f);
-		float a2 = (1.f - (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f));
-		realisticTurnSpeed = static_cast<float>(pow(a1, 2.0)) * 30 + static_cast<float>(pow(a2, 2.0)) * 20;
-		acceletion = 0;
+		return (
+				   std::fmod(
+					   std::fmod(a - b, 360.f) + 540.f, 360.f)) -
+			   180.f;
 	}
-	else {
-		acceletion += nextGassain;
-	}
-	if (diffRotation.x > realisticTurnSpeed)
+	inline Vector GetLocalViewAngles()
 	{
-		diffRotation.x = realisticTurnSpeed;
+		Vector viewAngles;
+		I::EngineClient->GetViewAngles(viewAngles);
+		return viewAngles;
 	}
-	else {
-		diffRotation.x = U::Math.Max(diffRotation.x, -realisticTurnSpeed);
-	}
-	if (diffRotation.y > realisticTurnSpeed)
+	void RotationManager::onUpdate(C_TerrorPlayer *pLocal)
 	{
-		diffRotation.y = realisticTurnSpeed;
+		if (!I::EngineClient->IsInGame()) {
+			currentPosition = Vector();
+			targetPosition = Vector();
+			currentRotation = Vector();
+			lastMS = 0;
+			keepRotation = 0;
+			DisabledRotation = true;
+			return;
+		}
+		if (currentPosition.IsZero())
+		{
+			Vector vec = U::Math.AngleVectors(GetLocalViewAngles());
+			Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * 2.0f);
+			currentPosition = vViewAngleOnWorld;
+		}
+		if (DisabledRotation) { 
+			currentRotation = GetLocalViewAngles();
+			return;
+		}else {
+			if (isRotateBack())
+			{
+				Vector vec = U::Math.AngleVectors(GetLocalViewAngles());
+				Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * 2.0f);
+				targetPosition = vViewAngleOnWorld;
+			}
+			calcPosition();
+			currentRotation = U::Math.GetAngleToPosition(pLocal->Weapon_ShootPosition(), currentPosition);
+			DisabledRotation = ShouldDisabledRotation();
+		}
 	}
-	else {
-		diffRotation.y = U::Math.Max(diffRotation.y, -realisticTurnSpeed);
+	void RotationManager::setTargetPosition(Vector targetPosition, float keepLength)
+	{
+		this->targetPosition = targetPosition;
+		this->keepRotation = keepLength;
+		lastMS = I::GlobalVars->realtime;
+		DisabledRotation = false;
 	}
-	U::Math.ClampAngles(diffRotation);
-	current = current + diffRotation;
-	U::Math.ClampAngles(current);
-	acceletion = hypot(getAngleDifference(target.y, current.y), target.x - current.x) <= 0 ? 0 : acceletion;
-}
-
-void Helper::RotationManager::onUpdate()
-{
-	if (!I::EngineClient->IsInGame()) {
-		current = Vector();
-		target = Vector();
-		keepRotation = 0;
-		DisabledRotation = true;
-		acceletion = 0;
-		return;
+	Vector RotationManager::getCurrentRotation()
+	{
+		return currentRotation;
 	}
-	
-	Vector viewAngles;
-	I::EngineClient->GetViewAngles(viewAngles);
-	if (current.IsZero()) {
-		current = viewAngles;
-		return;
+    float RotationManager::distance(Vector current, Vector target)
+    {
+        float distanceValue = sqrt(pow(target.x - current.x, 2) + pow(target.y - current.y, 2) + pow(target.z - current.z, 2));
+        return distanceValue;
+    }
+    bool RotationManager::isRotateBack()
+    {
+        return I::GlobalVars->realtime - lastMS >= keepRotation / 1000;
+    }
+    bool RotationManager::ShouldDisabledRotation()
+    {
+        if (!isRotateBack()) return false;
+		return DisabledRotation || distance(currentPosition, targetPosition) <= 1;
+    }
+    void RotationManager::calcPosition()
+    {
+		Vector diffPosition = targetPosition - currentPosition;
+		currentPosition += diffPosition / 2;
 	}
-	if (hasKeepRotationReachedLimit()) {
-		target = viewAngles;
-	}
-	calcRotation();
-	DisabledRotation = ShouldDisabledRotation();
-	if (DisabledRotation) { 
-		current = viewAngles;
-		return; 
-	}
-}
-//CreateMove Update
-void Helper::RotationManager::onCreateMove()
-{
-	
-}
-
-void Helper::RotationManager::setTargetRotation(Vector rotation, float keepLength)
-{
-	target = rotation;
-	lastMS = I::GlobalVars->realtime;
-	keepRotation = keepLength;
-	DisabledRotation = false;
-}
-
-Vector Helper::RotationManager::getCurrentRotation()
-{
-	return current;
 }
