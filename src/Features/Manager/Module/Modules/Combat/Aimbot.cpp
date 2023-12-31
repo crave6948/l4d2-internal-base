@@ -122,7 +122,6 @@ namespace F
 				aiming = false;
 				return;
 			}
-			aiming = true;
 			bool allowedToSwitch = false;
 			if (I::GlobalVars->realtime - lastTime >= AttackConfig::switchTimer / 1000)
 			{
@@ -152,12 +151,14 @@ namespace F
 			if (destination.IsZero()) return;
 			targetPosition = U::Math.GetAngleToPosition(pLocalPos, destination);
 			Helper::rotationManager.setTargetPosition(destination,250);
+			aiming = true;
 		}
 		void Aimbot::onPostCreateMove(CUserCmd* cmd, C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal)
 		{
 			CanAttack = pWeapon->CanPrimaryAttack(-0.2);
 			if (!aiming || target == nullptr)
 			{
+				Helper::rotationManager.ForceBack();
 				return;
 			}
 			if (!AttackConfig::Slient)

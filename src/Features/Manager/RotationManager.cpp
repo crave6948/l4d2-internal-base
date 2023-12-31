@@ -35,6 +35,10 @@ namespace Helper
 		}
 		if (DisabledRotation) { 
 			currentRotation = GetLocalViewAngles();
+			targetPosition = Vector();
+			currentPosition = Vector();
+			lastMS = 0;
+			keepRotation = 0;
 			return;
 		}else {
 			if (isRotateBack())
@@ -55,8 +59,12 @@ namespace Helper
 		lastMS = I::GlobalVars->realtime;
 		DisabledRotation = false;
 	}
-	Vector RotationManager::getCurrentRotation()
-	{
+    void RotationManager::ForceBack()
+    {
+		lastMS = keepRotation / 1000;
+    }
+    Vector RotationManager::getCurrentRotation()
+    {
 		return currentRotation;
 	}
     float RotationManager::distance(Vector current, Vector target)

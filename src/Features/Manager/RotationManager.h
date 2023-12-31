@@ -7,6 +7,7 @@ namespace Helper
 	public:
 		void onUpdate(C_TerrorPlayer* pLocal);
 		void setTargetPosition(Vector targetPosition, float keepLength);
+		void ForceBack();
 		Vector getCurrentRotation();
 		bool DisabledRotation = false;
 	private:
