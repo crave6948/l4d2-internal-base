@@ -23,13 +23,13 @@ namespace Helper
 		if (currentPosition.IsZero())
 		{
 			Vector vec = U::Math.AngleVectors(GetLocalViewAngles());
-			Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * distance(pLocal->Weapon_ShootPosition(), targetPosition));
+			Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * 2.0f);
 			if (!targetPosition.IsZero()) {
 				Vector vtest = pLocal->Weapon_ShootPosition() + (vec * 1400.0f);
 				float v1 = distance(vtest, pLocal->Weapon_ShootPosition());
 				float v2 = distance(vtest, targetPosition);
 				if (v2 > v1) {
-					vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * distance(pLocal->Weapon_ShootPosition(), targetPosition));
+					vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * std::min(200.f,distance(pLocal->Weapon_ShootPosition(), targetPosition)));
 				}
 			}
 			currentPosition = vViewAngleOnWorld;
@@ -38,7 +38,7 @@ namespace Helper
 		{
 			currentRotation = GetLocalViewAngles();
 			Vector vec = U::Math.AngleVectors(GetLocalViewAngles());
-			Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec);
+			Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * 2.0f);
 			currentPosition = vViewAngleOnWorld;
 			return;
 		}
@@ -47,7 +47,7 @@ namespace Helper
 			if (isRotateBack())
 			{
 				Vector vec = U::Math.AngleVectors(GetLocalViewAngles());
-				Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * distance(pLocal->Weapon_ShootPosition(), targetPosition));
+				Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * 2.0f);
 				targetPosition = vViewAngleOnWorld;
 			}
 			calcPosition();
@@ -89,9 +89,9 @@ namespace Helper
 	{
 		Vector diffPosition = targetPosition - currentPosition;
 		float d = distance(targetPosition, currentPosition);
-		float a1 = (-cos(d / 1400.f * M_PI) * 0.5f + 0.5f);
-		float a2 = (1.f - (-cos(d / 1400.f * M_PI) * 0.5f + 0.5f));
-		float realisticTurnSpeed = realisticTurnSpeed = static_cast<float>(pow(a1, 2.0)) * 70 + static_cast<float>(pow(a2, 2.0)) * 10;
+		float a1 = (-cos(d / 700.f * M_PI) * 0.5f + 0.5f);
+		float a2 = (1.f - (-cos(d / 700.f * M_PI) * 0.5f + 0.5f));
+		float realisticTurnSpeed = realisticTurnSpeed = static_cast<float>(pow(a1, 2.0)) * 200 + static_cast<float>(pow(a2, 2.0)) * 10;
 
 		if (diffPosition.x > realisticTurnSpeed)
 		{
