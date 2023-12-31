@@ -3,6 +3,7 @@
 namespace Helper
 {
 	inline Vector lastRotation = Vector();
+	inline float lastStartedMS = 0;
 	inline Vector GetLocalViewAngles()
 	{
 		Vector viewAngles;
@@ -70,6 +71,8 @@ namespace Helper
 	}
 	void RotationManager::setTargetPosition(Vector targetPosition, float keepLength)
 	{
+		if (this->targetPosition.IsZero())
+			lastStartedMS = I::GlobalVars->realtime;
 		this->targetPosition = targetPosition;
 		this->keepRotation = keepLength;
 		lastMS = I::GlobalVars->realtime;
@@ -101,21 +104,13 @@ namespace Helper
 	void RotationManager::calcPosition()
 	{
 		Vector diffPosition = targetPosition - currentPosition;
-		float realisticTurnSpeed = 30;
-		if (diffPosition.x > realisticTurnSpeed)
-		{
-			diffPosition.x = realisticTurnSpeed;
+		float startTime = lastStartedMS;
+		float endInTime = lastStartedMS + 1000;
+		float converted = (endInTime - startTime) / 1000;//convert in to scale from 0 to 1;
+		float easedValue = easeInOutQuint(converted);
+		currentPosition = currentPosition + (diffPosition * easedValue);
+		if (distance(currentPosition, targetPosition) <= 1) {
+			lastStartedMS = I::GlobalVars->realtime;
 		}
-		else {
-			diffPosition.x = U::Math.Max(diffPosition.x, -realisticTurnSpeed);
-		}
-		if (diffPosition.y > realisticTurnSpeed)
-		{
-			diffPosition.y = realisticTurnSpeed;
-		}
-		else {
-			diffPosition.y = U::Math.Max(diffPosition.y, -realisticTurnSpeed);
-		}
-		currentPosition += diffPosition / 2;
 	}
 }
