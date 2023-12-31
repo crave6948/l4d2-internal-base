@@ -23,7 +23,7 @@ namespace F {
 						cmd->buttons &= ~IN_JUMP;
 						delayedTicks--;
 					}else {
-						delayedTicks = generateRandomNumber(2,4);
+						delayedTicks = generateRandomNumber(1,2);
 					}
 				}
 			}else {
