@@ -46,11 +46,11 @@ jobs:
       run: |
         mv src/Release/pol.dll src/Release/pol-crave-git.dll
 
-    - name: List Files
-      run: |
-        ls -R $GITHUB_WORKSPACE
+    # - name: List Files
+    #   run: |
+    #     ls -R $GITHUB_WORKSPACE
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: MyTest-BuildArtifacts
-        path: $env.GITHUB_WORKSPACE\src\Release\pol-crave-git.dll # Replace with the actual path to your build artifacts
+        path: D:\a\l4d2-internal-base\l4d2-internal-base\src\Release\pol-crave-git.dll # Replace with the actual path to your build artifacts
