@@ -138,8 +138,6 @@ public:
 		Vector min,max;
 		U::Math.VectorTransform(pFinalBox->bbmin, Matrix[pFinalBox->bone], min);
 		U::Math.VectorTransform(pFinalBox->bbmax, Matrix[pFinalBox->bone], max);
-		// Vector input = (min + max) * 0.5f;
-		// U::Math.VectorTransform(input, Matrix[pFinalBox->bone], vPos);
 		vPos = (min + max) * 0.5f;
 		return true;
 	}

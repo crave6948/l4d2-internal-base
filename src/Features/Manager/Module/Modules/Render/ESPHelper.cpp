@@ -130,7 +130,7 @@ namespace F {
 					{
 						continue;
 					}
-					for (int i = 1; i <= 10; i++) {
+					for (int i = 1; i <= 24; i++) {
 						drawESP(pInfected->GetBaseEntity(), i);
 					}
 					break;
