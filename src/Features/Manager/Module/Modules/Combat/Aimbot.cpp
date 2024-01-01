@@ -139,7 +139,6 @@ namespace F
 					target = Utils::target.find(pLocal, maxfov);
 				}
 				if (target == nullptr) {
-					Helper::rotationManager.ForceBack();
 					return;
 				}
 			}
