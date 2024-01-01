@@ -42,7 +42,7 @@ namespace Helper {
 		if (DisabledRotation)
 		{
 			lastdist = -1;
-			return;
+			return true;
 		}
 		Vector diffRotation = target - current;
 		U::Math.ClampAngles(diffRotation);
