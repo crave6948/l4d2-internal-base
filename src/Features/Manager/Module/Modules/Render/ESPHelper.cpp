@@ -46,7 +46,7 @@ namespace F {
 			}
 			case EClientClass::Infected:
 			{
-				name = "Infected";
+				name = std::to_string(hit);
 				break;
 			}
 			default:
@@ -100,7 +100,7 @@ namespace F {
 					C_Tank* pTank = pEntity->As<C_Tank*>();
 					if (!pTank) continue;
 					if (pTank->deadflag()) continue;
-					drawESP(pTank->GetBaseEntity(), HITGROUP_CHEST);
+					drawESP(pTank->GetBaseEntity(), HITGROUP_STOMACH);
 					break;
 				}
 				case EClientClass::Boomer:
@@ -130,7 +130,9 @@ namespace F {
 					{
 						continue;
 					}
-					drawESP(pInfected->GetBaseEntity(), HITGROUP_STOMACH);
+					for (int i = 1; i <= 10; i++) {
+						drawESP(pInfected->GetBaseEntity(), i);
+					}
 					break;
 				}
 				default:
