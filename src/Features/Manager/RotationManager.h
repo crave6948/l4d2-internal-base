@@ -8,7 +8,7 @@ namespace Helper
 		Vector current = Vector(), target = Vector();
 		float keepRotation = 0;
 		float lastMS = 0;
-		bool DisabledRotation = false;
+		bool DisabledRotation = true;
 		void ForceBack();
 		void onUpdate(C_TerrorPlayer* pLocal);
 		void setTargetRotation(Vector rotation, float keepLength);

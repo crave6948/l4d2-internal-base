@@ -13,7 +13,8 @@ namespace F
 
 			// You could also check if the current spread is -1.0f and not run nospread I guess.
 			// But since I wanted to filter out shotungs and just be sure that it isnt ran for other stuff I check the weaponid.
-
+			if (!pWeapon)
+				return false;
 			switch (pWeapon->GetWeaponID())
 			{
 			case WEAPON_AK47:
@@ -65,7 +66,6 @@ namespace F
 			}
 
 			U::Math.ClampAngles(vAngle);
-			G::Util.FixMovement(vAngle, cmd);
 
 			cmd->viewangles = vAngle;
 		}

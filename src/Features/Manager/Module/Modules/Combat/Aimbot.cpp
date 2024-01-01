@@ -22,7 +22,7 @@ namespace F
 			inline int f_i = 0;
 			inline bool IsLeftClick = false;
 		}
-		Vector getHitBoxPos(IClientEntity* pEntity, C_TerrorPlayer* pLocal)
+		inline Vector getHitBoxPos(IClientEntity* pEntity, C_TerrorPlayer* pLocal)
 		{
 			Vector box = Vector();
 			ClientClass* pCC = pEntity->GetClientClass();
@@ -72,7 +72,7 @@ namespace F
 					C_BaseAnimating* pAnimating = pEntity->As<C_BaseAnimating*>();
 					box = pAnimating->GetHitboxPositionByGroup(HITGROUP_CHEST);
 				}
-				box = box + (Utils::RandomUtils::genVector() * 2);
+				box = box + Utils::RandomUtils::genVector();
 				return box;
 			}
 			return Vector();
@@ -87,7 +87,8 @@ namespace F
 
 			//You could also check if the current spread is -1.0f and not run nospread I guess.
 			//But since I wanted to filter out shotungs and just be sure that it isnt ran for other stuff I check the weaponid.
-
+			if (!pWeapon)
+				return false;
 			switch (pWeapon->GetWeaponID())
 			{
 			case WEAPON_AK47:
@@ -131,7 +132,7 @@ namespace F
 			if (target == nullptr)
 			{
 				if (allowedToSwitch) {
-					Utils::target.serverRotation = Helper::rotationManager.getCurrentRotation();
+					Utils::target.serverRotation = Helper::rotationManager.DisabledRotation ? cmd->viewangles : Helper::rotationManager.getCurrentRotation();
 					target = Utils::target.find(pLocal, maxfov);
 				}
 				if (target == nullptr)
@@ -146,11 +147,10 @@ namespace F
 					return;
 				}
 			}
-			Vector pLocalPos = pLocal->Weapon_ShootPosition();
 			C_BaseAnimating* pAnimating = target->As<C_BaseAnimating*>();
 			Vector destination = getHitBoxPos(target, pLocal);
 			if (destination.IsZero()) return;
-			targetPosition = U::Math.GetAngleToPosition(pLocalPos, destination);
+			targetPosition = U::Math.GetAngleToPosition(pLocal->Weapon_ShootPosition(), destination);
 			Helper::rotationManager.setTargetRotation(targetPosition,250);
 			aiming = true;
 		}

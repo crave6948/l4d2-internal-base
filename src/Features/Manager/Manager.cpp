@@ -53,24 +53,24 @@ namespace F {
 		if (pLocal && !pLocal->deadflag())
 		{
 			C_TerrorWeapon* pWeapon = pLocal->GetActiveWeapon()->As<C_TerrorWeapon*>();
+			Vector oldViewangles = cmd->viewangles;
 
+			for (Module* mod : featurelist) {
+				if (!mod->getEnabled()) continue;
+				if (mod->getName() == "NoSpread") continue;
+				mod->onPreCreateMove(cmd, pWeapon, pLocal);
+			}
+			Helper::rotationManager.onUpdate(pLocal);
+			if (!Helper::rotationManager.getCurrentRotation().IsZero() && !Helper::rotationManager.DisabledRotation) {
+				cmd->viewangles = Helper::rotationManager.getCurrentRotation();
+				//I::EngineClient->SetViewAngles(cmd->viewangles);
+			}
+			for (Module* mod : featurelist) {
+				if (!mod->getEnabled()) continue;
+				mod->onPostCreateMove(cmd, pWeapon, pLocal);
+			}
 			if (pWeapon)
 			{
-				Vector oldViewangles = cmd->viewangles;
-				for (Module* mod : featurelist) {
-					if (!mod->getEnabled()) continue;
-					if (mod->getName() == "NoSpread") continue;
-					mod->onPreCreateMove(cmd, pWeapon, pLocal);
-				}
-				Helper::rotationManager.onUpdate(pLocal);
-				if (!Helper::rotationManager.getCurrentRotation().IsZero() && !Helper::rotationManager.DisabledRotation) {
-					cmd->viewangles = Helper::rotationManager.getCurrentRotation();
-					//I::EngineClient->SetViewAngles(cmd->viewangles);
-				}
-				for (Module* mod : featurelist) {
-					if (!mod->getEnabled()) continue;
-					mod->onPostCreateMove(cmd, pWeapon, pLocal);
-				}
 				F::EnginePrediction.Start(pLocal, cmd);
 				{
 					for (Module* mod : featurelist) {
@@ -80,8 +80,8 @@ namespace F {
 					}
 				}
 				F::EnginePrediction.Finish(pLocal, cmd);
-				G::Util.FixMovement(oldViewangles,cmd);
 			}
+			G::Util.FixMovement(oldViewangles,cmd);
 		}
 	}
 
