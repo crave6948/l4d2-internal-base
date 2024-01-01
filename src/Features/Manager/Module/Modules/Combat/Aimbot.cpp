@@ -150,7 +150,7 @@ namespace F
 			Vector destination = getHitBoxPos(target, pLocal);
 			if (destination.IsZero()) return;
 			targetPosition = U::Math.GetAngleToPosition(pLocalPos, destination);
-			Helper::rotationManager.setTargetPosition(destination,250);
+			Helper::rotationManager.setTargetRotation(targetPosition,250);
 			aiming = true;
 		}
 		void Aimbot::onPostCreateMove(CUserCmd* cmd, C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal)

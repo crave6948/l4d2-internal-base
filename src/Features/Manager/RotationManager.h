@@ -5,19 +5,19 @@ namespace Helper
 	class RotationManager
 	{
 	public:
-		void onUpdate(C_TerrorPlayer* pLocal);
-		void setTargetPosition(Vector targetPosition, float keepLength);
-		void ForceBack();
-		Vector getCurrentRotation();
+		Vector current = Vector(), target = Vector();
+		float keepRotation = 0;
+		float lastMS = 0;
 		bool DisabledRotation = false;
+		void ForceBack();
+		void onUpdate(C_TerrorPlayer* pLocal);
+		void setTargetRotation(Vector rotation, float keepLength);
+		Vector getCurrentRotation();
 	private:
-		float lastMS = 0, keepRotation = 0;
-		float distance(Vector current, Vector target);
-		bool isRotateBack();
 		bool ShouldDisabledRotation();
-		void calcPosition();
-		Vector currentRotation = Vector();
-		Vector currentPosition = Vector(), targetPosition = Vector();
+		void calcRotation();
+		bool calcRotation2(float lastdist);
+		bool hasKeepRotationReachedLimit();
 	};
 	inline RotationManager rotationManager = RotationManager();
 }
