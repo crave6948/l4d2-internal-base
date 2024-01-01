@@ -53,11 +53,11 @@ namespace Helper {
 		double nextGassain = distribution(generator);
 		float supposedTurnSpeed = nextGassain;
 		float realisticTurnSpeed = round(rotationDiff * (supposedTurnSpeed / 180.0f));
-		if (rotationDiff > 30)
+		if (rotationDiff > 60)
 		{
 			float a1 = (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f);
 			float a2 = (1.f - (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f));
-			realisticTurnSpeed = static_cast<float>(pow(a1, 2.0)) * nextGassain + static_cast<float>(pow(a2, 2.0)) * 10;
+			realisticTurnSpeed = round(pow(a1, 2.0f) * 30 + pow(a2, 2.0f) * 10);
 		}
 		if (diffRotation.x > realisticTurnSpeed)
 		{
