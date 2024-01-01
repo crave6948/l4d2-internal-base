@@ -27,7 +27,7 @@ namespace Utils
 			std::mt19937 gen(rd());
 
 			// Create a uniform distribution for the specified range
-			std::uniform_real_distribution<float> distribution(minValue, maxValue);
+			std::uniform_real_distribution<float> distribution(min, max);
 
 			// Generate a random number within the specified range
 			float random_number = distribution(gen);
