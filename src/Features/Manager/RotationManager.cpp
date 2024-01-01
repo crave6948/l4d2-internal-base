@@ -130,8 +130,7 @@ namespace Helper {
 	// }
 	void RotationManager::ForceBack()
 	{
-		keepRotation = 0;
-		lastMS = I::GlobalVars->realtime;
+		keepRotation = 500;
 	}
 	void RotationManager::onUpdate(C_TerrorPlayer *pLocal)
 	{
