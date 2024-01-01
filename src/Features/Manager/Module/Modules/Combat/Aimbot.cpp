@@ -122,6 +122,7 @@ namespace F
 			{
 				target = nullptr;
 				aiming = false;
+				Helper::rotationManager.ForceBack();
 				return;
 			}
 			bool allowedToSwitch = false;
@@ -135,8 +136,10 @@ namespace F
 					Utils::target.serverRotation = Helper::rotationManager.DisabledRotation ? cmd->viewangles : Helper::rotationManager.getCurrentRotation();
 					target = Utils::target.find(pLocal, maxfov);
 				}
-				if (target == nullptr)
+				if (target == nullptr) {
+					Helper::rotationManager.ForceBack();
 					return;
+				}
 			}
 			else {
 				bool isDead = Utils::target.CheckInvaidOrDead(pLocal, target);
@@ -159,7 +162,6 @@ namespace F
 			CanAttack = pWeapon->CanPrimaryAttack(-0.2);
 			if (!aiming || target == nullptr)
 			{
-				Helper::rotationManager.ForceBack();
 				return;
 			}
 			if (!AttackConfig::Slient)
