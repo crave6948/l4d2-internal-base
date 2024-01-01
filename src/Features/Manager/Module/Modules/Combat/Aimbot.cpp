@@ -33,7 +33,7 @@ namespace F
 				case EClientClass::Tank:
 				{
 					C_BaseAnimating* pPlayer = pEntity->As<C_BaseAnimating*>();
-					box = pPlayer->GetHitboxPositionByGroup(HITGROUP_CHEST);
+					box = pPlayer->GetHitboxPositionByGroup(HITGROUP_STOMACH);
 					break;
 				}
 				case EClientClass::Witch:
