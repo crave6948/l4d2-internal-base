@@ -123,29 +123,14 @@ public:
 		mstudiobbox *pFinalBox = nullptr;
 
 		// Gets head properly, possibly fails for other groups due to obvious reasons.
-		if (nGroup == HITGROUP_STOMACH)
+		for (int n = 0; n < pSet->numhitboxes; n++)
 		{
-			for (int n = 0; n < pSet->numhitboxes; n++)
-			{
-				mstudiobbox *pBox = pSet->pHitbox(n);
+			mstudiobbox *pBox = pSet->pHitbox(n);
 
-				if (!pBox || (pBox->group != HITGROUP_GENERIC) || (pBox->bone < 0) || (pBox->bone >= NUM_STUDIOBONES))
-					continue;
+			if (!pBox || (pBox->group != nGroup) || (pBox->bone < 0) || (pBox->bone >= NUM_STUDIOBONES))
+				continue;
 
-				pFinalBox = pBox;
-			}
-		}
-		else
-		{
-			for (int n = 0; n < pSet->numhitboxes; n++)
-			{
-				mstudiobbox *pBox = pSet->pHitbox(n);
-
-				if (!pBox || (pBox->group != nGroup) || (pBox->bone < 0) || (pBox->bone >= NUM_STUDIOBONES))
-					continue;
-
-				pFinalBox = pBox;
-			}
+			pFinalBox = pBox;
 		}
 
 		if (!pFinalBox)
