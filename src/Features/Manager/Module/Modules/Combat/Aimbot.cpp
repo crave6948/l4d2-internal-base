@@ -58,7 +58,7 @@ namespace F
 				case EClientClass::Infected:
 				{
 					C_BaseAnimating* pInfected = pEntity->As<C_BaseAnimating*>();
-					box = pInfected->GetHitboxPositionByGroup(HITGROUP_GENERIC);
+					box = pInfected->GetHitboxPositionByGroup(HITGROUP_STOMACH);
 					break;
 				}
 				default:
@@ -70,7 +70,9 @@ namespace F
 				float distance = pLocal->Weapon_ShootPosition().DistTo(box);
 				if (distance <= 150) {
 					C_BaseAnimating* pAnimating = pEntity->As<C_BaseAnimating*>();
-					box = pAnimating->GetHitboxPositionByGroup(HITGROUP_GENERIC);
+					Vector min,max;
+					pEntity->GetRenderBoundsWorldspace(min,max);
+					box = (min + max) * 0.5f;
 				}
 				box = box + Utils::RandomUtils::genVector();
 				return box;
