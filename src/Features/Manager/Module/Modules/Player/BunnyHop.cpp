@@ -1,9 +1,12 @@
 #include "BunnyHop.h"
 #include <random>
-namespace F {
-	namespace BunnyHopModule {
+namespace F
+{
+	namespace BunnyHopModule
+	{
 		inline int delayedTicks = 0;
-		inline int generateRandomNumber(int min, int max) {
+		inline int generateRandomNumber(int min, int max)
+		{
 			// Use a random_device to seed the random number generator
 			std::random_device rd;
 
@@ -18,17 +21,29 @@ namespace F {
 
 			return random_number;
 		}
-		void BunnyHop::onPreCreateMove(CUserCmd* cmd, C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal)
+		void BunnyHop::onPreCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
 		{
-			if (cmd->buttons & IN_JUMP) {
-				if (!(pLocal->m_fFlags() & FL_ONGROUND) && delayedTicks <= 0) {
+			if (cmd->buttons & IN_JUMP)
+			{
+				if (!(pLocal->m_fFlags() & FL_ONGROUND) && delayedTicks <= 0)
+				{
 					cmd->buttons &= ~IN_JUMP;
-				}else {
-					delayedTicks = generateRandomNumber(4,6);
 				}
-				if (delayedTicks > 0) delayedTicks--;
-			}else {
-				delayedTicks = 0;
+				else if (pLocal->m_fFlags() & FL_ONGROUND)
+				{
+					delayedTicks = generateRandomNumber(4, 6);
+				}
+			}
+			else
+			{
+				if (delayedTicks > 0) {
+					cmd->buttons |= IN_JUMP;
+				}
+			}
+
+			if (delayedTicks > 0)
+			{
+				delayedTicks--;
 			}
 		}
 
