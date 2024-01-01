@@ -6,16 +6,12 @@ namespace F {
 		void BunnyHop::onPreCreateMove(CUserCmd* cmd, C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal)
 		{
 			if (cmd->buttons & IN_JUMP) {
-				if (!(pLocal->m_fFlags() & FL_ONGROUND)) {
+				if (!(pLocal->m_fFlags() & FL_ONGROUND) && delayedTicks <= 0) {
 					cmd->buttons &= ~IN_JUMP;
 				}else {
-					if (delayedTicks > 0) {
-						cmd->buttons &= ~IN_JUMP;
-						delayedTicks--;
-					}else {
-						delayedTicks = 1;
-					}
+					delayedTicks = 5;
 				}
+				if (delayedTicks > 0) delayedTicks--;
 			}else {
 				delayedTicks = 0;
 			}
