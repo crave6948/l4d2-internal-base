@@ -22,33 +22,15 @@ namespace Utils
 		}
 		inline float generateRandomNumber(float min, float max)
 		{
-			// Use a random_device to seed the random number generator
+			// Create a random number generator engine
 			std::random_device rd;
-
-			// Use the random_device to seed the Mersenne Twister PRNG
 			std::mt19937 gen(rd());
 
-			// Define a range for the random numbers
-			std::uniform_int_distribution<float> distribution(min, max);
+			// Create a uniform distribution for the specified range
+			std::uniform_real_distribution<float> distribution(minValue, maxValue);
 
 			// Generate a random number within the specified range
 			float random_number = distribution(gen);
-
-			return random_number;
-		}
-		inline double generateRandomNumber(double min, double max)
-		{
-			// Use a random_device to seed the random number generator
-			std::random_device rd;
-
-			// Use the random_device to seed the Mersenne Twister PRNG
-			std::mt19937 gen(rd());
-
-			// Define a range for the random numbers
-			std::uniform_int_distribution<double> distribution(min, max);
-
-			// Generate a random number within the specified range
-			double random_number = distribution(gen);
 
 			return random_number;
 		}
