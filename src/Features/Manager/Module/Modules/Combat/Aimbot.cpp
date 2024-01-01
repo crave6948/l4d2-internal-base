@@ -67,15 +67,7 @@ namespace F
 				}
 			}
 			if (!box.IsZero()) {
-				float distance = pLocal->Weapon_ShootPosition().DistTo(box);
-				if (pCC->m_ClassID == EClientClass::Infected && distance <= 150) {
-					C_BaseAnimating* pAnimating = pEntity->As<C_BaseAnimating*>();
-					Vector min,max;
-					pEntity->GetRenderBoundsWorldspace(min,max);
-					box = (min + max) * 0.5f;
-					box.y = min.y + ((max.y-min.y) * 0.75f);
-				}
-				box = box + Utils::RandomUtils::genVector();
+				box = box + (Utils::RandomUtils::genVector() * 1.5f);
 				return box;
 			}
 			return Vector();
