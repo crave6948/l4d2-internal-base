@@ -72,7 +72,8 @@ namespace F
 					C_BaseAnimating* pAnimating = pEntity->As<C_BaseAnimating*>();
 					Vector min,max;
 					pEntity->GetRenderBoundsWorldspace(min,max);
-					box = (min + max) * 0.75f;
+					box = (min + max) * 0.5f;
+					box.y = min.y + ((max.y-min.y) * 0.75f);
 				}
 				box = box + Utils::RandomUtils::genVector();
 				return box;
