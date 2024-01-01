@@ -32,13 +32,13 @@ namespace F
 			{
 				case EClientClass::Tank:
 				{
-					C_BaseAnimating* pPlayer = pEntity->As<C_BaseAnimating*>();
+					C_Tank* pPlayer = pEntity->As<C_Tank*>();
 					box = pPlayer->GetHitboxPositionByGroup(HITGROUP_STOMACH);
 					break;
 				}
 				case EClientClass::Witch:
 				{
-					C_BaseAnimating* pPlayer = pEntity->As<C_BaseAnimating*>();
+					C_Witch* pPlayer = pEntity->As<C_Witch*>();
 					box = pPlayer->GetHitboxPositionByGroup(HITGROUP_HEAD);
 					break;
 				}
@@ -49,7 +49,7 @@ namespace F
 				case EClientClass::Spitter:
 				case EClientClass::Charger:
 				{
-					C_BaseAnimating* pPlayer = pEntity->As<C_BaseAnimating*>();
+					C_TerrorPlayer* pPlayer = pEntity->As<C_TerrorPlayer*>();
 					int hit = HITGROUP_HEAD;
 					if (pCC->m_ClassID == EClientClass::Boomer) { hit = HITGROUP_STOMACH; };
 					box = pPlayer->GetHitboxPositionByGroup(hit);
@@ -57,7 +57,7 @@ namespace F
 				}
 				case EClientClass::Infected:
 				{
-					C_BaseAnimating* pInfected = pEntity->As<C_BaseAnimating*>();
+					C_Infected* pInfected = pEntity->As<C_Infected*>();
 					box = pInfected->GetHitboxPositionByGroup(HITGROUP_STOMACH);
 					break;
 				}
