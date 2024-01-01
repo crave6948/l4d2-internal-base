@@ -126,7 +126,7 @@ public:
 		if (!pFinalBox)
 			return Vector();
 		Vector vPos;
-		U::Math.VectorTransform((pFinalBox->bbmin + pFinalBox->bbmax) / 2, Matrix[pFinalBox->bone], vPos);
+		U::Math.VectorTransform((pFinalBox->bbmin + pFinalBox->bbmax) * 0.5f, Matrix[pFinalBox->bone], vPos);
 		return vPos;
 	}
 	inline bool GetHitboxPositionByGroup(const int nGroup, Vector& vPos)
@@ -168,76 +168,6 @@ public:
 
 		U::Math.VectorTransform((pFinalBox->bbmin + pFinalBox->bbmax) * 0.5f, Matrix[pFinalBox->bone], vPos);
 		return true;
-	}
-
-	inline Vector GetHitboxPositionNearestPosition(const int nGroup, Vector position, Vector currentAngle)
-	{
-		const model_t* pModel = this->GetModel();
-
-		if (!pModel)
-			return Vector();
-
-		const studiohdr_t* pHdr = I::ModelInfo->GetStudiomodel(pModel);
-
-		if (!pHdr)
-			return Vector();
-
-		const mstudiohitboxset* pSet = pHdr->pHitboxSet(this->m_nHitboxSet());
-
-		if (!pSet)
-			return Vector();
-
-		matrix3x4_t Matrix[NUM_STUDIOBONES];
-		if (!this->SetupBones(Matrix, NUM_STUDIOBONES, 0x100, I::GlobalVars->curtime))
-			return Vector();
-
-		mstudiobbox* pFinalBox = nullptr;
-
-		//Gets head properly, possibly fails for other groups due to obvious reasons.
-		for (int n = 0; n < pSet->numhitboxes; n++)
-		{
-			mstudiobbox* pBox = pSet->pHitbox(n);
-
-			if (!pBox || (pBox->group != nGroup) || (pBox->bone < 0) || (pBox->bone >= NUM_STUDIOBONES))
-				continue;
-
-			pFinalBox = pBox;
-		}
-
-		if (!pFinalBox)
-			return Vector();
-		Vector BestvPos = Vector();
-		float bestfov = 9999.f;
-		float ix = 0.1, iy = 0.1, iz = 0.1;
-		while (ix < 1)
-		{
-			while (iy < 1)
-			{
-				while (iz < 1)
-				{
-					Vector vPos;
-					Vector input = Vector(pFinalBox->bbmin.x + (pFinalBox->bbmax.x - pFinalBox->bbmin.x) * ix,
-						pFinalBox->bbmin.y + (pFinalBox->bbmax.y - pFinalBox->bbmin.y) * iy,
-						pFinalBox->bbmin.z + (pFinalBox->bbmax.z - pFinalBox->bbmin.z) * iz);
-					iz += 0.1;
-					U::Math.VectorTransform(input, Matrix[pFinalBox->bone], vPos);
-					if (BestvPos.IsZero())
-					{
-						BestvPos = vPos;
-						continue;
-					}
-					Vector Angle = U::Math.GetAngleToPosition(position, vPos);
-					float fov = U::Math.GetFovBetween(currentAngle, Angle);
-					//if (fov >= bestfov) continue;
-					if (position.DistTo(vPos) >= position.DistTo(BestvPos)) continue;
-					BestvPos = vPos;
-					bestfov = fov;
-				}
-				iy += 0.1;
-			}
-			ix += 0.1;
-		}
-		return BestvPos;
 	}
 };
 

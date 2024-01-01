@@ -68,10 +68,11 @@ namespace F
 			}
 			if (!box.IsZero()) {
 				float distance = pLocal->Weapon_ShootPosition().DistTo(box);
-				if (distance <= 50) {
+				if (distance <= 150) {
 					C_BaseAnimating* pAnimating = pEntity->As<C_BaseAnimating*>();
 					box = pAnimating->GetHitboxPositionByGroup(HITGROUP_CHEST);
 				}
+				box = box + (Utils::RandomUtils::genVector() * 2);
 				return box;
 			}
 			return Vector();
