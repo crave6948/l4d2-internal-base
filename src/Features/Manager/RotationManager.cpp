@@ -47,12 +47,12 @@ namespace Helper {
 		Vector diffRotation = target - current;
 		U::Math.ClampAngles(diffRotation);
 		float rotationDiff = hypot(getAngleDifference(target.y, current.y), diffRotation.x);
-		double min = 10.0, max = 20.0;
-		float supposedTurnSpeed = 55;
+		double min = 35.0, max = 180.0;
 		std::default_random_engine generator;
 		std::uniform_real_distribution<double> distribution(min, max);
 		double nextGassain = distribution(generator);
-		float realisticTurnSpeed = round(rotationDiff * (supposedTurnSpeed + nextGassain / 180.0f));
+		float supposedTurnSpeed = nextGassain;
+		float realisticTurnSpeed = round(rotationDiff * (supposedTurnSpeed / 180.0f));
 		if (rotationDiff > 30)
 		{
 			float a1 = (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f);
