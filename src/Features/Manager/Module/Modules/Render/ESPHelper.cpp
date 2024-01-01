@@ -130,9 +130,7 @@ namespace F {
 					{
 						continue;
 					}
-					for (int i = 1; i <= 24; i++) {
-						drawESP(pInfected->GetBaseEntity(), i);
-					}
+					drawESP(pInfected->GetBaseEntity(), HITGROUP_CHEST);
 					break;
 				}
 				default:
