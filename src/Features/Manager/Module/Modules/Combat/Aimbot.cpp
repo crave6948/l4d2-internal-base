@@ -7,7 +7,8 @@ namespace F
 	{
 		inline IClientEntity *target = nullptr;
 		inline Vector targetPosition = Vector();
-		inline float maxfov = 35.0f, lastTime = 0.0f;
+		inline Vector lastRandom = Vector();
+		inline float maxfov = 35.0f, lastTime = 0.0f, lastrndTime = 0.0f;
 		inline bool aiming = false, CanAttack = false, IsVisible = false;
 		namespace AttackConfig
 		{
@@ -71,7 +72,12 @@ namespace F
 			}
 			if (!box.IsZero())
 			{
-				box = box + (Utils::RandomUtils::genVector() * 3.0f);
+				if (I::GlobalVars->realtime - lastrndTime >= AttackConfig::randVecTime / 1000)
+				{
+					lastRandom = Utils::RandomUtils::genVector() * 3.0f;
+					lastrndTime = I::GlobalVars->realtime;
+				}
+				box = box + lastRandom;
 				return box;
 			}
 			return Vector();
