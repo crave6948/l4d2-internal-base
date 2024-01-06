@@ -296,7 +296,7 @@ namespace F
 				}
 			}
 			//(pLocal->IsScoped() && !gVisuals.bNoZoom) ? 30.0f :
-			float flR = tanf(DEG2RAD(maxfov) / 2) / tanf(DEG2RAD(125) / 2) * G::Draw.m_nScreenW;
+			float flR = tanf(DEG2RAD(maxfov) / 2) / tanf(DEG2RAD(110) / 2) * G::Draw.m_nScreenW;
 			G::Draw.OutlinedCircle(G::Draw.m_nScreenW / 2, G::Draw.m_nScreenH / 2, flR, 32, Color(178, 190, 181, 255));
 		}
 		void Aimbot::onEnabled()
