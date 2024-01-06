@@ -46,7 +46,7 @@ namespace Helper {
 		}
 		Vector diffRotation = target - current;
 		U::Math.ClampAngles(diffRotation);
-		float rotationDiff = hypot(getAngleDifference(target.y, current.y), diffRotation.x);
+		float rotationDiff = U::Math.GetFovBetween(current, target);
 		double min = 65.0, max = 180.0;
 		std::default_random_engine generator;
 		std::uniform_real_distribution<double> distribution(min, max);
