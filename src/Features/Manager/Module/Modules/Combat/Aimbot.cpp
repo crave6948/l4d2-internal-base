@@ -34,7 +34,7 @@ namespace F
 			case EClientClass::Tank:
 			{
 				C_Tank *pPlayer = pEntity->As<C_Tank *>();
-				box = pPlayer->GetHitboxPositionByGroup(HITGROUP_STOMACH);
+				box = pPlayer->GetHitboxPositionByGroup(HITGROUP_CHEST);
 				break;
 			}
 			case EClientClass::Witch:
