@@ -5,74 +5,82 @@ namespace F
 {
 	namespace AimbotModule
 	{
-		inline IClientEntity* target = nullptr;
+		inline IClientEntity *target = nullptr;
 		inline Vector targetPosition = Vector();
-		inline float maxfov = 25.0f, lastTime = 0.0f, lastRotateSet = 0.0f;
+		inline float maxfov = 25.0f, lastTime = 0.0f, lastRandom = 0.0f;
 		inline bool aiming = false, CanAttack = false, IsVisible = false;
 		namespace AttackConfig
 		{
 			bool Slient = true;
 			int holdAttackForTick = 0;
 			int holdTick = 0;
-			float switchTimer = 200;
+			float switchTimer = 200, randVecTime = 750;
 		}
 		namespace RenderLocal
 		{
-			inline float acceletionList[20] = { 0 };
+			inline float acceletionList[20] = {0};
 			inline int f_i = 0;
 			inline bool IsLeftClick = false;
 		}
-		inline Vector getHitBoxPos(IClientEntity* pEntity, C_TerrorPlayer* pLocal)
+		inline Vector getHitBoxPos(IClientEntity *pEntity, C_TerrorPlayer *pLocal)
 		{
 			Vector box = Vector();
-			ClientClass* pCC = pEntity->GetClientClass();
+			ClientClass *pCC = pEntity->GetClientClass();
 			Vector vCamera;
 			I::EngineClient->GetViewAngles(vCamera);
 			switch (pCC->m_ClassID)
 			{
-				case EClientClass::Tank:
-				{
-					C_Tank* pPlayer = pEntity->As<C_Tank*>();
-					box = pPlayer->GetHitboxPositionByGroup(HITGROUP_STOMACH);
-					break;
-				}
-				case EClientClass::Witch:
-				{
-					C_Witch* pPlayer = pEntity->As<C_Witch*>();
-					box = pPlayer->GetHitboxPositionByGroup(HITGROUP_HEAD);
-					break;
-				}
-				case EClientClass::Boomer:
-				case EClientClass::Jockey:
-				case EClientClass::Smoker:
-				case EClientClass::Hunter:
-				case EClientClass::Spitter:
-				case EClientClass::Charger:
-				{
-					C_TerrorPlayer* pPlayer = pEntity->As<C_TerrorPlayer*>();
-					int hit = HITGROUP_HEAD;
-					if (pCC->m_ClassID == EClientClass::Boomer) { hit = HITGROUP_STOMACH; };
-					box = pPlayer->GetHitboxPositionByGroup(hit);
-					break;
-				}
-				case EClientClass::Infected:
-				{
-					C_Infected* pInfected = pEntity->As<C_Infected*>();
-					box = pInfected->GetHitboxPositionByGroup(HITGROUP_CHEST);
-					break;
-				}
-				default:
-				{
-					break;
-				}
+			case EClientClass::Tank:
+			{
+				C_Tank *pPlayer = pEntity->As<C_Tank *>();
+				box = pPlayer->GetHitboxPositionByGroup(HITGROUP_STOMACH);
+				break;
 			}
-			if (!box.IsZero()) {
-				box = box + (Utils::RandomUtils::genVector() * 1.5f);
+			case EClientClass::Witch:
+			{
+				C_Witch *pPlayer = pEntity->As<C_Witch *>();
+				box = pPlayer->GetHitboxPositionByGroup(HITGROUP_HEAD);
+				break;
+			}
+			case EClientClass::Boomer:
+			case EClientClass::Jockey:
+			case EClientClass::Smoker:
+			case EClientClass::Hunter:
+			case EClientClass::Spitter:
+			case EClientClass::Charger:
+			{
+				C_TerrorPlayer *pPlayer = pEntity->As<C_TerrorPlayer *>();
+				int hit = HITGROUP_HEAD;
+				if (pCC->m_ClassID == EClientClass::Boomer)
+				{
+					hit = HITGROUP_STOMACH;
+				};
+				box = pPlayer->GetHitboxPositionByGroup(hit);
+				break;
+			}
+			case EClientClass::Infected:
+			{
+				C_Infected *pInfected = pEntity->As<C_Infected *>();
+				box = pInfected->GetHitboxPositionByGroup(HITGROUP_CHEST);
+				break;
+			}
+			default:
+			{
+				break;
+			}
+			}
+			if (!box.IsZero())
+			{
+				if (I::GlobalVars->realtime - lastRandom >= AttackConfig::randVecTime / 1000)
+				{
+					box = box + (Utils::RandomUtils::genVector() * 7.0f);
+					lastRandom = I::GlobalVars->realtime;
+				}
 				return box;
 			}
 			return Vector();
 		}
-		inline bool ShouldRun(C_TerrorPlayer* pLocal, C_TerrorWeapon* pWeapon, CUserCmd* cmd)
+		inline bool ShouldRun(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd)
 		{
 			if (cmd->buttons & IN_USE)
 				return false;
@@ -80,8 +88,8 @@ namespace F
 			if (pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || !pLocal->CanAttackFull())
 				return false;
 
-			//You could also check if the current spread is -1.0f and not run nospread I guess.
-			//But since I wanted to filter out shotungs and just be sure that it isnt ran for other stuff I check the weaponid.
+			// You could also check if the current spread is -1.0f and not run nospread I guess.
+			// But since I wanted to filter out shotungs and just be sure that it isnt ran for other stuff I check the weaponid.
 			if (!pWeapon)
 				return false;
 			switch (pWeapon->GetWeaponID())
@@ -111,9 +119,9 @@ namespace F
 
 			return false;
 		}
-		void Aimbot::onPreCreateMove(CUserCmd* cmd, C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal)
+		void Aimbot::onPreCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
 		{
-			if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000) || !ShouldRun(pLocal,pWeapon,cmd))
+			if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000) || !ShouldRun(pLocal, pWeapon, cmd))
 			{
 				target = nullptr;
 				aiming = false;
@@ -127,31 +135,36 @@ namespace F
 			}
 			if (target == nullptr)
 			{
-				if (allowedToSwitch) {
+				if (allowedToSwitch)
+				{
 					Utils::target.serverRotation = Helper::rotationManager.DisabledRotation ? cmd->viewangles : Helper::rotationManager.getCurrentRotation();
 					target = Utils::target.find(pLocal, maxfov);
 				}
-				if (target == nullptr) {
+				if (target == nullptr)
+				{
 					return;
 				}
 			}
-			else {
+			else
+			{
 				bool isDead = Utils::target.CheckInvaidOrDead(pLocal, target);
 				if (isDead)
 				{
 					lastTime = I::GlobalVars->realtime;
+					lastRandom = I::GlobalVars->realtime - AttackConfig::randVecTime / 1000;
 					target = nullptr;
 					return;
 				}
 			}
-			C_BaseAnimating* pAnimating = target->As<C_BaseAnimating*>();
+			C_BaseAnimating *pAnimating = target->As<C_BaseAnimating *>();
 			Vector destination = getHitBoxPos(target, pLocal);
-			if (destination.IsZero()) return;
+			if (destination.IsZero())
+				return;
 			targetPosition = U::Math.GetAngleToPosition(pLocal->Weapon_ShootPosition(), destination);
-			Helper::rotationManager.setTargetRotation(targetPosition,1000);
+			Helper::rotationManager.setTargetRotation(targetPosition, 1000);
 			aiming = true;
 		}
-		void Aimbot::onPostCreateMove(CUserCmd* cmd, C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal)
+		void Aimbot::onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
 		{
 			CanAttack = pWeapon->CanPrimaryAttack(-0.2);
 			if (!aiming || target == nullptr)
@@ -163,7 +176,7 @@ namespace F
 				I::EngineClient->SetViewAngles(cmd->viewangles);
 			}
 			Vector vec = U::Math.AngleVectors(cmd->viewangles);
-			CTraceFilterHitscan filter{ pLocal };
+			CTraceFilterHitscan filter{pLocal};
 			bool shouldhit = false;
 			if (auto pHit = G::Util.GetHitEntity(pLocal->Weapon_ShootPosition(), pLocal->Weapon_ShootPosition() + (vec * 1400.f), &filter))
 			{
@@ -186,7 +199,7 @@ namespace F
 					case EClientClass::Witch:
 					{
 						shouldhit = true;
-						if (pHit->As<C_Witch*>()->m_rage() != 1.0f)
+						if (pHit->As<C_Witch *>()->m_rage() != 1.0f)
 						{
 							shouldhit = false;
 						}
@@ -196,7 +209,8 @@ namespace F
 						break;
 					}
 				}
-				else {
+				else
+				{
 					shouldhit = true;
 				}
 			}
@@ -223,9 +237,8 @@ namespace F
 			cmd->buttons |= IN_ATTACK;
 			AttackConfig::holdTick = AttackConfig::holdAttackForTick;
 			RenderLocal::IsLeftClick = cmd->buttons;
-			lastRotateSet = I::GlobalVars->realtime;
 		}
-		inline void acceletionLog(int renderX,int renderY, float acceletion)
+		inline void acceletionLog(int renderX, int renderY, float acceletion)
 		{
 			if (RenderLocal::f_i >= 20)
 			{
@@ -241,16 +254,20 @@ namespace F
 		void Aimbot::onRender2D()
 		{
 			int startX = 2, startY = 100;
-			if (!I::EngineClient->IsInGame()) { 
+			if (!I::EngineClient->IsInGame())
+			{
 				target = nullptr;
-				return; 
+				return;
 			};
-			if (I::EngineVGui->IsGameUIVisible()) { return; }
+			if (I::EngineVGui->IsGameUIVisible())
+			{
+				return;
+			}
 			if (GetAsyncKeyState(VK_NUMPAD5) & 0x8000)
 			{
 				AttackConfig::Slient = !AttackConfig::Slient;
 			}
-			C_TerrorPlayer* pLocal = I::ClientEntityList->GetClientEntity(I::EngineClient->GetLocalPlayer())->As<C_TerrorPlayer*>();
+			C_TerrorPlayer *pLocal = I::ClientEntityList->GetClientEntity(I::EngineClient->GetLocalPlayer())->As<C_TerrorPlayer *>();
 			if (aiming)
 			{
 				std::string str = "Aiming";
@@ -263,8 +280,9 @@ namespace F
 			}
 			G::Draw.String(EFonts::DEBUG, startX, startY, Color(255, 255, 255, 255), TXT_DEFAULT, ("IsLeftClick:" + std::to_string(RenderLocal::IsLeftClick)).c_str());
 			startY += G::Draw.GetFontHeight(EFonts::DEBUG) + 1;
-			if (target != nullptr) {
-				G::Draw.String(EFonts::DEBUG, startX, startY, Color(255, 255, 255, 255), TXT_DEFAULT, ("Target:"+ std::to_string(target->entindex())).c_str());
+			if (target != nullptr)
+			{
+				G::Draw.String(EFonts::DEBUG, startX, startY, Color(255, 255, 255, 255), TXT_DEFAULT, ("Target:" + std::to_string(target->entindex())).c_str());
 				startY += G::Draw.GetFontHeight(EFonts::DEBUG) + 1;
 				if (!targetPosition.IsZero())
 				{
@@ -276,13 +294,14 @@ namespace F
 					G::Draw.Line(screen.x, screen.y, screen.x + 4, screen.y - 4, Color(255, 255, 255, 255));
 				}
 			}
-			//(pLocal->IsScoped() && !gVisuals.bNoZoom) ? 30.0f : 
+			//(pLocal->IsScoped() && !gVisuals.bNoZoom) ? 30.0f :
 			float flR = tanf(DEG2RAD(maxfov) / 2) / tanf(DEG2RAD(120) / 2) * G::Draw.m_nScreenW;
-				G::Draw.OutlinedCircle(G::Draw.m_nScreenW / 2, G::Draw.m_nScreenH / 2, flR, 32, Color(178, 190, 181, 255));
+			G::Draw.OutlinedCircle(G::Draw.m_nScreenW / 2, G::Draw.m_nScreenH / 2, flR, 32, Color(178, 190, 181, 255));
 		}
 		void Aimbot::onEnabled()
 		{
 			target = nullptr;
+			lastRandom = I::GlobalVars->realtime - AttackConfig::randVecTime / 1000;
 		}
 		void Aimbot::onDisabled()
 		{
