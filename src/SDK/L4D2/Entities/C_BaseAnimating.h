@@ -143,7 +143,7 @@ public:
 		{
 		case HITGROUP_CHEST:
 			vPos.x -= 20;
-			vPos.y += 20;
+			vPos.y -= 20;
 			vPos.z -= 10;
 			break;
 		case HITGROUP_STOMACH:
