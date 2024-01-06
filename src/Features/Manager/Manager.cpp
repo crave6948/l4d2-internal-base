@@ -89,6 +89,7 @@ namespace F {
 	{
 		//bool isToggled = keyState & 1;
 		//bool isDown = keyState & 0x8000;
+		if (!I::EngineClient->IsInGame() || I::EngineClient->IsPaused()) return;
 		for (Module* mod : featurelist) {
 			if (GetAsyncKeyState(mod->getKey()) & 0x8000)
 			{
