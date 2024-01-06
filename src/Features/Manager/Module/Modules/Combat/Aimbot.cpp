@@ -7,14 +7,14 @@ namespace F
 	{
 		inline IClientEntity *target = nullptr;
 		inline Vector targetPosition = Vector();
-		inline float maxfov = 25.0f, lastTime = 0.0f, lastRandom = 0.0f;
+		inline float maxfov = 35.0f, lastTime = 0.0f, lastRandom = 0.0f;
 		inline bool aiming = false, CanAttack = false, IsVisible = false;
 		namespace AttackConfig
 		{
 			bool Slient = true;
 			int holdAttackForTick = 0;
 			int holdTick = 0;
-			float switchTimer = 200, randVecTime = 750;
+			float switchTimer = 200, randVecTime = 500;
 		}
 		namespace RenderLocal
 		{
@@ -73,7 +73,7 @@ namespace F
 			{
 				if (I::GlobalVars->realtime - lastRandom >= AttackConfig::randVecTime / 1000)
 				{
-					box = box + (Utils::RandomUtils::genVector() * 7.0f);
+					box = box + (Utils::RandomUtils::genVector() * 3.0f);
 					lastRandom = I::GlobalVars->realtime;
 				}
 				return box;
@@ -295,7 +295,7 @@ namespace F
 				}
 			}
 			//(pLocal->IsScoped() && !gVisuals.bNoZoom) ? 30.0f :
-			float flR = tanf(DEG2RAD(maxfov) / 2) / tanf(DEG2RAD(120) / 2) * G::Draw.m_nScreenW;
+			float flR = tanf(DEG2RAD(maxfov) / 2) / tanf(DEG2RAD(125) / 2) * G::Draw.m_nScreenW;
 			G::Draw.OutlinedCircle(G::Draw.m_nScreenW / 2, G::Draw.m_nScreenH / 2, flR, 32, Color(178, 190, 181, 255));
 		}
 		void Aimbot::onEnabled()
