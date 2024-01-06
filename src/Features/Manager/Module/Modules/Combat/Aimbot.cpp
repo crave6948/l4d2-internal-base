@@ -58,7 +58,7 @@ namespace F
 				case EClientClass::Infected:
 				{
 					C_Infected* pInfected = pEntity->As<C_Infected*>();
-					box = pInfected->GetHitboxPositionByGroup(HITGROUP_HEAD);
+					box = pInfected->GetHitboxPositionByGroup(HITGROUP_CHEST);
 					break;
 				}
 				default:
