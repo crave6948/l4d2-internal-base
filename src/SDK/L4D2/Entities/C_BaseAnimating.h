@@ -127,7 +127,7 @@ public:
 		{
 			mstudiobbox *pBox = pSet->pHitbox(n);
 
-			if (!pBox || (pBox->group != HITGROUP_HEAD) || (pBox->bone < 0) || (pBox->bone >= NUM_STUDIOBONES))
+			if (!pBox || (pBox->group != nGroup) || (pBox->bone < 0) || (pBox->bone >= NUM_STUDIOBONES))
 				continue;
 
 			pFinalBox = pBox;
@@ -142,7 +142,9 @@ public:
 		switch (nGroup)
 		{
 		case HITGROUP_CHEST:
-			vPos.z -= 20;
+			vPos.x -= 20;
+			vPos.y += 20;
+			vPos.z -= 10;
 			break;
 		case HITGROUP_STOMACH:
 			vPos.z -= 30;

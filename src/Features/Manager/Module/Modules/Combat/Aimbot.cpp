@@ -7,7 +7,7 @@ namespace F
 	{
 		inline IClientEntity *target = nullptr;
 		inline Vector targetPosition = Vector();
-		inline float maxfov = 35.0f, lastTime = 0.0f, lastRandom = 0.0f;
+		inline float maxfov = 35.0f, lastTime = 0.0f;
 		inline bool aiming = false, CanAttack = false, IsVisible = false;
 		namespace AttackConfig
 		{
@@ -71,11 +71,7 @@ namespace F
 			}
 			if (!box.IsZero())
 			{
-				if (I::GlobalVars->realtime - lastRandom >= AttackConfig::randVecTime / 1000)
-				{
-					box = box + (Utils::RandomUtils::genVector() * 3.0f);
-					lastRandom = I::GlobalVars->realtime;
-				}
+				box = box + (Utils::RandomUtils::genVector() * 3.0f);
 				return box;
 			}
 			return Vector();
@@ -151,7 +147,6 @@ namespace F
 				if (isDead)
 				{
 					lastTime = I::GlobalVars->realtime;
-					lastRandom = I::GlobalVars->realtime - AttackConfig::randVecTime / 1000;
 					target = nullptr;
 					return;
 				}
@@ -301,7 +296,6 @@ namespace F
 		void Aimbot::onEnabled()
 		{
 			target = nullptr;
-			lastRandom = I::GlobalVars->realtime - AttackConfig::randVecTime / 1000;
 		}
 		void Aimbot::onDisabled()
 		{
