@@ -52,12 +52,12 @@ namespace Helper {
 		std::uniform_real_distribution<double> distribution(min, max);
 		double nextGassain = distribution(generator);
 		float supposedTurnSpeed = nextGassain;
-		float realisticTurnSpeed = round(rotationDiff * (supposedTurnSpeed / 180.0f));
+		float realisticTurnSpeed = rotationDiff * (supposedTurnSpeed / 180.0f);
 		if (rotationDiff > 60)
 		{
 			float a1 = (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f);
 			float a2 = (1.f - (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f));
-			realisticTurnSpeed = round(pow(a1, 2.0f) * 30 + pow(a2, 2.0f) * 10);
+			realisticTurnSpeed = pow(a1, 2.0f) * 30 + pow(a2, 2.0f) * 10;
 		}
 		if (diffRotation.x > realisticTurnSpeed)
 		{

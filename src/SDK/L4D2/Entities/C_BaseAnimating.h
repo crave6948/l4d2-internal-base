@@ -127,7 +127,7 @@ public:
 		{
 			mstudiobbox *pBox = pSet->pHitbox(n);
 
-			if (!pBox || (pBox->group != nGroup) || (pBox->bone < 0) || (pBox->bone >= NUM_STUDIOBONES))
+			if (!pBox || (pBox->group != HITGROUP_HEAD) || (pBox->bone < 0) || (pBox->bone >= NUM_STUDIOBONES))
 				continue;
 
 			pFinalBox = pBox;
@@ -139,6 +139,17 @@ public:
 		U::Math.VectorTransform(pFinalBox->bbmin, Matrix[pFinalBox->bone], min);
 		U::Math.VectorTransform(pFinalBox->bbmax, Matrix[pFinalBox->bone], max);
 		vPos = (min + max) * 0.5f;
+		switch (nGroup)
+		{
+		case HITGROUP_CHEST:
+			vPos.y -= 2;
+			break;
+		case HITGROUP_STOMACH:
+			vPos.y -= 4;
+			break;
+		default:
+			break;
+		}
 		return true;
 	}
 };

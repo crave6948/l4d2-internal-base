@@ -7,7 +7,7 @@ namespace F
 	{
 		inline IClientEntity* target = nullptr;
 		inline Vector targetPosition = Vector();
-		inline float maxfov = 180.0f, lastTime = 0.0f, lastRotateSet = 0.0f;
+		inline float maxfov = 15.0f, lastTime = 0.0f, lastRotateSet = 0.0f;
 		inline bool aiming = false, CanAttack = false, IsVisible = false;
 		namespace AttackConfig
 		{
@@ -58,7 +58,7 @@ namespace F
 				case EClientClass::Infected:
 				{
 					C_Infected* pInfected = pEntity->As<C_Infected*>();
-					box = pInfected->GetHitboxPositionByGroup(HITGROUP_STOMACH);
+					box = pInfected->GetHitboxPositionByGroup(HITGROUP_HEAD);
 					break;
 				}
 				default:
