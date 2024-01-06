@@ -7,7 +7,7 @@ namespace F
 	{
 		inline IClientEntity* target = nullptr;
 		inline Vector targetPosition = Vector();
-		inline float maxfov = 15.0f, lastTime = 0.0f, lastRotateSet = 0.0f;
+		inline float maxfov = 25.0f, lastTime = 0.0f, lastRotateSet = 0.0f;
 		inline bool aiming = false, CanAttack = false, IsVisible = false;
 		namespace AttackConfig
 		{

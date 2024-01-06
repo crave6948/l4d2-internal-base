@@ -142,10 +142,10 @@ public:
 		switch (nGroup)
 		{
 		case HITGROUP_CHEST:
-			vPos.y -= 10;
+			vPos.z -= 10;
 			break;
 		case HITGROUP_STOMACH:
-			vPos.y -= 20;
+			vPos.z -= 20;
 			break;
 		default:
 			break;
