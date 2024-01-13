@@ -3,6 +3,11 @@
 namespace Helper {
 	inline Vector lastSetTarget = Vector();
 	inline float lastdist = -1;
+	inline double nextGassain( double min, double max) {
+		std::default_random_engine generator;
+		std::uniform_real_distribution<double> distribution(min, max);
+		return distribution(generator);
+	}
 	inline float getAngleDifference(float a, float b)
 	{
 		return (
@@ -37,7 +42,7 @@ namespace Helper {
 			return false;
 		return DisabledRotation || hypot(getAngleDifference(target.y, current.y), target.x - current.x) <= 1;
 	}
-	bool RotationManager::calcRotation2(float lastdist)
+	bool RotationManager::calcRotation(float lastdist)
 	{
 		if (DisabledRotation)
 		{
@@ -47,17 +52,14 @@ namespace Helper {
 		Vector diffRotation = target - current;
 		U::Math.ClampAngles(diffRotation);
 		float rotationDiff = U::Math.GetFovBetween(current, target);
-		double min = 65.0, max = 180.0;
-		std::default_random_engine generator;
-		std::uniform_real_distribution<double> distribution(min, max);
-		double nextGassain = distribution(generator);
-		float supposedTurnSpeed = nextGassain;
-		float realisticTurnSpeed = rotationDiff * (supposedTurnSpeed / 180.0f);
-		if (rotationDiff > 60)
+		
+		float supposedTurnSpeed = nextGassain(65.0,180.0);
+		float realisticTurnSpeed = rotationDiff * (rotationDiff <= 7 ? U::Math.Max(0.5f, supposedTurnSpeed / 180.0f) : (supposedTurnSpeed / 180.0f));
+		if (rotationDiff > 30)
 		{
 			float a1 = (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f);
 			float a2 = (1.f - (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f));
-			realisticTurnSpeed = pow(a1, 2.0f) * 30 + pow(a2, 2.0f) * 10;
+			realisticTurnSpeed = pow(a1, 2.0f) * nextGassain(30.0,40.0) + pow(a2, 2.0f) * nextGassain(7.0, 17.0);
 		}
 		if (diffRotation.x > realisticTurnSpeed)
 		{
@@ -87,47 +89,6 @@ namespace Helper {
 		return true;
 	}
 
-	// void RotationManager::calcRotation()
-	// {
-	// 	if (DisabledRotation)
-	// 	{
-	// 		return;
-	// 	}
-	// 	Vector diffRotation = target - current;
-	// 	U::Math.ClampAngles(diffRotation);
-	// 	float rotationDiff = hypot(getAngleDifference(target.y, current.y), diffRotation.x);
-	// 	double min = 3.0, max = 7.0;
-	// 	float supposedTurnSpeed = 55;
-	// 	std::default_random_engine generator;
-	// 	std::uniform_real_distribution<double> distribution(min, max);
-	// 	double nextGassain = distribution(generator);
-	// 	float realisticTurnSpeed = round(rotationDiff * (supposedTurnSpeed / 180.0f));
-	// 	if (rotationDiff > 30)
-	// 	{
-	// 		float a1 = (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f);
-	// 		float a2 = (1.f - (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f));
-	// 		realisticTurnSpeed = static_cast<float>(pow(a1, 2.0)) * 30 + static_cast<float>(pow(a2, 2.0)) * 10;
-	// 	}
-	// 	if (diffRotation.x > realisticTurnSpeed)
-	// 	{
-	// 		diffRotation.x = realisticTurnSpeed;
-	// 	}
-	// 	else
-	// 	{
-	// 		diffRotation.x = U::Math.Max(diffRotation.x, -realisticTurnSpeed);
-	// 	}
-	// 	if (diffRotation.y > realisticTurnSpeed)
-	// 	{
-	// 		diffRotation.y = realisticTurnSpeed;
-	// 	}
-	// 	else
-	// 	{
-	// 		diffRotation.y = U::Math.Max(diffRotation.y, -realisticTurnSpeed);
-	// 	}
-	// 	U::Math.ClampAngles(diffRotation);
-	// 	current = current + diffRotation;
-	// 	U::Math.ClampAngles(current);
-	// }
 	void RotationManager::ForceBack()
 	{
 		keepRotation = 500;
@@ -158,7 +119,7 @@ namespace Helper {
 		bool passed = false;
 		while (passed == false)
 		{
-			passed = calcRotation2(lastdist);
+			passed = calcRotation(lastdist);
 		}
 		DisabledRotation = ShouldDisabledRotation();
 		if (DisabledRotation)

@@ -8,7 +8,7 @@ namespace F
 		inline IClientEntity *target = nullptr;
 		inline Vector targetPosition = Vector();
 		inline Vector lastRandom = Vector();
-		inline float maxfov = 35.0f, lastTime = 0.0f, lastrndTime = 0.0f;
+		inline float maxfov = 90.0f, lastTime = 0.0f, lastrndTime = 0.0f;
 		inline bool aiming = false, CanAttack = false, IsVisible = false;
 		namespace AttackConfig
 		{
@@ -167,7 +167,7 @@ namespace F
 		}
 		void Aimbot::onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
 		{
-			CanAttack = pWeapon->CanPrimaryAttack(-0.2);
+			CanAttack = pWeapon->CanPrimaryAttack();
 			if (!aiming || target == nullptr)
 			{
 				return;

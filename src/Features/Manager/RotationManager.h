@@ -15,8 +15,7 @@ namespace Helper
 		Vector getCurrentRotation();
 	private:
 		bool ShouldDisabledRotation();
-		void calcRotation();
-		bool calcRotation2(float lastdist);
+		bool calcRotation(float lastdist);
 		bool hasKeepRotationReachedLimit();
 	};
 	inline RotationManager rotationManager = RotationManager();
