@@ -19,7 +19,7 @@ namespace F
 				}
 				else if (pLocal->m_fFlags() & FL_ONGROUND)
 				{
-					delayedTicks = Utils::RandomUtils::generateRandomNumber(5, 9);
+					delayedTicks = Utils::RandomUtils::generateRandomNumber(10, 14);
 				}
 			}
 			else
