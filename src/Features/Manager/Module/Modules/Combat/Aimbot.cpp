@@ -166,7 +166,7 @@ namespace F
 		}
 		void Aimbot::onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
 		{
-			CanAttack = pWeapon->CanPrimaryAttack();
+			CanAttack = pWeapon->CanPrimaryAttack(-0.2);
 			if (!aiming || target == nullptr)
 			{
 				return;
