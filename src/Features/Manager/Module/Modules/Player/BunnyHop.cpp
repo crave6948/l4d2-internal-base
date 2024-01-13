@@ -30,7 +30,8 @@ namespace F
 				}
 			}
 			isJumping = cmd->buttons & IN_JUMP;
-			delayedTicks--;
+			if (delayedTicks > 0)
+				delayedTicks--;
 		}
 
 		void BunnyHop::onRender2D()
