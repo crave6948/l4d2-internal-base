@@ -13,7 +13,7 @@ namespace F
 		{
 			if (cmd->buttons & IN_JUMP)
 			{
-				if (!(pLocal->m_fFlags() & FL_ONGROUND) && !nextGround && delayedTicks <= 0)
+				if (!nextGround && delayedTicks <= 0)
 				{
 					cmd->buttons &= ~IN_JUMP;
 				}
@@ -35,7 +35,7 @@ namespace F
 
 		void BunnyHop::onRender2D()
 		{
-			std::string str = "Bhop: " + std::to_string(delayedTicks) + " ticks / Jump:" + (isJumping ? "true" : "false");
+			std::string str = "Bhop: " + std::to_string(delayedTicks) + " ticks / Jump:" + (isJumping ? "true" : "false") + " / Ground:" + (nextGround? "true" : "false");
 			G::Draw.String(EFonts::DEBUG, 100, 100, Color(255, 255, 255, 255), TXT_DEFAULT, str.c_str());
 		}
 	}
