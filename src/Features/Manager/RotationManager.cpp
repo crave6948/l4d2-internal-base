@@ -59,7 +59,7 @@ namespace Helper {
 		{
 			float a1 = (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f);
 			float a2 = (1.f - (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f));
-			realisticTurnSpeed = pow(a1, 2.0f) * nextGassain(30.0,40.0) + pow(a2, 2.0f) * nextGassain(7.0, 17.0);
+			realisticTurnSpeed = pow(a1, 2.0f) * nextGassain(25.0,35.0) + pow(a2, 2.0f) * nextGassain(7.0, 15.0);
 		}
 		if (diffRotation.x > realisticTurnSpeed)
 		{
