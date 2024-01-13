@@ -70,6 +70,10 @@ namespace F {
 			}
 			if (pWeapon)
 			{
+				for (Module* mod : featurelist) {
+					if (!mod->getEnabled()) continue;
+					mod->onPrePrediction(cmd, pWeapon, pLocal);
+				}
 				F::EnginePrediction.Start(pLocal, cmd);
 				{
 					for (Module* mod : featurelist) {

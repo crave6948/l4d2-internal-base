@@ -16,6 +16,7 @@ public:
 	};
 	virtual void onPreCreateMove(CUserCmd* cmd, C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal) {};
 	virtual void onPostCreateMove(CUserCmd* cmd, C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal) {};
+	virtual void onPrePrediction(CUserCmd* cmd, C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal) {};
 	virtual void onPrediction(CUserCmd* cmd, C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal,int PredictedFlags) {};
 	virtual void onPostPrediction(CUserCmd* cmd, C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal) {};
 	virtual void onRender2D() {};
