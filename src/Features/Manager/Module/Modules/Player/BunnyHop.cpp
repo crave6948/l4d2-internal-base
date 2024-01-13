@@ -5,8 +5,10 @@ namespace F
 	{
 		inline int delayedTicks = 0;
 		inline bool isJumping = false, nextGround = false;
+		int oldbuttons = 0;
 		void BunnyHop::onPrePrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
 		{
+			oldbuttons = cmd->buttons;
 			if (cmd->buttons & IN_JUMP)
 				cmd->buttons &= ~IN_JUMP;
 		}
@@ -16,6 +18,7 @@ namespace F
 		}
 		void BunnyHop::onPostPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
 		{
+			cmd->buttons = oldbuttons;
 			if (cmd->buttons & IN_JUMP)
 			{
 				if (!(pLocal->m_fFlags() & FL_ONGROUND) && delayedTicks <= 0)
