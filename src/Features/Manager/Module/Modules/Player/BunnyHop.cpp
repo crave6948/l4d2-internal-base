@@ -13,13 +13,14 @@ namespace F
 		{
 			if (cmd->buttons & IN_JUMP)
 			{
-				if (!nextGround && delayedTicks <= 0)
+				if (!(pLocal->m_fFlags() & FL_ONGROUND) && delayedTicks <= 0)
 				{
 					cmd->buttons &= ~IN_JUMP;
 				}
-				else if (pLocal->m_fFlags() & FL_ONGROUND)
+				else if (pLocal->m_fFlags() & FL_ONGROUND || nextGround)
 				{
-					delayedTicks = Utils::RandomUtils::generateRandomNumber(10, 14);
+					if (delayedTicks <= 0)
+						delayedTicks = Utils::RandomUtils::generateRandomNumber(10, 14);
 				}
 			}
 			else
