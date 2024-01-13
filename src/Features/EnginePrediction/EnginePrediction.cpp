@@ -11,7 +11,7 @@ void CFeatures_EnginePrediction::Start(C_BasePlayer* pLocal, CUserCmd* cmd)
 	m_nOldTickCount = I::GlobalVars->tickcount;
 
 	const int nOldTickBase = pLocal->m_nTickBase();
-	const int nOldFlags = pLocal->m_fFlags();
+	nOldFlags = pLocal->m_fFlags();
 
 	const int nTickBase = GetTickBase(nOldTickBase, cmd);
 
@@ -74,6 +74,11 @@ void CFeatures_EnginePrediction::Finish(C_BasePlayer* pLocal, CUserCmd* cmd)
 int CFeatures_EnginePrediction::GetPredictedFlags() const
 {
 	return m_nPredictedFlags;
+}
+
+int CFeatures_EnginePrediction::GetOldFlags() const
+{
+    return nOldFlags;
 }
 
 //CasualHacker I believe posted this.

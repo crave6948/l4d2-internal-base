@@ -269,6 +269,4 @@ public:
 	inline unsigned char& m_MoveType() {
 		return *reinterpret_cast<unsigned char*>(reinterpret_cast<DWORD>(this) + 0x144);
 	}
-
-	int raycount = 0;
 };

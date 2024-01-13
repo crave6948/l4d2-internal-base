@@ -54,10 +54,9 @@ namespace F {
 		{
 			C_TerrorWeapon* pWeapon = pLocal->GetActiveWeapon()->As<C_TerrorWeapon*>();
 			Vector oldViewangles = cmd->viewangles;
-
+			Utils::target.serverRotation = Helper::rotationManager.DisabledRotation || Helper::rotationManager.getCurrentRotation().IsZero() ? cmd->viewangles : Helper::rotationManager.getCurrentRotation();
 			for (Module* mod : featurelist) {
 				if (!mod->getEnabled()) continue;
-				if (mod->getName() == "NoSpread") continue;
 				mod->onPreCreateMove(cmd, pWeapon, pLocal);
 			}
 			Helper::rotationManager.onUpdate(pLocal);
@@ -74,12 +73,15 @@ namespace F {
 				F::EnginePrediction.Start(pLocal, cmd);
 				{
 					for (Module* mod : featurelist) {
-						if (mod->getName() != "NoSpread") continue;
 						if (!mod->getEnabled()) continue;
-						mod->onPreCreateMove(cmd, pWeapon, pLocal);
+						mod->onPrediction(cmd, pWeapon, pLocal, F::EnginePrediction.GetPredictedFlags());
 					}
 				}
 				F::EnginePrediction.Finish(pLocal, cmd);
+			}
+			for (Module* mod : featurelist) {
+				if (!mod->getEnabled()) continue;
+				mod->onPostPrediction(cmd, pWeapon, pLocal);
 			}
 			G::Util.FixMovement(oldViewangles,cmd);
 		}

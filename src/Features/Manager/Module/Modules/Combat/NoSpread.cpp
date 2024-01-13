@@ -39,7 +39,7 @@ namespace F
 			return false;
 		}
 
-		void NoSpread::onPreCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
+		void NoSpread::onPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal, int PredictedFlags)
 		{
 			static const auto pfSharedRandomFloat = reinterpret_cast<float (*)(const char *, float, float, int)>(U::Offsets.m_dwSharedRandomFloat);
 

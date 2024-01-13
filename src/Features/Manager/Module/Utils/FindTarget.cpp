@@ -15,9 +15,6 @@ namespace Utils
 			CTraceFilterHitscan filter{ pLocal };
 			auto pHit{ G::Util.GetHitEntity(LocalPlayerPosition, entityposition, &filter) };
 			if (!pHit || pHit->entindex() != pEntity->entindex()) return -1;
-			if (pHit->GetHealth() <= 0) return -1;
-			pHit->raycount++;
-			if (pHit->raycount <= 20) return -1;
 			Vector vCamera;
 			I::EngineClient->GetViewAngles(vCamera);
 			float fov = U::Math.GetFovBetween(!serverRotation.IsZero() ? serverRotation : vCamera, U::Math.GetAngleToPosition(LocalPlayerPosition, entityposition));
@@ -204,7 +201,6 @@ namespace Utils
 			}
 			}
 		}
-		serverRotation = Vector();
 		return bestTarget;
 	}
 }

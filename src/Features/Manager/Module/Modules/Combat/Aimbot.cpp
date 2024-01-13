@@ -139,7 +139,6 @@ namespace F
 			{
 				if (allowedToSwitch)
 				{
-					Utils::target.serverRotation = Helper::rotationManager.DisabledRotation ? cmd->viewangles : Helper::rotationManager.getCurrentRotation();
 					target = Utils::target.find(pLocal, maxfov);
 				}
 				if (target == nullptr)
