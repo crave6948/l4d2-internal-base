@@ -40,7 +40,7 @@ namespace Helper {
 	{
 		if (!hasKeepRotationReachedLimit())
 			return false;
-		return DisabledRotation || hypot(getAngleDifference(target.y, current.y), target.x - current.x) <= 1;
+		return DisabledRotation || U::Math.GetFovBetween(current, target) <= 1;
 	}
 	bool RotationManager::calcRotation(float lastdist)
 	{
@@ -56,7 +56,7 @@ namespace Helper {
 		
 		float supposedTurnSpeed = nextGassain(65.0, 180.0);
 		float realisticTurnSpeed = calculateRealisticTurnSpeed(rotationDiff, supposedTurnSpeed);
-		
+
 		if (rotationDiff > 30)
 		{
 			realisticTurnSpeed = calculateTurnSpeedWithCurve(rotationDiff);
@@ -70,7 +70,7 @@ namespace Helper {
 		current += diffRotation;
 		U::Math.ClampAngles(current);
 
-		float aimdist = pre.DistTo(current);
+		float aimdist = U::Math.GetFovBetween(pre, current);
 
 		if (is_lac_detected(aimdist, lastdist, rotationDiff))
 		{
@@ -144,7 +144,7 @@ namespace Helper {
 		if (lastSetTarget.IsZero()) {
 			lastSetTarget = rotation;
 		}else {
-			if (lastSetTarget.DistTo(rotation) > 130) {
+			if (U::Math.GetFovBetween(lastSetTarget, rotation) > 10) {
 				lastdist = -1;
 			}
 		}
