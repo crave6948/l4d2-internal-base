@@ -54,7 +54,7 @@ namespace Helper {
 		U::Math.ClampAngles(diffRotation);
 		float rotationDiff = U::Math.GetFovBetween(current, target);
 		
-		float supposedTurnSpeed = nextGassain(65.0, 180.0);
+		float supposedTurnSpeed = nextGassain(75.0, 180.0);
 		float realisticTurnSpeed = calculateRealisticTurnSpeed(rotationDiff, supposedTurnSpeed);
 
 		if (rotationDiff > 30)
@@ -83,7 +83,8 @@ namespace Helper {
 
 	float RotationManager::calculateRealisticTurnSpeed(float rotationDiff, float supposedTurnSpeed)
 	{
-		return rotationDiff * (rotationDiff <= 5 ? std::max(0.3f, supposedTurnSpeed / 180.0f) : (supposedTurnSpeed / 180.0f));
+		float a1 = 180.0 - (rotationDiff * 9.0f);
+		return rotationDiff * (rotationDiff <= 5 ? (a1 / 180.0f) : (supposedTurnSpeed / 180.0f));
 	}
 
 	float RotationManager::calculateTurnSpeedWithCurve(float rotationDiff)
