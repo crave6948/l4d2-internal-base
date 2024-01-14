@@ -147,7 +147,7 @@ public:
 			vPos.z -= 5;
 			if (this->GetClientClass()->m_ClassID == EClientClass::Infected) {
 				vPos = this->GetAbsOrigin();
-				vPos.z += 55;
+				vPos.z += 30;
 			}
 			break;
 		case HITGROUP_STOMACH:
