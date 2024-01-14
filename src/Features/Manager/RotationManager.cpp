@@ -49,44 +49,54 @@ namespace Helper {
 			lastdist = -1;
 			return true;
 		}
+
 		Vector diffRotation = target - current;
 		U::Math.ClampAngles(diffRotation);
 		float rotationDiff = U::Math.GetFovBetween(current, target);
 		
-		float supposedTurnSpeed = nextGassain(65.0,180.0);
-		float realisticTurnSpeed = rotationDiff * (rotationDiff <= 7 ? U::Math.Max(0.5f, supposedTurnSpeed / 180.0f) : (supposedTurnSpeed / 180.0f));
+		float supposedTurnSpeed = nextGassain(65.0, 180.0);
+		float realisticTurnSpeed = calculateRealisticTurnSpeed(rotationDiff, supposedTurnSpeed);
+		
 		if (rotationDiff > 30)
 		{
-			float a1 = (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f);
-			float a2 = (1.f - (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f));
-			realisticTurnSpeed = pow(a1, 2.0f) * nextGassain(25.0,35.0) + pow(a2, 2.0f) * nextGassain(7.0, 15.0);
+			realisticTurnSpeed = calculateTurnSpeedWithCurve(rotationDiff);
 		}
-		if (diffRotation.x > realisticTurnSpeed)
-		{
-			diffRotation.x = realisticTurnSpeed;
-		}
-		else
-		{
-			diffRotation.x = U::Math.Max(diffRotation.x, -realisticTurnSpeed);
-		}
-		if (diffRotation.y > realisticTurnSpeed)
-		{
-			diffRotation.y = realisticTurnSpeed;
-		}
-		else
-		{
-			diffRotation.y = U::Math.Max(diffRotation.y, -realisticTurnSpeed);
-		}
+
+		realisticTurnSpeed = round(realisticTurnSpeed * 100.0f) / 100.0f;
+		clampRotation(diffRotation, realisticTurnSpeed);
+		
 		Vector pre = current;
 		U::Math.ClampAngles(diffRotation);
-		current = current + diffRotation;
+		current += diffRotation;
 		U::Math.ClampAngles(current);
+
 		float aimdist = pre.DistTo(current);
-		if (is_lac_detected(aimdist,lastdist,rotationDiff)) {
+
+		if (is_lac_detected(aimdist, lastdist, rotationDiff))
+		{
 			return false;
 		}
+
 		lastdist = aimdist;
 		return true;
+	}
+
+	float RotationManager::calculateRealisticTurnSpeed(float rotationDiff, float supposedTurnSpeed)
+	{
+		return rotationDiff * (rotationDiff <= 5 ? std::max(0.3f, supposedTurnSpeed / 180.0f) : (supposedTurnSpeed / 180.0f));
+	}
+
+	float RotationManager::calculateTurnSpeedWithCurve(float rotationDiff)
+	{
+		float a1 = (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f);
+		float a2 = (1.f - (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f));
+		return pow(a1, 2.0f) * nextGassain(115.0, 135.0) + pow(a2, 2.0f) * nextGassain(10.0, 15.0);
+	}
+
+	void RotationManager::clampRotation(Vector& diffRotation, float realisticTurnSpeed)
+	{
+		diffRotation.x = std::clamp(diffRotation.x, -realisticTurnSpeed, realisticTurnSpeed);
+		diffRotation.y = std::clamp(diffRotation.y, -realisticTurnSpeed, realisticTurnSpeed);
 	}
 
 	void RotationManager::ForceBack()

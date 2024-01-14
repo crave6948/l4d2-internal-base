@@ -17,6 +17,9 @@ namespace Helper
 		bool ShouldDisabledRotation();
 		bool calcRotation(float lastdist);
 		bool hasKeepRotationReachedLimit();
+		float calculateRealisticTurnSpeed(float rotationDiff, float supposedTurnSpeed);
+		float calculateTurnSpeedWithCurve(float rotationDiff);
+		void clampRotation(Vector& diffRotation, float realisticTurnSpeed);
 	};
 	inline RotationManager rotationManager = RotationManager();
 }
