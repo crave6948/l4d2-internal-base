@@ -15,7 +15,7 @@ namespace F
 			bool Slient = true;
 			int holdAttackForTick = 0;
 			int holdTick = 0;
-			float switchTimer = 600, randVecTime = 200;
+			float switchTimer = 400, randVecTime = 200;
 		}
 		namespace RenderLocal
 		{
