@@ -1,6 +1,5 @@
 #include "ESPHelper.h"
 #include "../../../Manager.h"
-#include <map>
 
 namespace F
 {
@@ -22,24 +21,55 @@ namespace F
 			G::Draw.Line(screen.x - size, screen.y + size, screen.x - size, screen.y - size, Color(255, 255, 255, 255));
 			std::string name = "Zombie";
 			Color color = Color(255, 255, 255, 255);
-			std::map<EClientClass, std::pair<std::string, Color>> classMappings = {
-				{EClientClass::Witch, {"Witch", Color(255, 0, 0, 255)}},
-				{EClientClass::Tank, {"Tank", Color(255, 0, 0, 255)}},
-				{EClientClass::Boomer, {"Boomer", Color(0, 255, 0, 255)}},
-				{EClientClass::Jockey, {"Jockey", Color(0, 255, 0, 255)}},
-				{EClientClass::Smoker, {"Smoker", Color(0, 255, 0, 255)}},
-				{EClientClass::Hunter, {"Hunter", Color(0, 255, 0, 255)}},
-				{EClientClass::Spitter, {"Spitter", Color(0, 255, 0, 255)}},
-				{EClientClass::Charger, {"Charger", Color(0, 255, 0, 255)}},
-				{EClientClass::Infected, {"v", Color(255, 255, 255, 255)}},
-			};
-
-			auto classIterator = classMappings.find(pBaseEntity->GetClientClass()->m_ClassID);
-
-			if (classIterator != classMappings.end())
+			switch (pBaseEntity->GetClientClass()->m_ClassID)
 			{
-				name = classIterator->second.first;
-				color = classIterator->second.second;
+			case EClientClass::Witch:
+			{
+				name = "Witch";
+				color = Color(255, 0, 0, 255);
+				break;
+			}
+			case EClientClass::Tank:
+			{
+				name = "Tank";
+				color = Color(255, 0, 0, 255);
+				break;
+			}
+			case EClientClass::Boomer:
+				name = "Boomer";
+				color = Color(0, 255, 0, 255);
+				break;
+			case EClientClass::Jockey:
+				name = "Jockey";
+				color = Color(0, 255, 0, 255);
+				break;
+			case EClientClass::Smoker:
+				name = "Smoker";
+				color = Color(0, 255, 0, 255);
+				break;
+			case EClientClass::Hunter:
+				name = "Hunter";
+				color = Color(0, 255, 0, 255);
+				break;
+			case EClientClass::Spitter:
+				name = "Spitter";
+				color = Color(0, 255, 0, 255);
+				break;
+			case EClientClass::Charger:
+			{
+				name = "Charger";
+				color = Color(0, 255, 0, 255);
+				break;
+			}
+			case EClientClass::Infected:
+			{
+				name = "v";
+				break;
+			}
+			default:
+			{
+				break;
+			}
 			}
 			if (name == "v")
 				return;
