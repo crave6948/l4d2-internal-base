@@ -40,7 +40,9 @@ namespace F {
 			case EClientClass::Spitter:
 			case EClientClass::Charger:
 			{
-				name = "SP Infected " + pBaseEntity->GetPlayerName();
+				const char* charPtr = pBaseEntity->GetPlayerName();
+				std::string str(charPtr);
+				name = "SP Infected " + str;
 				color = Color(0, 255, 0, 255);
 				break;
 			}
