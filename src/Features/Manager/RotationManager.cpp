@@ -84,7 +84,7 @@ namespace Helper {
 	float RotationManager::calculateRealisticTurnSpeed(float rotationDiff, float supposedTurnSpeed)
 	{
 		float a1 = 135.0 - (rotationDiff * 9.0f);
-		return rotationDiff * (rotationDiff <= 5 ? (a1 / 180.0f) : (supposedTurnSpeed / 180.0f));
+		return rotationDiff * (rotationDiff <= 5 ? a1 / 180.0f : supposedTurnSpeed / 180.0f);
 	}
 
 	float RotationManager::calculateTurnSpeedWithCurve(float rotationDiff)
