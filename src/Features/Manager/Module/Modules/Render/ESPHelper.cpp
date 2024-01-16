@@ -56,14 +56,6 @@ namespace F {
 			}
 			G::Draw.String(EFonts::DEBUG, screen.x, screen.y - G::Draw.GetFontHeight(EFonts::DEBUG) - 1, color, TXT_CENTERXY, name.c_str());
 		}
-		inline void drawBox(Vector min, Vector max, C_BaseEntity* entity, int* bone) {
-			matrix3x4_t Matrix[NUM_STUDIOBONES];
-			if (!entity->SetupBones(Matrix, NUM_STUDIOBONES, 0x100, I::GlobalVars->curtime))
-				return;
-			Vector vec;
-			U::Math.BuildTransformedBox(vec,min,max,Matrix[bone]);
-			
-		}
 		void ESPHelper::onRender2D()
 		{
 			if (!I::EngineClient->IsInGame() || I::EngineVGui->IsGameUIVisible())
@@ -140,8 +132,6 @@ namespace F {
 					}
 					Vector min, max;
 					int bone;
-					pEntity->GetBaseAnimating()->GetMinMaxHitBox(HITGROUP_CHEST, min,max,bone);
-					// drawBox(min,max,pEntity,bone);
 					drawESP(pInfected->GetBaseEntity(), HITGROUP_CHEST);
 
 					break;
