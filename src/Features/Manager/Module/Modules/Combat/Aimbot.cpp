@@ -8,14 +8,14 @@ namespace F
 		inline IClientEntity *target = nullptr;
 		inline Vector targetPosition = Vector();
 		inline Vector lastRandom = Vector();
-		inline float maxfov = 15.0f, lastTime = 0.0f, lastrndTime = 0.0f, lastRotate = 0.0f;
+		inline float maxfov = 5.0f, lastTime = 0.0f, lastrndTime = 0.0f, lastRotate = 0.0f;
 		inline bool aiming = false, CanAttack = false, IsVisible = false;
 		namespace AttackConfig
 		{
 			bool Slient = true;
 			int holdAttackForTick = 0;
 			int holdTick = 0;
-			float switchTimer = 400, randVecTime = 200, rotateTime = 100;
+			float switchTimer = 400, randVecTime = 200, rotateTime = 50;
 		}
 		namespace RenderLocal
 		{
