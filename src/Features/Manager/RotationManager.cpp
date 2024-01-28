@@ -2,7 +2,6 @@
 #include "random"
 namespace Helper {
 	inline Vector lastSetTarget = Vector();
-	inline bool slowmethod = false;
 	inline float lastdist = -1;
 	inline double nextGassain( double min, double max) {
 		std::default_random_engine generator;
@@ -85,7 +84,7 @@ namespace Helper {
 	float RotationManager::calculateRealisticTurnSpeed(float rotationDiff, float supposedTurnSpeed)
 	{
 		float a1 = 180.0 - (rotationDiff * 9.0f);
-		return rotationDiff * (rotationDiff <= 10 && !slowmethod ? a1 / 180.0f : supposedTurnSpeed / 180.0f);
+		return rotationDiff * (rotationDiff <= 3 ? a1 / 180.0f : supposedTurnSpeed / 180.0f);
 	}
 
 	float RotationManager::calculateTurnSpeedWithCurve(float rotationDiff)
@@ -145,13 +144,9 @@ namespace Helper {
 	{
 		if (lastSetTarget.IsZero()) {
 			lastSetTarget = rotation;
-			slowmethod = false;
 		}else {
 			if (U::Math.GetFovBetween(lastSetTarget, rotation) > 10) {
 				lastdist = -1;
-				slowmethod = true;
-			}else {
-				slowmethod = false;
 			}
 		}
 		target = rotation;
