@@ -35,10 +35,11 @@ jobs:
         uses: threeal/cmake-action@v1.3.0
 
       - name: Build Project
-        run: mkdir build
-            cd ./build/
-            cmake ..
-            cd ..
+        run: |
+          mkdir build
+          cd build/
+          cmake ..
+          cd ..
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1.0.2
