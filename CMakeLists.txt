@@ -27,7 +27,7 @@ target_include_directories(l4d2_base PRIVATE
 
 # Set compile options based on build configurations
 target_compile_options(l4d2_base PRIVATE
-    "$<$<CONFIG:Debug>: /Od /MDd /Zi /EHsc>"
+    "$<$<CONFIG:Debug>: /Od /MDd /Zi /RTC1 /EHsc>"
     "$<$<CONFIG:Release>: /O2 /MD /EHsc>"
 )
 
