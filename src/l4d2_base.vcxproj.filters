@@ -124,6 +124,9 @@
     <ClCompile Include="Features\Manager\Module\Modules\Combat\Aimbot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Features\Manager\Module\Modules\Combat\AutoShoot\AutoShoot.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Features\Manager\RotationManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -397,6 +400,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Features\Manager\Module\Modules\Combat\Aimbot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Manager\Module\Modules\Combat\AutoShoot\AutoShoot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Features\Manager\RotationManager.h">

@@ -192,6 +192,7 @@
     <ClCompile Include="Features\Manager\Module\Modules\Player\BunnyHop.cpp" />
     <ClCompile Include="Features\Manager\Module\Modules\Render\Arraylist.cpp" />
     <ClCompile Include="Features\Manager\Module\Modules\Combat\Aimbot.cpp" />
+    <ClCompile Include="Features\Manager\Module\Modules\Combat\AutoShoot\AutoShoot.cpp" />
     <ClCompile Include="Features\Manager\RotationManager.cpp" />
     <ClCompile Include="Features\Manager\Module\Utils\FindTarget.cpp" />
     <ClCompile Include="Features\Manager\Module\Modules\Render\ESPHelper.cpp" />
@@ -283,6 +284,7 @@
     <ClInclude Include="Features\Manager\Module\Modules\Player\BunnyHop.h" />
     <ClInclude Include="Features\Manager\Module\Modules\Render\Arraylist.h" />
     <ClInclude Include="Features\Manager\Module\Modules\Combat\Aimbot.h" />
+    <ClInclude Include="Features\Manager\Module\Modules\Combat\AutoShoot\AutoShoot.h" />
     <ClInclude Include="Features\Manager\RotationManager.h" />
     <ClInclude Include="Features\Manager\Module\Utils\FindTarget.h" />
     <ClInclude Include="Features\Manager\Module\Utils\UtilsCollector.h" />
