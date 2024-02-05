@@ -21,7 +21,7 @@ namespace Utils
 			if (fov > maxfov) return -1;
 			float distancepercent = (distance * 100) / 1400;
 			float fovpercent = (fov * 100) / maxfov;
-			score = 100 - ((distancepercent + fovpercent) / 2);
+			score = 100 - fovpercent;
 		}
 		return score;
 	}
