@@ -37,6 +37,9 @@
     <ClCompile Include="Features\Manager\Module\Utils\FindTarget.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Features\Manager\Module\Utils\UtilsCollector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Features\Manager\RotationManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

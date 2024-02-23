@@ -163,6 +163,7 @@
     <ClCompile Include="Features\Manager\Module\Modules\Render\Arraylist.cpp" />
     <ClCompile Include="Features\Manager\Module\Modules\Render\ESPHelper.cpp" />
     <ClCompile Include="Features\Manager\Module\Utils\FindTarget.cpp" />
+    <ClCompile Include="Features\Manager\Module\Utils\UtilsCollector.cpp" />
     <ClCompile Include="Features\Manager\RotationManager.cpp" />
     <ClCompile Include="Features\Vars.cpp" />
     <ClCompile Include="Hooks\BaseClient\BaseClient.cpp" />
