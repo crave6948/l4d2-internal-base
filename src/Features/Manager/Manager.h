@@ -19,8 +19,8 @@ namespace F {
 		
 		ArraylistModule::Arraylist arraylist = ArraylistModule::Arraylist();
 		
-		// AimbotModule::Aimbot aimbot = AimbotModule::Aimbot();
-		// NoSpreadModule::NoSpread noSpread = NoSpreadModule::NoSpread();
+		AimbotModule::Aimbot aimbot = AimbotModule::Aimbot();
+		NoSpreadModule::NoSpread noSpread = NoSpreadModule::NoSpread();
 		AutoShootModule::AutoShoot autoShoot = AutoShootModule::AutoShoot();
 
 		ESPHelperModule::ESPHelper espHelper = ESPHelperModule::ESPHelper();
@@ -28,8 +28,8 @@ namespace F {
 		//pointer
 		BunnyHopModule::BunnyHop* bhop_ptr = &bhop;
 		ArraylistModule::Arraylist* arraylist_ptr = &arraylist;
-		// AimbotModule::Aimbot* aimbot_ptr = &aimbot;
-		// NoSpreadModule::NoSpread* noSpread_ptr = &noSpread;
+		AimbotModule::Aimbot* aimbot_ptr = &aimbot;
+		NoSpreadModule::NoSpread* noSpread_ptr = &noSpread;
 		ESPHelperModule::ESPHelper* espHelper_ptr = &espHelper;
 		AutoShootModule::AutoShoot* autoShoot_ptr = &autoShoot;
 		void Init();
