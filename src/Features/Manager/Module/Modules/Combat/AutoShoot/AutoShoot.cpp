@@ -76,7 +76,7 @@ namespace F {
                 return;
             }
             if (cmd->buttons & IN_ATTACK) {
-                bool attack = pWeapon->CanPrimaryAttack();
+                bool attack = pWeapon->CanPrimaryAttack(-0.2);
                 if (attack) {
                     if (check) {
                         cmd->buttons &= ~IN_ATTACK;
@@ -93,7 +93,7 @@ namespace F {
 					if (nextPunch) {
 						if (Config::AutoPunch::getAutoPunch(pWeapon)) {
 							if (!(cmd->buttons & IN_ATTACK2)) {
-								bool attack = pLocal->IsReadyToShove();
+								bool attack = pLocal->IsReadyToShove() || pWeapon->CanSecondaryAttack(-0.2);
 								if (attack) {
 									cmd->buttons |= IN_ATTACK2;
 								}
