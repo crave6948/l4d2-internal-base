@@ -5,10 +5,10 @@ namespace F {
 		int lastTime = 0;
 		bool nextPunch = false;
 		inline bool isSniper(int id) {
-			return (id == WEAPON_AWP || id == WEAPON_SCOUT || id == WEAPON_MILITARY_SNIPER || id == WEAPON_HUNTING_RIFLE);
+			return (id == WEAPON_AWP || id == WEAPON_SCOUT);
 		}
 		inline bool isShotgun(int id) {
-			return (id == WEAPON_AUTO_SHOTGUN || id == WEAPON_SPAS || id == WEAPON_PUMP_SHOTGUN || id == WEAPON_CHROME_SHOTGUN);
+			return (id == WEAPON_PUMP_SHOTGUN || id == WEAPON_CHROME_SHOTGUN);
 		}
 		namespace Config {
 			namespace AutoPunch {
