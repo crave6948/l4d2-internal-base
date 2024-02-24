@@ -48,7 +48,7 @@ namespace F {
                 return;
             }
             if (cmd->buttons & IN_ATTACK) {
-                bool attack = pWeapon->CanPrimaryAttack(-0.2f) || pWeapon->GetCurrentSpread() <= 0.0f;
+                bool attack = pWeapon->CanPrimaryAttack(-0.2f);
                 if (attack) {
                     if (check) {
                         cmd->buttons &= ~IN_ATTACK;
@@ -57,6 +57,7 @@ namespace F {
 						check = true;
 					}
                 }else {
+					cmd->buttons &= ~IN_ATTACK;
                     check = false;
                 }
             }
