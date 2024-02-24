@@ -1,7 +1,15 @@
 #include "AutoShoot.h"
 namespace F {
     namespace AutoShootModule {
-        bool check = false;
+        int check = false;
+		int lastTime = 0;
+		bool nextPunch = false;
+		inline bool isSniper(int id) {
+			return (id == WEAPON_AWP || id == WEAPON_SCOUT || id == WEAPON_MILITARY_SNIPER || id == WEAPON_HUNTING_RIFLE);
+		}
+		inline bool isShotgun(int id) {
+			return (id == WEAPON_AUTO_SHOTGUN || id == WEAPON_SPAS || id == WEAPON_PUMP_SHOTGUN || id == WEAPON_CHROME_SHOTGUN);
+		}
 		namespace Config {
 			namespace AutoPunch {
 				bool AutoPunch = true;
@@ -13,9 +21,9 @@ namespace F {
 					if (!OnlySniper && !OnlyShotgun)
 						return true;
 					int id = pWeapon->GetWeaponID();
-					if (OnlySniper && (id == WEAPON_AWP || id == WEAPON_SCOUT || id == WEAPON_MILITARY_SNIPER || id == WEAPON_HUNTING_RIFLE))
+					if (OnlySniper && isSniper(id))
 						return true;
-					if (OnlyShotgun && (id == WEAPON_AUTO_SHOTGUN || id == WEAPON_SPAS || id == WEAPON_PUMP_SHOTGUN || id == WEAPON_CHROME_SHOTGUN))
+					if (OnlyShotgun && isShotgun(id))
 						return true;
 					return false;
 				}
@@ -64,6 +72,7 @@ namespace F {
         {
             if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000) || !ShouldRun(pLocal, pWeapon, cmd)) {
                 check = false;
+				nextPunch = false;
                 return;
             }
             if (cmd->buttons & IN_ATTACK) {
@@ -75,10 +84,26 @@ namespace F {
                     }else {
 						check = true;
 					}
+					lastTime = 5;
+					nextPunch = true;
                 }else {
-					cmd->buttons &= ~IN_ATTACK;
+					if (lastTime <= 0)
+						cmd->buttons &= ~IN_ATTACK;
                     check = false;
+					if (nextPunch) {
+						if (Config::AutoPunch::getAutoPunch(pWeapon)) {
+							if (!(cmd->buttons & IN_ATTACK)) {
+								bool attack = pWeapon->CanSecondaryAttack(-0.2f);
+								if (attack) {
+									cmd->buttons |= IN_ATTACK2;
+								}
+							}
+						}
+						nextPunch = false;
+					}
                 }
+				if (lastTime > 0) 
+					lastTime--;
             }
         }
     }
