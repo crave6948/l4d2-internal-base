@@ -1,6 +1,6 @@
 #pragma once
 #include "string"
-#include "../Utils/UntilsCollector.h"
+#include "Utils/UntilsCollector.h"
 class Module
 {
 public:

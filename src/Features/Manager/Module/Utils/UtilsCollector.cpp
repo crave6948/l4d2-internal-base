@@ -34,7 +34,7 @@ namespace Utils
 
             return random_number;
         }
-        Vector genVector(float scope = 1.0f, bool x = true, bool y = true, bool z = true) {
+        Vector genVector(float scope, bool x, bool y, bool z) {
   			// Generate random values based on boolean flags
             float randX = x ? generateRandomNumber(-scope, scope) : 0;
             float randY = y ? generateRandomNumber(-scope, scope) : 0;
