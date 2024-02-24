@@ -84,24 +84,24 @@ namespace F {
                     }else {
 						check = true;
 					}
-					lastTime = 5;
+					lastTime = 10;
 					nextPunch = true;
                 }else {
 					if (lastTime <= 0)
 						cmd->buttons &= ~IN_ATTACK;
                     check = false;
-                }
-				if (nextPunch) {
-					if (Config::AutoPunch::getAutoPunch(pWeapon)) {
-						if (!(cmd->buttons & IN_ATTACK2)) {
-							bool attack = pLocal->IsReadyToShove();
-							if (attack) {
-								cmd->buttons |= IN_ATTACK2;
+					if (nextPunch) {
+						if (Config::AutoPunch::getAutoPunch(pWeapon)) {
+							if (!(cmd->buttons & IN_ATTACK2)) {
+								bool attack = pLocal->IsReadyToShove();
+								if (attack) {
+									cmd->buttons |= IN_ATTACK2;
+								}
 							}
 						}
+						nextPunch = false;
 					}
-					nextPunch = false;
-				}
+                }
 				if (lastTime > 0) 
 					lastTime--;
             }

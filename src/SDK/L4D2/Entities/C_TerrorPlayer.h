@@ -232,9 +232,6 @@ public:
 	inline bool CanAttackFull(float timeToFaster) {
 		return (CanAttack() && ((m_flNextAttack() - timeToFaster) <= I::GlobalVars->curtime));
 	}
-	inline bool CanShoveFull() {
-		return ((m_flNextShoveTime() <= I::GlobalVars->curtime));
-	}
 };
 
 class C_SurvivorBot : public C_TerrorPlayer

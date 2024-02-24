@@ -54,7 +54,7 @@ namespace Helper {
 		U::Math.ClampAngles(diffRotation);
 		float rotationDiff = U::Math.GetFovBetween(current, target);
 		
-		float supposedTurnSpeed = nextGassain(35.0, 135.0);
+		float supposedTurnSpeed = nextGassain(80.0, 135.0);
 		float realisticTurnSpeed = calculateRealisticTurnSpeed(rotationDiff, supposedTurnSpeed);
 
 		if (rotationDiff > 30)
