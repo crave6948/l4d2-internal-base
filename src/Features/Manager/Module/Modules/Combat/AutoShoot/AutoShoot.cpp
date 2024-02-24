@@ -90,18 +90,18 @@ namespace F {
 					if (lastTime <= 0)
 						cmd->buttons &= ~IN_ATTACK;
                     check = false;
-					if (nextPunch) {
-						if (Config::AutoPunch::getAutoPunch(pWeapon)) {
-							if (!(cmd->buttons & IN_ATTACK)) {
-								bool attack = pWeapon->CanSecondaryAttack(-0.2f);
-								if (attack) {
-									cmd->buttons |= IN_ATTACK2;
-								}
+                }
+				if (nextPunch) {
+					if (Config::AutoPunch::getAutoPunch(pWeapon)) {
+						if (!(cmd->buttons & IN_ATTACK2)) {
+							bool attack = pWeapon->CanSecondaryAttack() || pLocal->IsReadyToShove();
+							if (attack) {
+								cmd->buttons |= IN_ATTACK2;
 							}
 						}
-						nextPunch = false;
 					}
-                }
+					nextPunch = false;
+				}
 				if (lastTime > 0) 
 					lastTime--;
             }
