@@ -5,7 +5,7 @@ namespace F
 {
 	namespace AimbotModule
 	{
-		inline IClientEntity *target = nullptr;
+		inline IClientEntity* target = nullptr;
 		inline Vector targetPosition = Vector();
 		inline Vector lastRandom = Vector();
 		inline float maxfov = 5.0f, lastTime = 0.0f, lastrndTime = 0.0f, lastRotate = 0.0f;
