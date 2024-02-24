@@ -151,11 +151,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Util\Hook\MinHook\buffer.c" />
     <ClCompile Include="Util\Hook\MinHook\hook.c" />
-    <ClCompile Include="Util\Hook\MinHook\trampoline.c" />
-    <ClCompile Include="Util\Hook\MinHook\hde\hde32.c" />
-    <ClCompile Include="Util\Hook\MinHook\hde\hde64.c" />
     <ClCompile Include="DllMain.cpp" />
     <ClCompile Include="Entry\Entry.cpp" />
     <ClCompile Include="Features\ESP\ESP.cpp" />
