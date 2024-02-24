@@ -53,6 +53,7 @@ namespace F {
                     if (check) {
                         cmd->buttons &= ~IN_ATTACK;
                         check = false;
+						return;
                     }
                     //next tick weapon shouldn't can attack
                     check = true;
