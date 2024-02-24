@@ -6,8 +6,8 @@
 #include "Module/Modules/Player/BunnyHop.h"
 #include "Module/Modules/Render/Arraylist.h"
 #include "Module/Modules/Render/ESPHelper.h"
-// #include "Module/Modules/Combat/Aimbot.h"
-// #include "Module/Modules/Combat/NoSpread.h"
+#include "Module/Modules/Combat/Aimbot.h"
+#include "Module/Modules/Combat/NoSpread.h"
 #include "Module/Modules/Combat/AutoShoot/AutoShoot.h"
 namespace F {
 	class Manager {
