@@ -41,6 +41,9 @@ namespace F {
 
 			return false;
 		}
+        void AutoShoot::onPreCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
+        {
+        }
         void AutoShoot::onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
         {
             if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000) || !ShouldRun(pLocal, pWeapon, cmd)) {
@@ -60,6 +63,15 @@ namespace F {
                     check = false;
                 }
             }
+        }
+        void AutoShoot::onRender2D()
+        {
+        }
+        void AutoShoot::onEnabled()
+        {
+        }
+        void AutoShoot::onDisabled()
+        {
         }
     }
 }
