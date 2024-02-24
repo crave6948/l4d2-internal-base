@@ -48,7 +48,7 @@ namespace F {
                 return;
             }
             if (cmd->buttons & IN_ATTACK) {
-                bool WeaponAtk = pWeapon->CanPrimaryAttack();
+                bool WeaponAtk = pWeapon->CanPrimaryAttack(-0.2);
                 if (WeaponAtk) {
                     if (check) {
                         cmd->buttons &= ~IN_ATTACK;
