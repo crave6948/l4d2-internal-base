@@ -31,11 +31,12 @@ namespace F::FastMeleeModule
                     if (i == 1)
                         continue;
                     C_BaseCombatWeapon *pWep = pLocal->Weapon_GetSlot(i);
+                    if (!pWep)
+                        continue;
                     if (pLocal->Weapon_CanSwitchTo(pWep))
                     {
-                        cmd->buttons |= IN_JUMP;
+                        pLocal->Weapon_Switch(pWep);
                         break;
-                    //     pLocal->Weapon_Switch(pWep);
                     }
                 }
                 break;
