@@ -12,7 +12,7 @@ namespace F::FastMeleeModule
         if (pWeapon->GetWeaponID() != WEAPON_MELEE)
             return false;
 
-        if (!pWeapon->CanPrimaryAttack())
+        if (!pWeapon->CanPrimaryAttack(-0.2))
             return false;
 
         return true;
@@ -38,7 +38,7 @@ namespace F::FastMeleeModule
                         continue;
                     if (pLocal->Weapon_CanSwitchTo(pWep))
                     {
-                        pLocal->Weapon_Switch(pWep);
+                        pLocal->SelectItem(pWep);
                         break;
                     }
                 }
@@ -50,7 +50,7 @@ namespace F::FastMeleeModule
                     return;
                 if (pLocal->Weapon_CanSwitchTo(pWep))
                 {
-                    pLocal->Weapon_Switch(pWep);
+                    pLocal->SelectItem(pWep);
                 }
                 stage = 0;
                 nextSwap = false;
