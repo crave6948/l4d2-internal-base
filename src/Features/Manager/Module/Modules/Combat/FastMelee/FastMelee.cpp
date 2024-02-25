@@ -19,12 +19,6 @@ namespace F::FastMeleeModule
     }
     void FastMelee::onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
     {
-        if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000)) {
-            stage = 0;
-            nextSwap = false;
-            waiting = 0;
-            return;
-        }
         if (nextSwap && stage > 0)
         {
             switch (stage)
@@ -39,7 +33,7 @@ namespace F::FastMeleeModule
                         continue;
                     if (pLocal->Weapon_CanSwitchTo(pWep))
                     {
-                        pLocal->SelectItem(pWep);
+                        cmd->weaponselect = pWep->entindex();
                         stage = 2;
                         waiting = 20;
                         break;
@@ -57,12 +51,18 @@ namespace F::FastMeleeModule
                     return;
                 if (pLocal->Weapon_CanSwitchTo(pWep))
                 {
-                    pLocal->SelectItem(pWep);
+                    cmd->weaponselect = pWep->entindex();
                 }
                 stage = 0;
                 nextSwap = false;
                 break;
             }
+            return;
+        }
+        if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000)) {
+            stage = 0;
+            nextSwap = false;
+            waiting = 0;
             return;
         }
         if (!shouldRun(pWeapon, pLocal))
