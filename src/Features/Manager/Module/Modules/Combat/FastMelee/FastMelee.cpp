@@ -19,7 +19,7 @@ namespace F::FastMeleeModule
     }
     void FastMelee::onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
     {
-        if (!cmd->buttons & IN_ATTACK) {
+        if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000)) {
             stage = 0;
             nextSwap = false;
             return;
