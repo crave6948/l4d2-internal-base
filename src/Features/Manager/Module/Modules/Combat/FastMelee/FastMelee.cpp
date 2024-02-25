@@ -31,19 +31,19 @@ namespace F::FastMeleeModule
                     if (i == 1)
                         continue;
                     C_BaseCombatWeapon *pWep = pLocal->Weapon_GetSlot(i);
-                    if (pLocal->Weapon_CanSwitchTo(pWep))
-                    {
-                        pLocal->Weapon_Switch(pWep);
-                    }
+                    // if (pLocal->Weapon_CanSwitchTo(pWep))
+                    // {
+                    //     pLocal->Weapon_Switch(pWep);
+                    // }
                 }
                 break;
                 stage++;
             case 2:
-                C_BaseCombatWeapon *pWep = pLocal->Weapon_GetSlot(1);
-                if (pLocal->Weapon_CanSwitchTo(pWep))
-                {
-                    pLocal->Weapon_Switch(pWep);
-                }
+                // C_BaseCombatWeapon *pWep = pLocal->Weapon_GetSlot(1);
+                // if (pLocal->Weapon_CanSwitchTo(pWep))
+                // {
+                //     pLocal->Weapon_Switch(pWep);
+                // }
                 stage = 0;
                 nextSwap = false;
                 break;
