@@ -24,6 +24,11 @@ namespace F::FastMeleeModule
             switch (stage)
             {
             case 1:
+                if (waiting > 0)
+                {
+                    waiting--;
+                    return;
+                }
                 for (int i = 0; i < 5; i++)
                 {
                     if (i == 1)
@@ -35,7 +40,7 @@ namespace F::FastMeleeModule
                     {
                         cmd->weaponselect = pWep->entindex();
                         stage = 2;
-                        waiting = 20;
+                        waiting = 5;
                         break;
                     }
                 }
@@ -69,6 +74,7 @@ namespace F::FastMeleeModule
             return;
         nextSwap = true;
         stage = 1;
+        waiting = 5;
     }
     void FastMelee::onRender2D()
     {
