@@ -40,7 +40,7 @@ namespace F::FastMeleeModule
                     {
                         cmd->weaponselect = pWep->entindex();
                         stage = 2;
-                        waiting = 5;
+                        waiting = 2;
                         break;
                     }
                 }
@@ -74,7 +74,7 @@ namespace F::FastMeleeModule
             return;
         nextSwap = true;
         stage = 1;
-        waiting = 5;
+        waiting = 3;
     }
     void FastMelee::onRender2D()
     {
