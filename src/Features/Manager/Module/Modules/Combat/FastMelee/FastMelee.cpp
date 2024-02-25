@@ -3,7 +3,7 @@ namespace F::FastMeleeModule
 {
     inline bool nextSwap = false;
     // 0 = nothing, 1 = swap to primary or medkit grenade pills, 2 = swap to secondary
-    inline int stage = 0;
+    inline int stage = 0, waiting = 0;
     bool FastMelee::shouldRun(C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
     {
         if (!pWeapon || !pLocal)
@@ -22,6 +22,7 @@ namespace F::FastMeleeModule
         if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000)) {
             stage = 0;
             nextSwap = false;
+            waiting = 0;
             return;
         }
         if (nextSwap && stage > 0)
@@ -39,12 +40,18 @@ namespace F::FastMeleeModule
                     if (pLocal->Weapon_CanSwitchTo(pWep))
                     {
                         pLocal->SelectItem(pWep);
+                        stage = 2;
+                        waiting = 20;
                         break;
                     }
                 }
-                stage = 2;
                 break;
             case 2:
+                if (waiting > 0)
+                {
+                    waiting--;
+                    return;
+                }
                 C_BaseCombatWeapon *pWep = pLocal->Weapon_GetSlot(1);
                 if (!pWep)
                     return;
