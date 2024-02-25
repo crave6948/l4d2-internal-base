@@ -48,6 +48,7 @@ namespace F {
 		featurelist.push_back(aimbot_ptr);
 		featurelist.push_back(autoShoot_ptr);
 		featurelist.push_back(noSpread_ptr);
+		featurelist.push_back(fastMelee_ptr);
 		
 		featurelist.push_back(espHelper_ptr);
 	}

@@ -9,6 +9,7 @@
 #include "Module/Modules/Combat/Aimbot.h"
 #include "Module/Modules/Combat/NoSpread.h"
 #include "Module/Modules/Combat/AutoShoot/AutoShoot.h"
+#include "Module/Modules/Combat/FastMelee/FastMelee.h"
 namespace F {
 	class Manager {
 
@@ -22,6 +23,7 @@ namespace F {
 		AimbotModule::Aimbot aimbot = AimbotModule::Aimbot();
 		NoSpreadModule::NoSpread noSpread = NoSpreadModule::NoSpread();
 		AutoShootModule::AutoShoot autoShoot = AutoShootModule::AutoShoot();
+		FastMeleeModule::FastMelee fastMelee = FastMeleeModule::FastMelee();
 
 		ESPHelperModule::ESPHelper espHelper = ESPHelperModule::ESPHelper();
 		
@@ -32,6 +34,7 @@ namespace F {
 		NoSpreadModule::NoSpread* noSpread_ptr = &noSpread;
 		ESPHelperModule::ESPHelper* espHelper_ptr = &espHelper;
 		AutoShootModule::AutoShoot* autoShoot_ptr = &autoShoot;
+		FastMeleeModule::FastMelee* fastMelee_ptr = &fastMelee;
 		void Init();
 		void onRender2D();
 		void onCreateMove(CUserCmd* cmd, C_TerrorPlayer* pLocal);

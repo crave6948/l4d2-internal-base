@@ -163,6 +163,7 @@
     <ClCompile Include="Features\Manager\Manager.cpp" />
     <ClCompile Include="Features\Manager\Module\Modules\Combat\Aimbot.cpp" />
     <ClCompile Include="Features\Manager\Module\Modules\Combat\AutoShoot\AutoShoot.cpp" />
+    <ClCompile Include="Features\Manager\Module\Modules\Combat\FastMelee\FastMelee.cpp" />
     <ClCompile Include="Features\Manager\Module\Modules\Combat\NoSpread.cpp" />
     <ClCompile Include="Features\Manager\Module\Modules\Player\BunnyHop.cpp" />
     <ClCompile Include="Features\Manager\Module\Modules\Render\Arraylist.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="Features\Manager\Module\ModuleHeader.h" />
     <ClInclude Include="Features\Manager\Module\Modules\Combat\Aimbot.h" />
     <ClInclude Include="Features\Manager\Module\Modules\Combat\AutoShoot\AutoShoot.h" />
+    <ClInclude Include="Features\Manager\Module\Modules\Combat\FastMelee\FastMelee.h" />
     <ClInclude Include="Features\Manager\Module\Modules\Combat\NoSpread.h" />
     <ClInclude Include="Features\Manager\Module\Modules\Player\BunnyHop.h" />
     <ClInclude Include="Features\Manager\Module\Modules\Render\Arraylist.h" />

@@ -22,6 +22,9 @@
     <ClCompile Include="Features\Manager\Module\Modules\Combat\AutoShoot\AutoShoot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Features\Manager\Module\Modules\Combat\FastMelee\FastMelee.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Features\Manager\Module\Modules\Combat\NoSpread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -145,6 +148,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Features\Manager\Module\Modules\Combat\AutoShoot\AutoShoot.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Manager\Module\Modules\Combat\FastMelee\FastMelee.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Features\Manager\Module\Modules\Combat\NoSpread.h">
