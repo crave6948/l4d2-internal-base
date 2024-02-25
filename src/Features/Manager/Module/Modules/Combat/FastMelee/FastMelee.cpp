@@ -12,15 +12,18 @@ namespace F::FastMeleeModule
         if (pWeapon->GetWeaponID() != WEAPON_MELEE)
             return false;
 
-        if (!pWeapon->CanPrimaryAttack(-0.2))
+        if (!pWeapon->CanPrimaryAttack())
             return false;
 
         return true;
     }
     void FastMelee::onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
     {
-        if (!cmd->buttons & IN_ATTACK)
+        if (!cmd->buttons & IN_ATTACK) {
+            stage = 0;
+            nextSwap = false;
             return;
+        }
         if (nextSwap && stage > 0)
         {
             switch (stage)
@@ -39,14 +42,16 @@ namespace F::FastMeleeModule
                         break;
                     }
                 }
+                stage = 2;
                 break;
-                stage++;
             case 2:
-                // C_BaseCombatWeapon *pWep = pLocal->Weapon_GetSlot(1);
-                // if (pLocal->Weapon_CanSwitchTo(pWep))
-                // {
-                //     pLocal->Weapon_Switch(pWep);
-                // }
+                C_BaseCombatWeapon *pWep = pLocal->Weapon_GetSlot(1);
+                if (!pWep)
+                    return;
+                if (pLocal->Weapon_CanSwitchTo(pWep))
+                {
+                    pLocal->Weapon_Switch(pWep);
+                }
                 stage = 0;
                 nextSwap = false;
                 break;
