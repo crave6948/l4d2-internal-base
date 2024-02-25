@@ -70,7 +70,7 @@ namespace F {
 		}
         void AutoShoot::onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
         {
-            if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000) || !ShouldRun(pLocal, pWeapon, cmd)) {
+            if (!ShouldRun(pLocal, pWeapon, cmd)) {
                 check = false;
 				nextPunch = false;
                 return;
