@@ -40,7 +40,7 @@ namespace F::FastMeleeModule
                     {
                         cmd->weaponselect = pWep->entindex();
                         stage = 2;
-                        waiting = 2;
+                        waiting = 1;
                         break;
                     }
                 }
@@ -74,13 +74,10 @@ namespace F::FastMeleeModule
             return;
         nextSwap = true;
         stage = 1;
-        waiting = 3;
+        waiting = 2;
     }
     void FastMelee::onRender2D()
     {
-        int startX = 100, startY = 100;
-        std::string str = "Stage: " + std::to_string(stage) + " / NextSwap: " + (nextSwap ? "true" : "false");
-        G::Draw.String(EFonts::DEBUG, startX, startY, Color(255, 255, 255, 255), TXT_DEFAULT, str.c_str());
     }
     void FastMelee::onEnabled()
     {
