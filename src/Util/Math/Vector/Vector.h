@@ -10,7 +10,11 @@
 
 #define DEG2RADF(f)	(f * (M_PI / 180.0f))
 #define RAD2DEGF(f)	(f * (180.0f / M_PI))
-
+/*
+In World Positon
+x/y represent x/z axis
+z represent y axis
+*/
 class Vector
 {
 public:

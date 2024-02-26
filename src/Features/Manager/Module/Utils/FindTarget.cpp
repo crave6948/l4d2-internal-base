@@ -21,7 +21,7 @@ namespace Utils
 			if (fov > maxfov) return -1;
 			float distancepercent = (distance * 100) / 1400;
 			float fovpercent = (fov * 100) / maxfov;
-			score = 100 - ((distancepercent + fovpercent) / 2);
+			score = 100 - fovpercent;
 		}
 		return score;
 	}
@@ -93,7 +93,7 @@ namespace Utils
 		Vector vCamera;
 		I::EngineClient->GetViewAngles(vCamera);
 		float fov = U::Math.GetFovBetween(vCamera, U::Math.GetAngleToPosition(LocalPlayerPosition, entityposition));
-		if (fov > maxfov) return true;
+		if (fov > maxfov + 15.0f) return true;
 		return false;
 	}
 	IClientEntity* FindTarget::find(C_TerrorPlayer* pLocal, float fov)
@@ -201,7 +201,6 @@ namespace Utils
 			}
 			}
 		}
-		serverRotation = Vector();
 		return bestTarget;
 	}
 }

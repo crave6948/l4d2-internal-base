@@ -10,6 +10,7 @@ public:
 
 public:
 	int GetPredictedFlags() const;
+	int GetOldFlags() const;
 
 private:
 	int GetTickBase(const int nCurrentTickBase, CUserCmd* cmd);
@@ -18,6 +19,7 @@ private:
 	float m_flOldCurTime = 0.0f;
 	float m_flOldFrameTime = 0.0f;
 
+	int nOldFlags = 0;
 	int m_nOldTickCount = 0;
 	int m_nPredictedFlags = 0;
 

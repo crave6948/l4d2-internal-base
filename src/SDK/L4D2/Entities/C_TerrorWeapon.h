@@ -84,6 +84,9 @@ public:
 	inline bool CanSecondaryAttack() {
 		return (m_flNextSecondaryAttack() <= I::GlobalVars->curtime);
 	}
+	inline bool CanSecondaryAttack(float offset) {
+		return (m_flNextSecondaryAttack() + offset <= I::GlobalVars->curtime);
+	}
 
 	inline void UpdateSpread() {
 		reinterpret_cast<void(__thiscall*)(void*)>(U::Offsets.m_dwUpdateSpread)(this);

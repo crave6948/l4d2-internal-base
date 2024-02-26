@@ -7,7 +7,7 @@ namespace F {
 		{
 		public:
 			NoSpread() { this->Create("NoSpread", true, VK_NUMPAD8); };
-			void onPreCreateMove(CUserCmd* cmd,C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal) override;
+			void onPrediction(CUserCmd* cmd,C_TerrorWeapon* pWeapon, C_TerrorPlayer* pLocal, int PredictedFlags) override;
 		private:
 
 		};

@@ -42,9 +42,14 @@ namespace F {
 	void Manager::Init()
 	{
 		featurelist.push_back(bhop_ptr);
+
 		featurelist.push_back(arraylist_ptr);
+
 		featurelist.push_back(aimbot_ptr);
+		featurelist.push_back(autoShoot_ptr);
 		featurelist.push_back(noSpread_ptr);
+		featurelist.push_back(fastMelee_ptr);
+		
 		featurelist.push_back(espHelper_ptr);
 	}
 
@@ -53,36 +58,41 @@ namespace F {
 		if (pLocal && !pLocal->deadflag())
 		{
 			C_TerrorWeapon* pWeapon = pLocal->GetActiveWeapon()->As<C_TerrorWeapon*>();
-
+			Vector oldViewangles = cmd->viewangles;
+			Utils::target.serverRotation = Helper::rotationManager.DisabledRotation || Helper::rotationManager.getCurrentRotation().IsZero() ? cmd->viewangles : Helper::rotationManager.getCurrentRotation();
+			for (Module* mod : featurelist) {
+				if (!mod->getEnabled()) continue;
+				mod->onPreCreateMove(cmd, pWeapon, pLocal);
+			}
+			Helper::rotationManager.onUpdate(pLocal);
+			if (!Helper::rotationManager.getCurrentRotation().IsZero() && !Helper::rotationManager.DisabledRotation) {
+				cmd->viewangles = Helper::rotationManager.getCurrentRotation();
+				//I::EngineClient->SetViewAngles(cmd->viewangles);
+			}
+			for (Module* mod : featurelist) {
+				if (!mod->getEnabled()) continue;
+				mod->onPostCreateMove(cmd, pWeapon, pLocal);
+			}
 			if (pWeapon)
 			{
-				Vector oldViewangles = cmd->viewangles;
 				for (Module* mod : featurelist) {
 					if (!mod->getEnabled()) continue;
-					if (mod->getName() == "NoSpread") continue;
-					mod->onPreCreateMove(cmd, pWeapon, pLocal);
-				}
-				Helper::rotationManager.onUpdate();
-				Helper::rotationManager.onCreateMove();
-				if (!Helper::rotationManager.getCurrentRotation().IsZero() && !Helper::rotationManager.DisabledRotation) {
-					cmd->viewangles = Helper::rotationManager.getCurrentRotation();
-					//I::EngineClient->SetViewAngles(cmd->viewangles);
-				}
-				for (Module* mod : featurelist) {
-					if (!mod->getEnabled()) continue;
-					mod->onPostCreateMove(cmd, pWeapon, pLocal);
+					mod->onPrePrediction(cmd, pWeapon, pLocal);
 				}
 				F::EnginePrediction.Start(pLocal, cmd);
 				{
 					for (Module* mod : featurelist) {
-						if (mod->getName() != "NoSpread") continue;
 						if (!mod->getEnabled()) continue;
-						mod->onPreCreateMove(cmd, pWeapon, pLocal);
+						mod->onPrediction(cmd, pWeapon, pLocal, F::EnginePrediction.GetPredictedFlags());
 					}
 				}
 				F::EnginePrediction.Finish(pLocal, cmd);
-				G::Util.FixMovement(oldViewangles,cmd);
 			}
+			for (Module* mod : featurelist) {
+				if (!mod->getEnabled()) continue;
+				mod->onPostPrediction(cmd, pWeapon, pLocal);
+			}
+			G::Util.FixMovement(oldViewangles,cmd);
 		}
 	}
 
