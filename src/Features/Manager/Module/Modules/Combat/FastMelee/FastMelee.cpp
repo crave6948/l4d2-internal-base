@@ -74,7 +74,7 @@ namespace F::FastMeleeModule
             return;
         nextSwap = true;
         stage = 1;
-        waiting = 2;
+        waiting = 4;
     }
     void FastMelee::onRender2D()
     {
