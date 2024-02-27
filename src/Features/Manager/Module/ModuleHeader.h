@@ -1,6 +1,7 @@
 #pragma once
 #include "string"
 #include "Utils/UtilsCollector.h"
+#include "../../Value/ValueManager.h"
 class Module
 {
 public:

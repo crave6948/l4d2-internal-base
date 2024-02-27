@@ -172,6 +172,7 @@
     <ClCompile Include="Features\Manager\Module\Utils\UtilsCollector.cpp" />
     <ClCompile Include="Features\Manager\RotationManager.cpp" />
     <ClCompile Include="Features\Vars.cpp" />
+    <ClCompile Include="Features\Value\ValueManager.cpp" />
     <ClCompile Include="Hooks\BaseClient\BaseClient.cpp" />
     <ClCompile Include="Hooks\BasePlayer\BasePlayer.cpp" />
     <ClCompile Include="Hooks\CL_Main\CL_Main.cpp" />
@@ -214,6 +215,10 @@
     <ClInclude Include="Features\Manager\Module\Utils\UtilsCollector.h" />
     <ClInclude Include="Features\Manager\RotationManager.h" />
     <ClInclude Include="Features\Vars.h" />
+    <ClInclude Include="Features\Value\Value.h" />
+    <ClInclude Include="Features\Value\ValueManager.h" />
+    <ClInclude Include="Features\Value\Values\BooleanValue.h" />
+    <ClInclude Include="Features\Value\Values\NumberValue.h" />
     <ClInclude Include="Hooks\BaseClient\BaseClient.h" />
     <ClInclude Include="Hooks\BasePlayer\BasePlayer.h" />
     <ClInclude Include="Hooks\CL_Main\CL_Main.h" />

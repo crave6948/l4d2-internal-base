@@ -49,6 +49,9 @@
     <ClCompile Include="Features\Vars.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Features\Value\ValueManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Hooks\BaseClient\BaseClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -175,6 +178,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Features\Vars.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Value\Value.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Value\ValueManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Value\Values\NumberValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Value\Values\BooleanValue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Hooks\BaseClient\BaseClient.h">
