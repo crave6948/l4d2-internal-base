@@ -6,8 +6,7 @@ namespace F {
 		void Arraylist::onRender2D()
 		{
 			std::vector<Module*> list = F::FeatureManager.featurelist;
-			const int aY = arrayYPtr->GetValue();
-			int startX = G::Draw.m_nScreenW - 2, startY = 20 + aY;
+			int startX = G::Draw.m_nScreenW - 2, startY = 20;
 			for (auto m : list) {
 				std::string name = m->getName();
 				bool isEnabled = m->getEnabled();
@@ -19,11 +18,6 @@ namespace F {
 					startY += G::Draw.GetFontHeight(EFonts::DEBUG) + 1;
 				}
 				m->updateanimate();
-			}
-			if (aY > 0) {
-				arrayYPtr->setValue(aY - 1);
-			}else {
-				arrayYPtr->setValue(100);
 			}
 		}
 	}
