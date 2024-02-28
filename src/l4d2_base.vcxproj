@@ -160,6 +160,7 @@
     <ClCompile Include="Entry\Entry.cpp" />
     <ClCompile Include="Features\ESP\ESP.cpp" />
     <ClCompile Include="Features\EnginePrediction\EnginePrediction.cpp" />
+    <ClCompile Include="Features\File\FileManager.cpp" />
     <ClCompile Include="Features\Manager\Manager.cpp" />
     <ClCompile Include="Features\Manager\Module\Modules\Combat\Aimbot.cpp" />
     <ClCompile Include="Features\Manager\Module\Modules\Combat\AutoShoot\AutoShoot.cpp" />
@@ -193,6 +194,7 @@
     <ClCompile Include="SDK\L4D2\Includes\checksum_md5.cpp" />
     <ClCompile Include="SDK\SDK.cpp" />
     <ClCompile Include="Util\Interface\Interface.cpp" />
+    <ClCompile Include="Util\Json\json.hpp" />
     <ClCompile Include="Util\Math\Math.cpp" />
     <ClCompile Include="Util\NetVarManager\NetVarManager.cpp" />
     <ClCompile Include="Util\Offsets\Offsets.cpp" />
@@ -202,6 +204,7 @@
     <ClInclude Include="Entry\Entry.h" />
     <ClInclude Include="Features\ESP\ESP.h" />
     <ClInclude Include="Features\EnginePrediction\EnginePrediction.h" />
+    <ClInclude Include="Features\File\FileManager.h" />
     <ClInclude Include="Features\Manager\Manager.h" />
     <ClInclude Include="Features\Manager\Module\ModuleHeader.h" />
     <ClInclude Include="Features\Manager\Module\Modules\Combat\Aimbot.h" />

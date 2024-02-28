@@ -13,6 +13,9 @@
     <ClCompile Include="Features\EnginePrediction\EnginePrediction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Features\File\FileManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Features\Manager\Manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -139,6 +142,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Features\EnginePrediction\EnginePrediction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\File\FileManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Features\Manager\Manager.h">
@@ -406,6 +412,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Util\Interface\Interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Util\Json\json.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Util\Math\Math.h">
