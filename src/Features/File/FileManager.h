@@ -8,5 +8,5 @@ namespace File {
             FileManager();
             void SaveToFile(std::string path, std::string data);
             std::string ReadFromFile(std::string path);
-    }
+    };
 }
