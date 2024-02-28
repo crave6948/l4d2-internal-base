@@ -6,7 +6,7 @@ namespace File {
     class FileManager {
         public:
             FileManager();
-            void SaveToFile(std::string path, std::string data);
+            void SaveToFile(std::string path, std::string data[]);
             std::string ReadFromFile(std::string path);
     };
 }
