@@ -1,5 +1,6 @@
 //this is the file manager class it will b used to manage features values and save them to a file
 // it used json as data format
+#pragma once
 #include <string>
 #include "../../Util/Json/json.hpp"
 namespace File {

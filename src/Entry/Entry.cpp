@@ -1,5 +1,5 @@
 #include "Entry.h"
-#include "../Features/Manager/Manager.h"
+#include "../Features/Client.h"
 
 void CGlobal_ModuleEntry::Load()
 {
@@ -44,7 +44,7 @@ void CGlobal_ModuleEntry::Load()
 
 	G::Draw.Init();
 	G::Hooks.Init();
-	F::FeatureManager.Init();
+	Client::client.ModuleManager.Init();
 }
 
 void CGlobal_ModuleEntry::Unload()

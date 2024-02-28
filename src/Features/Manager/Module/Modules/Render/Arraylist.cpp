@@ -1,11 +1,11 @@
 #include "Arraylist.h"
-#include "../../../Manager.h"
+#include "../../../../Client.h"
 
 namespace F {
 	namespace ArraylistModule {
 		void Arraylist::onRender2D()
 		{
-			std::vector<Module*> list = F::FeatureManager.featurelist;
+			std::vector<Module*> list = Client::client.ModuleManager.featurelist;
 			int startX = G::Draw.m_nScreenW - 2, startY = 20;
 			for (auto m : list) {
 				std::string name = m->getName();

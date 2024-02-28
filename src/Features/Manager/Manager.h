@@ -40,5 +40,4 @@ namespace F {
 		void onCreateMove(CUserCmd* cmd, C_TerrorPlayer* pLocal);
 		void onKey();
 	};
-	inline Manager FeatureManager; 
 }
