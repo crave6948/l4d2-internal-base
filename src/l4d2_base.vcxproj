@@ -219,6 +219,7 @@
     <ClInclude Include="Features\Value\ValueManager.h" />
     <ClInclude Include="Features\Value\Values\BooleanValue.h" />
     <ClInclude Include="Features\Value\Values\NumberValue.h" />
+    <ClInclude Include="Features\Value\Values\ListValue.h" />
     <ClInclude Include="Hooks\BaseClient\BaseClient.h" />
     <ClInclude Include="Hooks\BasePlayer\BasePlayer.h" />
     <ClInclude Include="Hooks\CL_Main\CL_Main.h" />

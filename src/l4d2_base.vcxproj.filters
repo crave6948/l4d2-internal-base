@@ -192,6 +192,9 @@
     <ClInclude Include="Features\Value\Values\BooleanValue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Value\Values\ListValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Hooks\BaseClient\BaseClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
