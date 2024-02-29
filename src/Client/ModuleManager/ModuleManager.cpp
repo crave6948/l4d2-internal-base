@@ -1,9 +1,9 @@
 #include "ModuleManager.h"
 
-Client::ModuleManager::ModuleManager()
+Client::Module::ModuleManager::ModuleManager()
 {
 }
 
-void Client::ModuleManager::init()
+void Client::Module::ModuleManager::init()
 {
 }

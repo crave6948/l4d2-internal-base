@@ -8,7 +8,7 @@ namespace Client
     public:
         None();
         void initialize();
-        ModuleManager moduleManager;
-        FileManager fileManager;
+        Module::ModuleManager moduleManager;
+        File::FileManager fileManager;
     };
 }

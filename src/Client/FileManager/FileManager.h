@@ -1,5 +1,5 @@
 #pragma once
-namespace Client
+namespace Client::File
 {
     class FileManager
     {
