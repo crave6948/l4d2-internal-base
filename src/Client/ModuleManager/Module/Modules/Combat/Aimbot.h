@@ -1,5 +1,5 @@
 #pragma once
-#include "../ModuleHeader.h"
+#include "../../ModuleHeader.h"
 namespace Client::Module {
 	namespace AimbotModule
 	{

@@ -1,8 +1,5 @@
 #include "BasePlayer.h"
 
-#include "../../Features/Vars.h"
-#include "../../Features/Manager/Manager.h"
-
 using namespace Hooks;
 
 void __fastcall BasePlayer::CalcPlayerView::Detour(C_BasePlayer* pThis, void* edx, Vector& eyeOrigin, Vector& eyeAngles, float& fov)
