@@ -8,7 +8,7 @@ void CGlobal_ModuleEntry::Load()
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	U::Offsets.Init();
-
+	Client::client.initialize();
 	//Interfaces
 	{
 		I::BaseClient       = U::Interface.Get<IBaseClientDLL*>("client.dll", "VClient016");
@@ -45,8 +45,6 @@ void CGlobal_ModuleEntry::Load()
 
 	G::Draw.Init();
 	G::Hooks.Init();
-	
-	Client::client.initialize();
 }
 
 void CGlobal_ModuleEntry::Unload()

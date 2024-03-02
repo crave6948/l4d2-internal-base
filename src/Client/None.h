@@ -8,8 +8,8 @@ namespace Client
     public:
         None();
         void initialize();
-        Module::ModuleManager moduleManager;
-        File::FileManager fileManager;
+        Module::ModuleManager moduleManager = Module::ModuleManager();
+        File::FileManager fileManager = File::FileManager();
     };
     inline None client = None();
 }
