@@ -1,5 +1,6 @@
 #include "Entry.h"
-#include "../Features/Client.h"
+#pragma once
+#include "../Client/None.h"
 
 void CGlobal_ModuleEntry::Load()
 {
@@ -44,7 +45,9 @@ void CGlobal_ModuleEntry::Load()
 
 	G::Draw.Init();
 	G::Hooks.Init();
-	Client::client.ModuleManager.Init();
+	
+	Client::client = Client::None();
+	Client::client.initialize();
 }
 
 void CGlobal_ModuleEntry::Unload()

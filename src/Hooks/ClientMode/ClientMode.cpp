@@ -1,6 +1,6 @@
 #include "ClientMode.h"
 
-#include "../../Features/Client.h"
+#include "../../Client/None.h"
 
 using namespace Hooks;
 
@@ -20,7 +20,7 @@ bool __fastcall ClientMode::CreateMove::Detour(void* ecx, void* edx, float input
 	//uintptr_t _ebp; __asm mov _ebp, ebp;
 	//bool* pSendPacket = (bool*)(***(uintptr_t***)_ebp - 0x1D);
 	C_TerrorPlayer* pLocal = I::ClientEntityList->GetClientEntity(I::EngineClient->GetLocalPlayer())->As<C_TerrorPlayer*>();
-	Client::client.ModuleManager.onCreateMove(cmd, pLocal);
+	Client::client.moduleManager.onCreateMove(cmd, pLocal);
 
 	return false;
 }

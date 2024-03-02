@@ -1,7 +1,7 @@
 #pragma once
 #include "../../ModuleHeader.h"
 
-namespace F
+namespace Client::Module
 {
 	namespace ArraylistModule
 	{

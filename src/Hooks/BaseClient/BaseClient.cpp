@@ -1,5 +1,4 @@
 #include "BaseClient.h"
-#include "../../Features/Manager/Manager.h"
 
 using namespace Hooks;
 

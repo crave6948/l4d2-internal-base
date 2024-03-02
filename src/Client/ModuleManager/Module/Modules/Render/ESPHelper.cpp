@@ -1,7 +1,6 @@
 #include "ESPHelper.h"
-#include "../../../Manager.h"
 
-namespace F
+namespace Client::Module
 {
 	namespace ESPHelperModule
 	{

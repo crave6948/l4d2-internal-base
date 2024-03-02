@@ -1,17 +1,17 @@
 #include "BunnyHop.h"
-namespace Client::Modules
+namespace Client::Module
 {
 	namespace BunnyHopModule
 	{
 		inline int delayedTicks = 0;
 		inline bool isJumping = false, nextGround = false;
-		int oldbuttons = 0;
+		inline int oldbuttons = 0;
 		void BunnyHop::onPrePrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
 		{
 			oldbuttons = cmd->buttons;
 			if (cmd->buttons & IN_JUMP)
 				cmd->buttons &= ~IN_JUMP;
-		}
+		};
 		void BunnyHop::onPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal, int PredictedFlags)
 		{
 			nextGround = PredictedFlags & FL_ONGROUND;

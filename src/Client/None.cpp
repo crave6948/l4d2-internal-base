@@ -2,13 +2,12 @@
 
 Client::None::None()
 {
-    initialize();
 }
 
 void Client::None::initialize()
 {
     moduleManager = Module::ModuleManager();
     fileManager = File::FileManager();
-    moduleManager.init();
+    moduleManager.Init();
     fileManager.init();
 }

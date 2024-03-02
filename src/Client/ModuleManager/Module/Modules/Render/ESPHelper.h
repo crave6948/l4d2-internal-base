@@ -1,7 +1,7 @@
 #pragma once
 #include "../../ModuleHeader.h"
 
-namespace F {
+namespace Client::Module {
 	namespace ESPHelperModule {
 		class ESPHelper : public Module
 		{
