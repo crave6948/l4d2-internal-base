@@ -1,9 +1,12 @@
 #include "RotationManager.h"
 #include "random"
-namespace Helper {
+#include <algorithm>
+namespace Helper
+{
 	inline Vector lastSetTarget = Vector();
 	inline float lastdist = -1;
-	inline double nextGassain( double min, double max) {
+	inline double nextGassain(double min, double max)
+	{
 		std::default_random_engine generator;
 		std::uniform_real_distribution<double> distribution(min, max);
 		return distribution(generator);
@@ -11,13 +14,15 @@ namespace Helper {
 	inline float getAngleDifference(float a, float b)
 	{
 		return (
-				std::fmod(
-					std::fmod(a - b, 360.f) + 540.f, 360.f)) -
-			180.f;
+				   std::fmod(
+					   std::fmod(a - b, 360.f) + 540.f, 360.f)) -
+			   180.f;
 	}
 
-	inline bool is_lac_detected(float aimdist, float laimdist, float tdelta) {
-		if (laimdist == -1) {
+	inline bool is_lac_detected(float aimdist, float laimdist, float tdelta)
+	{
+		if (laimdist == -1)
+		{
 			return false;
 		}
 		bool detected = false;
@@ -53,7 +58,7 @@ namespace Helper {
 		Vector diffRotation = target - current;
 		U::Math.ClampAngles(diffRotation);
 		float rotationDiff = U::Math.GetFovBetween(current, target);
-		
+
 		float supposedTurnSpeed = nextGassain(80.0, 135.0);
 		float realisticTurnSpeed = calculateRealisticTurnSpeed(rotationDiff, supposedTurnSpeed);
 
@@ -64,7 +69,7 @@ namespace Helper {
 
 		realisticTurnSpeed = round(realisticTurnSpeed * 100.0f) / 100.0f;
 		clampRotation(diffRotation, realisticTurnSpeed);
-		
+
 		Vector pre = current;
 		U::Math.ClampAngles(diffRotation);
 		current += diffRotation;
@@ -94,7 +99,7 @@ namespace Helper {
 		return pow(a1, 2.0f) * nextGassain(115.0, 135.0) + pow(a2, 2.0f) * nextGassain(10.0, 15.0);
 	}
 
-	void RotationManager::clampRotation(Vector& diffRotation, float realisticTurnSpeed)
+	void RotationManager::clampRotation(Vector &diffRotation, float realisticTurnSpeed)
 	{
 		diffRotation.x = std::clamp(diffRotation.x, -realisticTurnSpeed, realisticTurnSpeed);
 		diffRotation.y = std::clamp(diffRotation.y, -realisticTurnSpeed, realisticTurnSpeed);
@@ -142,10 +147,14 @@ namespace Helper {
 
 	void RotationManager::setTargetRotation(Vector rotation, float keepLength)
 	{
-		if (lastSetTarget.IsZero()) {
+		if (lastSetTarget.IsZero())
+		{
 			lastSetTarget = rotation;
-		}else {
-			if (U::Math.GetFovBetween(lastSetTarget, rotation) > 10) {
+		}
+		else
+		{
+			if (U::Math.GetFovBetween(lastSetTarget, rotation) > 10)
+			{
 				lastdist = -1;
 			}
 		}
