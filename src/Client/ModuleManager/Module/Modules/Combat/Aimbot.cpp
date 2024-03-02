@@ -1,6 +1,6 @@
 #include "Aimbot.h"
 #include "random"
-#include "../../../Rotation/RotationManager.h"
+#include "../../../../../Rotation/RotationManager.h"
 namespace Client::Module
 {
 	namespace AimbotModule
