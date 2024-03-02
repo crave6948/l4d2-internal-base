@@ -46,7 +46,6 @@ void CGlobal_ModuleEntry::Load()
 	G::Draw.Init();
 	G::Hooks.Init();
 	
-	Client::client = Client::None();
 	Client::client.initialize();
 }
 
