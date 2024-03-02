@@ -1,6 +1,5 @@
 #include "RotationManager.h"
 #include "random"
-#include <algorithm>
 namespace Helper
 {
 	inline Vector lastSetTarget = Vector();
