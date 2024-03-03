@@ -1,5 +1,6 @@
 #include "Entry.h"
-#include "../Features/Client.h"
+#pragma once
+#include "../Client/None.h"
 
 void CGlobal_ModuleEntry::Load()
 {
@@ -7,7 +8,7 @@ void CGlobal_ModuleEntry::Load()
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	U::Offsets.Init();
-
+	Client::client.initialize();
 	//Interfaces
 	{
 		I::BaseClient       = U::Interface.Get<IBaseClientDLL*>("client.dll", "VClient016");
@@ -44,7 +45,6 @@ void CGlobal_ModuleEntry::Load()
 
 	G::Draw.Init();
 	G::Hooks.Init();
-	Client::client.ModuleManager.Init();
 }
 
 void CGlobal_ModuleEntry::Unload()

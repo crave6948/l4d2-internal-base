@@ -1,7 +1,5 @@
 #include "CL_Main.h"
 
-#include "../../Features/Vars.h"
-
 using namespace Hooks;
 
 void __cdecl CL_Main::CL_Move::Detour(float accumulated_extra_samples, bool bFinalTick)

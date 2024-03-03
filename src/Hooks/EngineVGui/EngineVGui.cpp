@@ -1,6 +1,6 @@
 #include "EngineVGui.h"
 
-#include "../../Features/Client.h"
+#include "../../Client/None.h"
 
 using namespace Hooks;
 
@@ -24,7 +24,7 @@ void __fastcall EngineVGui::Paint::Detour(void* ecx, void* edx, int mode)
 	Table.Original<FN>(Index)(ecx, edx, mode);
 	if (!(mode & PAINT_UIPANELS))
 		return;
-	Client::client.ModuleManager.onKey();
+	Client::client.moduleManager.onKey();
 
 	if (!G::Draw.m_nScreenW)
 		G::Draw.m_nScreenW = I::BaseClient->GetScreenWidth();
@@ -34,7 +34,7 @@ void __fastcall EngineVGui::Paint::Detour(void* ecx, void* edx, int mode)
 
 	I::MatSystemSurface->StartDrawing();
 	{
-		Client::client.ModuleManager.onRender2D();
+		Client::client.moduleManager.onRender2D();
 		G::Draw.String(EFonts::DEBUG, 5, 5, { 204, 204, 204, 255 }, TXT_DEFAULT, _(L"None - Left 4 dead 2 by Lak3(OC), crave#6948"));
 	}
 	I::MatSystemSurface->FinishDrawing();
