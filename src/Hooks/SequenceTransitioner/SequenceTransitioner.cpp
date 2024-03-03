@@ -1,7 +1,5 @@
 #include "SequenceTransitioner.h"
 
-#include "../../Features/Vars.h"
-
 using namespace Hooks;
 
 void __fastcall SequenceTransitioner::CheckForSequenceChange::Detour(void* ecx, void* edx, CStudioHdr* hdr, int nCurSequence, bool bForceNewSequence, bool bInterpolate)

@@ -1,7 +1,5 @@
 #include "TerrorPlayer.h"
 
-#include "../../Features/Vars.h"
-
 using namespace Hooks;
 
 void __fastcall TerrorPlayer::AvoidPlayers::Detour(C_TerrorPlayer* pThis, void* edx, CUserCmd* pCmd)
