@@ -55,18 +55,6 @@ namespace Client::Module
 		}
 		void AutoShoot::onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
 		{
-			if (nextPunch)
-			{
-				if (!(cmd->buttons & IN_ATTACK2))
-				{
-					bool attack = pLocal->IsReadyToShove();
-					if (attack)
-					{
-						cmd->buttons |= IN_ATTACK2;
-					}
-				}
-				nextPunch = false;
-			}
 			if (!ShouldRun(pLocal, pWeapon, cmd))
 			{
 				check = false;
@@ -96,6 +84,18 @@ namespace Client::Module
 					if (lastTime <= 0)
 						cmd->buttons &= ~IN_ATTACK;
 					check = false;
+					if (nextPunch)
+					{
+						if (!(cmd->buttons & IN_ATTACK2))
+						{
+							bool attack = pLocal->IsReadyToShove() || pWeapon->CanSecondaryAttack(-0.2);
+							if (attack)
+							{
+								cmd->buttons |= IN_ATTACK2;
+							}
+						}
+						nextPunch = false;
+					}
 				}
 				if (lastTime > 0)
 					lastTime--;

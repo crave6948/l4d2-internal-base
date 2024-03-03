@@ -1,138 +1,142 @@
 #include "ModuleManager.h"
 #include "../Rotation/RotationManager.h"
-Client::Module::ModuleManager::ModuleManager()
+namespace Client::Module
 {
-}
 
-void Client::Module::ModuleManager::Init()
-{
-    featurelist.push_back(bhop_ptr);
-
-    featurelist.push_back(arraylist_ptr);
-
-    featurelist.push_back(aimbot_ptr);
-    featurelist.push_back(autoShoot_ptr);
-    featurelist.push_back(noSpread_ptr);
-    featurelist.push_back(fastMelee_ptr);
-
-    featurelist.push_back(espHelper_ptr);
-}
-
-void Client::Module::ModuleManager::onRender2D()
-{
-    for (Module *mod : featurelist)
+    ModuleManager::ModuleManager()
     {
-        if (!mod->getEnabled())
-            continue;
-        mod->onRender2D();
     }
-    if (!I::EngineClient->IsInGame())
+
+    void ModuleManager::Init()
     {
-        return;
-    };
-    if (I::EngineVGui->IsGameUIVisible())
-    {
-        return;
+        featurelist.push_back(bhop_ptr);
+
+        featurelist.push_back(arraylist_ptr);
+
+        featurelist.push_back(aimbot_ptr);
+        featurelist.push_back(autoShoot_ptr);
+        featurelist.push_back(noSpread_ptr);
+        featurelist.push_back(fastMelee_ptr);
+
+        featurelist.push_back(espHelper_ptr);
     }
-    C_TerrorPlayer *pLocal = I::ClientEntityList->GetClientEntity(I::EngineClient->GetLocalPlayer())->As<C_TerrorPlayer *>();
-    if (!Helper::rotationManager.getCurrentRotation().IsZero())
+
+    void ModuleManager::onRender2D()
     {
-        Vector vec = U::Math.AngleVectors(Helper::rotationManager.getCurrentRotation());
-        Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * 1400.0f);
-        Vector screen;
-        G::Util.W2S(vViewAngleOnWorld, screen);
-
-        int screenW = G::Draw.m_nScreenW, screenH = G::Draw.m_nScreenH;
-
-        if (Helper::rotationManager.DisabledRotation)
-        {
-            screenW = screenW / 2;
-            screenH = screenH / 2;
-            G::Draw.Line(screenW, screenH, screenW - 4, screenH + 4, Color(255, 255, 255, 255));
-            G::Draw.Line(screenW, screenH, screenW + 4, screenH + 4, Color(255, 255, 255, 255));
-            screenW = screenW * 2;
-            screenH = screenH * 2;
-        }
-        else
-        {
-            G::Draw.Line(screen.x, screen.y, screen.x - 4, screen.y + 4, Color(255, 255, 255, 255));
-            G::Draw.Line(screen.x, screen.y, screen.x + 4, screen.y + 4, Color(255, 255, 255, 255));
-        }
-        // G::Draw.Circle(screen.x, screen.y, 2, 8, );
-    }
-}
-
-void Client::Module::ModuleManager::onCreateMove(CUserCmd *cmd, C_TerrorPlayer *pLocal)
-{
-    if (pLocal && !pLocal->deadflag())
-    {
-        C_TerrorWeapon *pWeapon = pLocal->GetActiveWeapon()->As<C_TerrorWeapon *>();
-        Vector oldViewangles = cmd->viewangles;
-        Utils::target.serverRotation = Helper::rotationManager.DisabledRotation || Helper::rotationManager.getCurrentRotation().IsZero() ? cmd->viewangles : Helper::rotationManager.getCurrentRotation();
         for (Module *mod : featurelist)
         {
             if (!mod->getEnabled())
                 continue;
-            mod->onPreCreateMove(cmd, pWeapon, pLocal);
+            mod->onRender2D();
         }
-        Helper::rotationManager.onUpdate(pLocal);
-        if (!Helper::rotationManager.getCurrentRotation().IsZero() && !Helper::rotationManager.DisabledRotation)
+        if (!I::EngineClient->IsInGame())
         {
-            cmd->viewangles = Helper::rotationManager.getCurrentRotation();
-            // I::EngineClient->SetViewAngles(cmd->viewangles);
+            return;
+        };
+        if (I::EngineVGui->IsGameUIVisible())
+        {
+            return;
         }
-        for (Module *mod : featurelist)
+        C_TerrorPlayer *pLocal = I::ClientEntityList->GetClientEntity(I::EngineClient->GetLocalPlayer())->As<C_TerrorPlayer *>();
+        if (!Helper::rotationManager.getCurrentRotation().IsZero())
         {
-            if (!mod->getEnabled())
-                continue;
-            mod->onPostCreateMove(cmd, pWeapon, pLocal);
+            Vector vec = U::Math.AngleVectors(Helper::rotationManager.getCurrentRotation());
+            Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * 1400.0f);
+            Vector screen;
+            G::Util.W2S(vViewAngleOnWorld, screen);
+
+            int screenW = G::Draw.m_nScreenW, screenH = G::Draw.m_nScreenH;
+
+            if (Helper::rotationManager.DisabledRotation)
+            {
+                screenW = screenW / 2;
+                screenH = screenH / 2;
+                G::Draw.Line(screenW, screenH, screenW - 4, screenH + 4, Color(255, 255, 255, 255));
+                G::Draw.Line(screenW, screenH, screenW + 4, screenH + 4, Color(255, 255, 255, 255));
+                screenW = screenW * 2;
+                screenH = screenH * 2;
+            }
+            else
+            {
+                G::Draw.Line(screen.x, screen.y, screen.x - 4, screen.y + 4, Color(255, 255, 255, 255));
+                G::Draw.Line(screen.x, screen.y, screen.x + 4, screen.y + 4, Color(255, 255, 255, 255));
+            }
+            // G::Draw.Circle(screen.x, screen.y, 2, 8, );
         }
-        if (pWeapon)
+    }
+
+    void ModuleManager::onCreateMove(CUserCmd *cmd, C_TerrorPlayer *pLocal)
+    {
+        if (pLocal && !pLocal->deadflag())
         {
+            C_TerrorWeapon *pWeapon = pLocal->GetActiveWeapon()->As<C_TerrorWeapon *>();
+            Vector oldViewangles = cmd->viewangles;
+            Utils::target.serverRotation = Helper::rotationManager.DisabledRotation || Helper::rotationManager.getCurrentRotation().IsZero() ? cmd->viewangles : Helper::rotationManager.getCurrentRotation();
             for (Module *mod : featurelist)
             {
                 if (!mod->getEnabled())
                     continue;
-                mod->onPrePrediction(cmd, pWeapon, pLocal);
+                mod->onPreCreateMove(cmd, pWeapon, pLocal);
             }
-            F::EnginePrediction.Start(pLocal, cmd);
+            Helper::rotationManager.onUpdate(pLocal);
+            if (!Helper::rotationManager.getCurrentRotation().IsZero() && !Helper::rotationManager.DisabledRotation)
+            {
+                cmd->viewangles = Helper::rotationManager.getCurrentRotation();
+                // I::EngineClient->SetViewAngles(cmd->viewangles);
+            }
+            for (Module *mod : featurelist)
+            {
+                if (!mod->getEnabled())
+                    continue;
+                mod->onPostCreateMove(cmd, pWeapon, pLocal);
+            }
+            if (pWeapon)
             {
                 for (Module *mod : featurelist)
                 {
                     if (!mod->getEnabled())
                         continue;
-                    mod->onPrediction(cmd, pWeapon, pLocal, F::EnginePrediction.GetPredictedFlags());
+                    mod->onPrePrediction(cmd, pWeapon, pLocal);
                 }
+                F::EnginePrediction.Start(pLocal, cmd);
+                {
+                    for (Module *mod : featurelist)
+                    {
+                        if (!mod->getEnabled())
+                            continue;
+                        mod->onPrediction(cmd, pWeapon, pLocal, F::EnginePrediction.GetPredictedFlags());
+                    }
+                }
+                F::EnginePrediction.Finish(pLocal, cmd);
             }
-            F::EnginePrediction.Finish(pLocal, cmd);
+            for (Module *mod : featurelist)
+            {
+                if (!mod->getEnabled())
+                    continue;
+                mod->onPostPrediction(cmd, pWeapon, pLocal);
+            }
+            G::Util.FixMovement(oldViewangles, cmd);
         }
+    }
+
+    void ModuleManager::onKey()
+    {
+        // bool isToggled = keyState & 1;
+        // bool isDown = keyState & 0x8000;
         for (Module *mod : featurelist)
         {
-            if (!mod->getEnabled())
-                continue;
-            mod->onPostPrediction(cmd, pWeapon, pLocal);
-        }
-        G::Util.FixMovement(oldViewangles, cmd);
-    }
-}
-
-void Client::Module::ModuleManager::onKey()
-{
-    // bool isToggled = keyState & 1;
-    // bool isDown = keyState & 0x8000;
-    for (Module *mod : featurelist)
-    {
-        if (GetAsyncKeyState(mod->getKey()) & 0x8000)
-        {
-            if (!mod->ShouldToggle())
-                continue;
-            mod->toggle();
-            mod->keytimeout = 1;
-        }
-        else
-        {
-            if (mod->keytimeout > 0)
-                mod->keytimeout--;
+            if (GetAsyncKeyState(mod->getKey()) & 0x8000)
+            {
+                if (!mod->ShouldToggle())
+                    continue;
+                mod->toggle();
+                mod->keytimeout = 1;
+            }
+            else
+            {
+                if (mod->keytimeout > 0)
+                    mod->keytimeout--;
+            }
         }
     }
 }
