@@ -23,9 +23,17 @@ namespace Client::Module
         {
             return state;
         };
+        void setEnabled(bool state)
+        {
+            this->state = state;
+        };
         int getKey()
         {
             return key;
+        };
+        void setKey(int key)
+        {
+            this->key = key;
         };
         virtual void onPreCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
         virtual void onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
