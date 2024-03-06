@@ -86,31 +86,33 @@ namespace Client::Module
 					check = false;
 					if (nextPunch)
 					{
-						if (!(cmd->buttons & IN_ATTACK2))
+						if (cmd->buttons & IN_ATTACK2)
 						{
+							cmd->buttons &= ~IN_ATTACK2;
+						}else {
 							bool attack = pLocal->IsReadyToShove() || pWeapon->CanSecondaryAttack(-0.2);
 							if (attack)
 							{
 								cmd->buttons |= IN_ATTACK2;
 							}
+							nextPunch = false;
 						}
-						nextPunch = false;
 					}
 				}
-				if (lastTime > 0)
-					lastTime--;
 			}
+			if (lastTime > 0)
+				lastTime--;
 		}
 		bool AutoShoot::getAutoPunch(C_TerrorWeapon *pWeapon)
 		{
-			if (!autoPunch.GetValue())
+			if (!autoPunch->GetValue())
 				return false;
-			if (!onlySniper.GetValue() && !onlyShotgun.GetValue())
+			if (!onlySniper->GetValue() && !onlyShotgun->GetValue())
 				return true;
 			int id = pWeapon->GetWeaponID();
-			if (onlySniper.GetValue() && isSniper(id))
+			if (onlySniper->GetValue() && isSniper(id))
 				return true;
-			if (onlyShotgun.GetValue() && isShotgun(id))
+			if (onlyShotgun->GetValue() && isShotgun(id))
 				return true;
 			return false;
 		}

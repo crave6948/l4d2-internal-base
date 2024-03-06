@@ -54,14 +54,14 @@ namespace Client::Module
 				pWeapon->UpdateSpread();
 				const float flSpread = pWeapon->GetCurrentSpread();
 
-				vAngle.x -= pfSharedRandomFloat("CTerrorGun::FireBullet HorizSpread", -flSpread, flSpread, 0);
-				vAngle.y -= pfSharedRandomFloat("CTerrorGun::FireBullet VertSpread", -flSpread, flSpread, 0);
+				vAngle.x -= pfSharedRandomFloat("CTerrorGun::FireBullet HorizSpread", -flSpread, flSpread, 0) * (spreadPercent->GetValue() / 100.0f);
+				vAngle.y -= pfSharedRandomFloat("CTerrorGun::FireBullet VertSpread", -flSpread, flSpread, 0) * (spreadPercent->GetValue() / 100.0f);
 
 				pWeapon->GetCurrentSpread() = flOldSpread;
 			}
 
 			// Remove punch from current viewangles
-			{
+			if (removeRecoil->GetValue()) {
 				vAngle -= pLocal->GetPunchAngle();
 			}
 

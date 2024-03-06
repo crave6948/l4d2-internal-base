@@ -11,19 +11,16 @@ namespace Client::Module
 			AutoShoot()
 			{
 				this->Create("AutoShoot", true, VK_NUMPAD2);
-				vManager.AddValue(&autoPunch);
-				vManager.AddValue(&onlySniper);
-				vManager.AddValue(&onlyShotgun);
+				vManager.AddValue(autoPunch);
+				vManager.AddValue(onlySniper);
+				vManager.AddValue(onlyShotgun);
 			};
 			//autoPunch
-			V::BooleanValue autoPunch = V::BooleanValue("AutoPunch", true);
-			V::BooleanValue* autoPunchptr = &autoPunch;
+			V::BooleanValue* autoPunch = new V::BooleanValue("AutoPunch", true);
 			//onlySniper
-			V::BooleanValue onlySniper = V::BooleanValue("OnlySniper", true);
-			V::BooleanValue* onlySniperptr = &onlySniper;
+			V::BooleanValue* onlySniper = new V::BooleanValue("OnlySniper", true);
 			//onlyShotgun
-			V::BooleanValue onlyShotgun = V::BooleanValue("OnlyShotgun", true);
-			V::BooleanValue* onlyShotgunptr = &onlyShotgun;
+			V::BooleanValue* onlyShotgun = new V::BooleanValue("OnlyShotgun", true);
 			void onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal) override;
 			bool getAutoPunch(C_TerrorWeapon *pWeapon);
 		};

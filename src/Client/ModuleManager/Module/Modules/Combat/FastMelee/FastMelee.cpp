@@ -74,7 +74,7 @@ namespace Client::Module::FastMeleeModule
             return;
         nextSwap = true;
         stage = 1;
-        waiting = 4;
+        waiting = waitingTicks->GetValue();
     }
     void FastMelee::onRender2D()
     {
