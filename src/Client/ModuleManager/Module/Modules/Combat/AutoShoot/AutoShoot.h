@@ -11,12 +11,10 @@ namespace Client::Module
 			AutoShoot()
 			{
 				this->Create("AutoShoot", true, VK_NUMPAD2);
-				vManager = V::ValueManager();
 				vManager.AddValue(&autoPunch);
 				vManager.AddValue(&onlySniper);
 				vManager.AddValue(&onlyShotgun);
 			};
-			V::ValueManager vManager;
 			//autoPunch
 			V::BooleanValue autoPunch = V::BooleanValue("AutoPunch", true);
 			V::BooleanValue* autoPunchptr = &autoPunch;

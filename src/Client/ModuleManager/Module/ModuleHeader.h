@@ -8,6 +8,7 @@ namespace Client::Module
     class Module
     {
     public:
+        V::ValueManager vManager = V::ValueManager();
         void Create(std::string name, bool state, int keyCode)
         {
             this->name = name;
@@ -66,7 +67,6 @@ namespace Client::Module
                 animate = 20;
             }
         }
-
     private:
         std::string name;
         bool state = false;

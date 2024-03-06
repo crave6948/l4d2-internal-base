@@ -1,4 +1,5 @@
 // interihance from Value.h
+#pragma once
 #include <string>
 #include "../Value.h"
 namespace V
