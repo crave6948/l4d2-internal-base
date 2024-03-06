@@ -19,7 +19,7 @@ namespace Client::Module
 			if (cmd->buttons & IN_USE)
 				return false;
 
-			if (pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || !pLocal->CanAttackFull())
+			if (pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || pWeapon->m_bInReload())
 				return false;
 
 			// You could also check if the current spread is -1.0f and not run nospread I guess.
@@ -61,6 +61,22 @@ namespace Client::Module
 				nextPunch = false;
 				return;
 			}
+
+			if (nextPunch)
+			{
+				if (cmd->buttons & IN_ATTACK2)
+				{
+					cmd->buttons &= ~IN_ATTACK2;
+				}else {
+					bool attack = pLocal->IsReadyToShove() || pWeapon->CanSecondaryAttack(-0.2);
+					if (attack)
+					{
+						cmd->buttons |= IN_ATTACK2;
+					}
+					nextPunch = false;
+				}
+			}
+
 			if (cmd->buttons & IN_ATTACK)
 			{
 				bool attack = pWeapon->CanPrimaryAttack(-0.2);
@@ -81,27 +97,11 @@ namespace Client::Module
 				}
 				else
 				{
-					if (lastTime <= 0)
-						cmd->buttons &= ~IN_ATTACK;
 					check = false;
-					if (nextPunch)
-					{
-						if (cmd->buttons & IN_ATTACK2)
-						{
-							cmd->buttons &= ~IN_ATTACK2;
-						}else {
-							bool attack = pLocal->IsReadyToShove() || pWeapon->CanSecondaryAttack(-0.2);
-							if (attack)
-							{
-								cmd->buttons |= IN_ATTACK2;
-							}
-							nextPunch = false;
-						}
-					}
 				}
+			}else {
+				check = false;
 			}
-			if (lastTime > 0)
-				lastTime--;
 		}
 		bool AutoShoot::getAutoPunch(C_TerrorWeapon *pWeapon)
 		{
