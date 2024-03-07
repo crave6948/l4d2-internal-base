@@ -190,7 +190,6 @@ namespace Client::File
             std::cout << "File does not exist" << std::endl;
         }
         write_new_file(file, feature, true);
-        last_save = I::GlobalVars->realtime;
     }
     void FileManager::write_new_file(std::ofstream &file, nlohmann::json data, bool overwrite)
     {
@@ -212,6 +211,7 @@ namespace Client::File
         {
             load();
             save();
+            last_save = I::GlobalVars->realtime;
         }
     }
 }

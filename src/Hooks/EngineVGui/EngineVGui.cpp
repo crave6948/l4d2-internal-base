@@ -25,6 +25,7 @@ void __fastcall EngineVGui::Paint::Detour(void* ecx, void* edx, int mode)
 	if (!(mode & PAINT_UIPANELS))
 		return;
 	Client::client.moduleManager.onKey();
+	Client::client.fileManager.running_auto_save();
 
 	if (!G::Draw.m_nScreenW)
 		G::Draw.m_nScreenW = I::BaseClient->GetScreenWidth();

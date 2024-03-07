@@ -8,7 +8,7 @@ namespace Client::File
     class FileManager
     {
     private:
-        const float auto_save_interval = 5.f;
+        const float auto_save_interval = 30.f;
         int last_save = 0;
     public:
         FileManager();
