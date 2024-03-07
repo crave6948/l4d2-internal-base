@@ -3,6 +3,8 @@
 #include "../Value/Values/BooleanValue.h"
 #include "../Value/Values/ListValue.h"
 #include "../Value/Values/NumberValue.h"
+#include "../Value/Values/FloatValue.h"
+#include "../../SDK/SDK.h"
 namespace Client::File
 {
     FileManager::FileManager()
@@ -36,39 +38,6 @@ namespace Client::File
                     {
                         continue;
                     }
-                    // auto valueList = settings["values"];
-                    // if (valueList.is_null())
-                    //     continue;
-                    // for (auto valueData : valueList)
-                    // {
-                    //     if (valueData.is_null())
-                    //         continue;
-                    //     for (auto it = valueData.begin(); it != valueData.end(); it++)
-                    //     {
-                    //         std::string name = it.key();
-                    //         auto value = module->vManager.GetValue(name);
-                    //         if (value == nullptr)
-                    //             continue;
-                    //         if (auto booleanValue = dynamic_cast<V::BooleanValue *>(value))
-                    //         {
-                    //             // check the value type if it is boolean
-                    //             if (valueData[name].is_boolean())
-                    //                 booleanValue->SetValue(valueData[name]);
-                    //         }
-                    //         else if (auto listValue = dynamic_cast<V::ListValue *>(value))
-                    //         {
-                    //             // check the value type if it is string
-                    //             if (valueData[name].is_string())
-                    //                 listValue->SetSelected(valueData[name]);
-                    //         }
-                    //         else if (auto numberValue = dynamic_cast<V::NumberValue *>(value))
-                    //         {
-                    //             // check the value type if it is integer
-                    //             if (valueData[name].is_number_integer())
-                    //                 numberValue->SetValue(valueData[name]);
-                    //         }
-                    //     }
-                    // }
                     // Get values for the module
                     auto values = settings["values"];
                     if (values.is_null())
@@ -221,6 +190,7 @@ namespace Client::File
             std::cout << "File does not exist" << std::endl;
         }
         write_new_file(file, feature, true);
+        last_save = I::GlobalVars->realtime;
     }
     void FileManager::write_new_file(std::ofstream &file, nlohmann::json data, bool overwrite)
     {
@@ -235,5 +205,13 @@ namespace Client::File
 
         // Close the file
         file.close();
+    }
+    void FileManager::running_auto_save()
+    {
+        if (I::GlobalVars->realtime - last_save > auto_save_interval)
+        {
+            load();
+            save();
+        }
     }
 }
