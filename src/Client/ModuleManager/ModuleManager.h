@@ -41,5 +41,7 @@ namespace Client::Module
 		void onRender2D();
 		void onCreateMove(CUserCmd* cmd, C_TerrorPlayer* pLocal);
 		void onKey();
+		private:
+		int keyTimeout = 0;
     };
 }

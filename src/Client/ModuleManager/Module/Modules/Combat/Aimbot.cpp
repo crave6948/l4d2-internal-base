@@ -8,14 +8,13 @@ namespace Client::Module
 		inline IClientEntity* target = nullptr;
 		inline Vector targetPosition = Vector();
 		inline Vector lastRandom = Vector();
-		inline float maxfov = 5.0f, lastTime = 0.0f, lastrndTime = 0.0f, lastRotate = 0.0f;
+		inline float lastTime = 0.0f, lastrndTime = 0.0f, lastRotate = 0.0f;
 		inline bool aiming = false, CanAttack = false, IsVisible = false;
 		namespace AttackConfig
 		{
-			bool Slient = true;
 			int holdAttackForTick = 0;
 			int holdTick = 0;
-			float switchTimer = 400, randVecTime = 200, rotateTime = 50;
+			float randVecTime = 200, rotateTime = 50;
 		}
 		namespace RenderLocal
 		{
@@ -131,7 +130,7 @@ namespace Client::Module
 				return;
 			}
 			bool allowedToSwitch = false;
-			if (I::GlobalVars->realtime - lastTime >= AttackConfig::switchTimer / 1000)
+			if (I::GlobalVars->realtime - lastTime >= static_cast<float>(switchDelay->GetValue()) / 1000)
 			{
 				allowedToSwitch = true;
 			}
@@ -139,7 +138,7 @@ namespace Client::Module
 			{
 				if (allowedToSwitch)
 				{
-					target = Utils::target.find(pLocal, maxfov);
+					target = Utils::target.find(pLocal, static_cast<float>(fov->GetValue()));
 				}
 				if (target == nullptr)
 				{
@@ -175,7 +174,7 @@ namespace Client::Module
 			{
 				return;
 			}
-			if (!AttackConfig::Slient)
+			if (!silent->GetValue())
 			{
 				I::EngineClient->SetViewAngles(cmd->viewangles);
 			}
@@ -267,10 +266,6 @@ namespace Client::Module
 			{
 				return;
 			}
-			if (GetAsyncKeyState(VK_NUMPAD5) & 0x8000)
-			{
-				AttackConfig::Slient = !AttackConfig::Slient;
-			}
 			C_TerrorPlayer *pLocal = I::ClientEntityList->GetClientEntity(I::EngineClient->GetLocalPlayer())->As<C_TerrorPlayer *>();
 			if (aiming)
 			{
@@ -280,6 +275,9 @@ namespace Client::Module
 				G::Draw.String(EFonts::DEBUG, startX, startY, Color(255, 255, 255, 255), TXT_DEFAULT, ("CanAttack:" + std::to_string(CanAttack)).c_str());
 				startY += G::Draw.GetFontHeight(EFonts::DEBUG) + 1;
 				G::Draw.String(EFonts::DEBUG, startX, startY, Color(255, 255, 255, 255), TXT_DEFAULT, ("IsVisible:" + std::to_string(IsVisible)).c_str());
+				startY += G::Draw.GetFontHeight(EFonts::DEBUG) + 1;
+				std::string str2 = ("Silent: " + (silent->GetValue() ? std::string("true") : std::string("false")));
+				G::Draw.String(EFonts::DEBUG, startX, startY, Color(255, 255, 255, 255), TXT_DEFAULT, str2.c_str());
 				startY += G::Draw.GetFontHeight(EFonts::DEBUG) + 1;
 			}
 			G::Draw.String(EFonts::DEBUG, startX, startY, Color(255, 255, 255, 255), TXT_DEFAULT, ("IsLeftClick:" + std::to_string(RenderLocal::IsLeftClick)).c_str());
@@ -299,7 +297,7 @@ namespace Client::Module
 				}
 			}
 			//(pLocal->IsScoped() && !gVisuals.bNoZoom) ? 30.0f :
-			float flR = tanf(DEG2RAD(maxfov) / 2) / tanf(DEG2RAD(110) / 2) * G::Draw.m_nScreenW;
+			float flR = tanf(DEG2RAD(fov->GetValue()) / 2) / tanf(DEG2RAD(110) / 2) * G::Draw.m_nScreenW;
 			G::Draw.OutlinedCircle(G::Draw.m_nScreenW / 2, G::Draw.m_nScreenH / 2, flR, 32, Color(178, 190, 181, 255));
 		}
 		void Aimbot::onEnabled()
