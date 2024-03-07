@@ -36,36 +36,92 @@ namespace Client::File
                     {
                         continue;
                     }
-                    auto valueList = settings["values"];
-                    if (valueList.is_null())
+                    // auto valueList = settings["values"];
+                    // if (valueList.is_null())
+                    //     continue;
+                    // for (auto valueData : valueList)
+                    // {
+                    //     if (valueData.is_null())
+                    //         continue;
+                    //     for (auto it = valueData.begin(); it != valueData.end(); it++)
+                    //     {
+                    //         std::string name = it.key();
+                    //         auto value = module->vManager.GetValue(name);
+                    //         if (value == nullptr)
+                    //             continue;
+                    //         if (auto booleanValue = dynamic_cast<V::BooleanValue *>(value))
+                    //         {
+                    //             // check the value type if it is boolean
+                    //             if (valueData[name].is_boolean())
+                    //                 booleanValue->SetValue(valueData[name]);
+                    //         }
+                    //         else if (auto listValue = dynamic_cast<V::ListValue *>(value))
+                    //         {
+                    //             // check the value type if it is string
+                    //             if (valueData[name].is_string())
+                    //                 listValue->SetSelected(valueData[name]);
+                    //         }
+                    //         else if (auto numberValue = dynamic_cast<V::NumberValue *>(value))
+                    //         {
+                    //             // check the value type if it is integer
+                    //             if (valueData[name].is_number_integer())
+                    //                 numberValue->SetValue(valueData[name]);
+                    //         }
+                    //     }
+                    // }
+                    // Get values for the module
+                    auto values = settings["values"];
+                    if (values.is_null())
                         continue;
-                    for (auto valueData : valueList)
+                    for (auto &value : values)
                     {
-                        if (valueData.is_null())
-                            continue;
-                        for (auto it = valueData.begin(); it != valueData.end(); it++)
+                        for (auto &item : value.items())
                         {
-                            std::string name = it.key();
-                            auto value = module->vManager.GetValue(name);
-                            if (value == nullptr)
+                            std::string valueName = item.key(); // Get value name
+                            auto valueData = item.value();      // Get value data
+
+                            // Get value object from the module
+                            auto valueObject = module->vManager.GetValue(valueName);
+                            if (valueObject == nullptr)
                                 continue;
-                            if (auto booleanValue = dynamic_cast<V::BooleanValue *>(value))
+
+                            // Handle different value types
+                            std::string type = valueData["type"];
+                            if (type == "boolean")
                             {
-                                //check the value type if it is boolean
-                                if (valueData[name].is_boolean())
-                                    booleanValue->SetValue(valueData[name]);
+                                bool boolValue = valueData["value"];
+                                // Handle boolean value
+                                if (auto booleanValue = dynamic_cast<V::BooleanValue *>(valueObject))
+                                {
+                                    booleanValue->SetValue(boolValue);
+                                }
                             }
-                            else if (auto listValue = dynamic_cast<V::ListValue *>(value))
+                            else if (type == "list")
                             {
-                                //check the value type if it is string
-                                if (valueData[name].is_string())
-                                    listValue->SetSelected(valueData[name]);
+                                std::string selectedValue = valueData["value"];
+                                // Handle list value
+                                if (auto listValue = dynamic_cast<V::ListValue *>(valueObject))
+                                {
+                                    listValue->SetSelected(selectedValue);
+                                }
                             }
-                            else if (auto numberValue = dynamic_cast<V::NumberValue *>(value))
+                            else if (type == "number")
                             {
-                                //check the value type if it is integer
-                                if (valueData[name].is_number_integer())
-                                    numberValue->SetValue(valueData[name]);
+                                int numValue = valueData["value"];
+                                // Handle number value
+                                if (auto numberValue = dynamic_cast<V::NumberValue *>(valueObject))
+                                {
+                                    numberValue->SetValue(numValue);
+                                }
+                            }
+                            else if (type == "float")
+                            {
+                                float fValue = valueData["value"];
+                                // Handle float value
+                                if (auto floatValue = dynamic_cast<V::FloatValue *>(valueObject))
+                                {
+                                    floatValue->SetValue(fValue);
+                                }
                             }
                         }
                     }
@@ -96,15 +152,48 @@ namespace Client::File
                 // Check if value is a BooleanValue class
                 if (auto booleanValue = dynamic_cast<V::BooleanValue *>(value))
                 {
-                    valueJson[booleanValue->GetName()] = booleanValue->GetValue();
+                    nlohmann::json booleanValueJson;
+                    booleanValueJson["type"] = "boolean";
+                    booleanValueJson["value"] = booleanValue->GetValue();
+                    valueJson[booleanValue->GetName()] = booleanValueJson;
                 }
                 else if (auto listValue = dynamic_cast<V::ListValue *>(value))
                 {
-                    valueJson[listValue->GetName()] = listValue->GetSelected();
+                    nlohmann::json listValueJson;
+                    listValueJson["type"] = "list";
+                    listValueJson["value"] = listValue->GetSelected();
+                    // get all list value
+                    nlohmann::json allListJson = nlohmann::json::array();
+                    for (auto str : listValue->GetLists())
+                    {
+                        allListJson.push_back(str);
+                    }
+                    listValueJson["lists"] = allListJson;
+                    valueJson[listValue->GetName()] = listValueJson;
                 }
                 else if (auto numberValue = dynamic_cast<V::NumberValue *>(value))
                 {
-                    valueJson[numberValue->GetName()] = numberValue->GetValue();
+                    nlohmann::json numberValueJson;
+                    numberValueJson["type"] = "number";
+                    numberValueJson["value"] = numberValue->GetValue();
+                    // get min and max value
+                    numberValueJson["min"] = numberValue->GetMin();
+                    numberValueJson["max"] = numberValue->GetMax();
+                    // get format
+                    numberValueJson["format"] = numberValue->GetFormat();
+                    valueJson[numberValue->GetName()] = numberValueJson;
+                }
+                else if (auto floatValue = dynamic_cast<V::FloatValue *>(value))
+                {
+                    nlohmann::json floatValueJson;
+                    floatValueJson["type"] = "float";
+                    floatValueJson["value"] = floatValue->GetValue();
+                    // get min and max value
+                    floatValueJson["min"] = floatValue->GetMin();
+                    floatValueJson["max"] = floatValue->GetMax();
+                    // get format
+                    floatValueJson["format"] = floatValue->GetFormat();
+                    valueJson[floatValue->GetName()] = floatValueJson;
                 }
                 else
                 {
