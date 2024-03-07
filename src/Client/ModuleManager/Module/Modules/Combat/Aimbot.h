@@ -16,7 +16,7 @@ namespace Client::Module
 			};
 			V::NumberValue *fov = new V::NumberValue("Fov", 180, 0, 180);
 			V::BooleanValue *silent = new V::BooleanValue("Silent", true);
-			V::NumberValue *switchDelay = new V::NumberValue("SwitchDelay", 400, 0, 1000);
+			V::NumberValue *switchDelay = new V::NumberValue("SwitchDelay", 400, 0, 1000, "ms");
 			void onPreCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal) override;
 			void onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal) override;
 			void onRender2D() override;

@@ -26,6 +26,14 @@ namespace Client::Module
         void setEnabled(bool state)
         {
             this->state = state;
+            if (state)
+            {
+                onEnabled();
+            }
+            else
+            {
+                onDisabled();
+            }
         };
         int getKey()
         {
@@ -43,15 +51,7 @@ namespace Client::Module
         virtual void onRender2D(){};
         void toggle()
         {
-            state = !state;
-            if (state)
-            {
-                onEnabled();
-            }
-            else
-            {
-                onDisabled();
-            }
+            setEnabled(!state);
         };
         virtual void onEnabled(){};
         virtual void onDisabled(){};
