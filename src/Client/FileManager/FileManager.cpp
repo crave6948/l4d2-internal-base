@@ -17,7 +17,7 @@ namespace Client::File
     {
         // Get the current path
         std::filesystem::path currentPath = std::filesystem::current_path();
-        //check if file exists
+        // check if file exists
         std::string filePath = currentPath.string() + "/settings.json";
         if (std::filesystem::exists(filePath))
         {
@@ -31,33 +31,49 @@ namespace Client::File
                     auto settings = data[module->getName()];
                     module->setEnabled(settings["enabled"]);
                     module->setKey(settings["key"]);
-                    //check if settings["values"] is null
+                    // check if settings["values"] is null
                     if (settings["values"].is_null())
                     {
                         continue;
                     }
-                    for (auto value : module->vManager.GetValues())
+                    auto valueList = settings["values"];
+                    if (valueList.is_null())
+                        continue;
+                    for (auto valueData : valueList)
                     {
-                        if (settings["values"].contains(value->GetName()))
+                        if (valueData.is_null())
+                            continue;
+                        for (auto it = valueData.begin(); it != valueData.end(); it++)
                         {
-                            auto valueData = settings["values"][value->GetName()];
+                            std::string name = it.key();
+                            auto value = module->vManager.GetValue(name);
+                            if (value == nullptr)
+                                continue;
                             if (auto booleanValue = dynamic_cast<V::BooleanValue *>(value))
                             {
-                                booleanValue->SetValue(valueData);
+                                //check the value type if it is boolean
+                                if (valueData[name].is_boolean())
+                                    booleanValue->SetValue(valueData[name]);
                             }
                             else if (auto listValue = dynamic_cast<V::ListValue *>(value))
                             {
-                                listValue->SetSelected(valueData);
+                                //check the value type if it is string
+                                if (valueData[name].is_string())
+                                    listValue->SetSelected(valueData[name]);
                             }
                             else if (auto numberValue = dynamic_cast<V::NumberValue *>(value))
                             {
-                                numberValue->SetValue(valueData);
+                                //check the value type if it is integer
+                                if (valueData[name].is_number_integer())
+                                    numberValue->SetValue(valueData[name]);
                             }
                         }
                     }
                 }
             }
-        }else{
+        }
+        else
+        {
             save();
         }
     }

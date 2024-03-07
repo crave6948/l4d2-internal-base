@@ -123,7 +123,7 @@ namespace Client::Module
     {
         // bool isToggled = keyState & 1;
         // bool isDown = keyState & 0x8000;
-        if (GetAsyncKeyState(VK_HOME) & 0x8000) {
+        if (GetAsyncKeyState(VK_HOME) & 0x8000 && keyTimeout <= 0) {
             Client::client.fileManager.load();
             keyTimeout = 1;
         }else {
