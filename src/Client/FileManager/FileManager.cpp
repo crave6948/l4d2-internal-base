@@ -113,7 +113,11 @@ namespace Client::File
             nlohmann::json settings;
             settings["enabled"] = module->getEnabled();
             settings["key"] = module->getKey();
-            settings["category"] = module->getCategory();
+        //     Combat = 1,
+        // Visuals = 2,
+        // Player = 3,
+        // Misc = 4
+            settings["category"] = module->getCategory() == Client::Module::ModuleCategory::Combat ? "Combat" : module->getCategory() == Client::Module::ModuleCategory::Visuals ? "Visuals" : module->getCategory() == Client::Module::ModuleCategory::Player ? "Player" : module->getCategory() == Client::Module::ModuleCategory::Misc ? "Misc" : "None";
             // get all value
             nlohmann::json allValuesJson;
             for (auto value : module->vManager.GetValues())

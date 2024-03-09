@@ -3,14 +3,9 @@
 #include "../../../SDK/SDK.h"
 #include "Utils/UtilsCollector.h"
 #include "../../Value/ValueManager.h"
+#include "ModuleCategory.h"
 namespace Client::Module
 {
-    enum class ModuleCategory {
-        Combat = 1,
-        Visuals = 2,
-        Player = 3,
-        Misc = 4
-    };
     class Module
     {
     public:
