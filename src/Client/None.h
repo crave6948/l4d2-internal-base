@@ -12,5 +12,5 @@ namespace Client
         Module::ModuleManager moduleManager = Module::ModuleManager();
         File::FileManager fileManager = File::FileManager();
     };
-    inline None client = None();
+    None client = None();
 }
