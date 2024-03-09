@@ -113,6 +113,7 @@ namespace Client::File
             nlohmann::json settings;
             settings["enabled"] = module->getEnabled();
             settings["key"] = module->getKey();
+            settings["category"] = module->getCategory();
             // get all value
             nlohmann::json allValuesJson;
             for (auto value : module->vManager.GetValues())
