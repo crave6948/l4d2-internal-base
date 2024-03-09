@@ -10,7 +10,7 @@ namespace Client::Module
 		public:
 			Arraylist()
 			{
-				this->Create("ArrayList", true, VK_NUMPAD0, ModuleCategory::Visuals);
+				this->Create("ArrayList", true, VK_NUMPAD0, Client::Module::ModuleCategory::Visuals);
 				vManager = V::ValueManager();
 			};
 			void onRender2D() override;

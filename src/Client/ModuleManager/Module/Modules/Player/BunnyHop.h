@@ -10,7 +10,7 @@ namespace Client::Module
 		public:
 			BunnyHop()
 			{
-				this->Create("Bhop", true, VK_NUMPAD9, ModuleCategory::Player);
+				this->Create("Bhop", true, VK_NUMPAD9, Client::Module::ModuleCategory::Player);
 			};
 			void onPrePrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal) override;
 			void onPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal, int PredictedFlags) override;

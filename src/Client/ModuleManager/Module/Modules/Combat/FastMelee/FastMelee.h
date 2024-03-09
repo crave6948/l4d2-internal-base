@@ -10,7 +10,7 @@ namespace Client::Module
 		public:
 			FastMelee()
 			{
-				this->Create("FastMelee", true, VK_NUMPAD1, ModuleCategory::Combat);
+				this->Create("FastMelee", true, VK_NUMPAD1, Client::Module::ModuleCategory::Combat);
 				vManager.AddValue(waitingTicks);
 			};
 			V::NumberValue *waitingTicks = new V::NumberValue("WaitingTicks", 4, 0, 20);

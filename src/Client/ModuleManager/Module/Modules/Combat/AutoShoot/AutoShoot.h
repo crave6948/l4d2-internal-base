@@ -10,7 +10,7 @@ namespace Client::Module
 		public:
 			AutoShoot()
 			{
-				this->Create("AutoShoot", true, VK_NUMPAD2, ModuleCategory::Combat);
+				this->Create("AutoShoot", true, VK_NUMPAD2, Client::Module::ModuleCategory::Combat);
 				vManager.AddValue(autoPunch);
 				vManager.AddValue(onlySniper);
 				vManager.AddValue(onlyShotgun);
