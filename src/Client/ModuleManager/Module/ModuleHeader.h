@@ -63,6 +63,7 @@ namespace Client::Module
         void toggle()
         {
             setEnabled(!state);
+            client.fileManager.save();
         };
         virtual void onEnabled(){};
         virtual void onDisabled(){};
