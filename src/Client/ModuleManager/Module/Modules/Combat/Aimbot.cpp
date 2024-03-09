@@ -5,7 +5,7 @@ namespace Client::Module
 {
 	namespace AimbotModule
 	{
-		inline IClientEntity* target = nullptr;
+		inline IClientEntity *target = nullptr;
 		inline Vector targetPosition = Vector();
 		inline Vector lastRandom = Vector();
 		inline float lastTime = 0.0f, lastrndTime = 0.0f, lastRotate = 0.0f;
@@ -297,7 +297,7 @@ namespace Client::Module
 				}
 			}
 			//(pLocal->IsScoped() && !gVisuals.bNoZoom) ? 30.0f :
-			float flR = tanf(DEG2RAD(fov->GetValue()) / 2) / tanf(DEG2RAD(110) / 2) * G::Draw.m_nScreenW;
+			float flR = tanf(DEG2RAD(fov->GetValue()) / 2) / tanf(DEG2RAD(pLocal->IsZoomed() ? 30 : 110) / 2) * G::Draw.m_nScreenW;
 			G::Draw.OutlinedCircle(G::Draw.m_nScreenW / 2, G::Draw.m_nScreenH / 2, flR, 32, Color(178, 190, 181, 255));
 		}
 		void Aimbot::onEnabled()

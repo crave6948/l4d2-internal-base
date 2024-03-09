@@ -3,17 +3,20 @@
 #include "../../../SDK/SDK.h"
 #include "Utils/UtilsCollector.h"
 #include "../../Value/ValueManager.h"
+#include "../../None.h"
+#include "ModuleCatagory.h"
 namespace Client::Module
 {
     class Module
     {
     public:
         V::ValueManager vManager = V::ValueManager();
-        void Create(std::string name, bool state, int keyCode)
+        void Create(std::string name, bool state, int keyCode, ModuleCategory category)
         {
             this->name = name;
             this->state = state;
             this->key = keyCode;
+            this->category = category;
         };
         std::string getName()
         {
@@ -43,6 +46,10 @@ namespace Client::Module
         {
             this->key = key;
         };
+        ModuleCategory getCategory()
+        {
+            return category;
+        };
         virtual void onPreCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
         virtual void onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
         virtual void onPrePrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
@@ -52,6 +59,7 @@ namespace Client::Module
         void toggle()
         {
             setEnabled(!state);
+            Client::client.fileManager.save();
         };
         virtual void onEnabled(){};
         virtual void onDisabled(){};
@@ -79,5 +87,6 @@ namespace Client::Module
         std::string name;
         bool state = false;
         int key = 0;
+        ModuleCategory category;
     };
 }
