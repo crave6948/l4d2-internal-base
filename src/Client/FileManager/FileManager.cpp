@@ -15,6 +15,79 @@ namespace Client::File
     {
         load();
     }
+    inline void loadCategory(nlohmann::json category, Client::Module::ModuleCategory moduleCategory)
+    {
+        for (auto module : Client::client.moduleManager.getFeatureListByCategory(moduleCategory))
+        {
+            if (category.contains(module->getName()))
+            {
+                auto settings = category[module->getName()];
+                module->setEnabled(settings["enabled"]);
+                module->setKey(settings["key"]);
+                // check if settings["values"] is null
+                if (settings["values"].is_null())
+                {
+                    continue;
+                }
+                // Get values for the module
+                auto values = settings["values"];
+                if (values.is_null())
+                    continue;
+                for (auto &value : values)
+                {
+                    for (auto &item : value.items())
+                    {
+                        std::string valueName = item.key(); // Get value name
+                        auto valueData = item.value();      // Get value data
+
+                        // Get value object from the module
+                        auto valueObject = module->vManager.GetValue(valueName);
+                        if (valueObject == nullptr)
+                            continue;
+
+                        // Handle different value types
+                        std::string type = valueData["type"];
+                        if (type == "boolean")
+                        {
+                            bool boolValue = valueData["value"];
+                            // Handle boolean value
+                            if (auto booleanValue = dynamic_cast<V::BooleanValue *>(valueObject))
+                            {
+                                booleanValue->SetValue(boolValue);
+                            }
+                        }
+                        else if (type == "list")
+                        {
+                            std::string selectedValue = valueData["value"];
+                            // Handle list value
+                            if (auto listValue = dynamic_cast<V::ListValue *>(valueObject))
+                            {
+                                listValue->SetSelected(selectedValue);
+                            }
+                        }
+                        else if (type == "number")
+                        {
+                            int numValue = valueData["value"];
+                            // Handle number value
+                            if (auto numberValue = dynamic_cast<V::NumberValue *>(valueObject))
+                            {
+                                numberValue->SetValue(numValue);
+                            }
+                        }
+                        else if (type == "float")
+                        {
+                            float fValue = valueData["value"];
+                            // Handle float value
+                            if (auto floatValue = dynamic_cast<V::FloatValue *>(valueObject))
+                            {
+                                floatValue->SetValue(fValue);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     void FileManager::load()
     {
         // Get the current path
@@ -26,76 +99,83 @@ namespace Client::File
             nlohmann::json data;
             std::ifstream file(filePath);
             file >> data;
-            for (auto module : Client::client.moduleManager.featurelist)
+            file.close();
+            // if data contains the category
+            if (data.contains("Combat"))
             {
-                if (data.contains(module->getName()))
-                {
-                    auto settings = data[module->getName()];
-                    module->setEnabled(settings["enabled"]);
-                    module->setKey(settings["key"]);
-                    // check if settings["values"] is null
-                    if (settings["values"].is_null())
-                    {
-                        continue;
-                    }
-                    // Get values for the module
-                    auto values = settings["values"];
-                    if (values.is_null())
-                        continue;
-                    for (auto &value : values)
-                    {
-                        for (auto &item : value.items())
-                        {
-                            std::string valueName = item.key(); // Get value name
-                            auto valueData = item.value();      // Get value data
-
-                            // Get value object from the module
-                            auto valueObject = module->vManager.GetValue(valueName);
-                            if (valueObject == nullptr)
-                                continue;
-
-                            // Handle different value types
-                            std::string type = valueData["type"];
-                            if (type == "boolean")
-                            {
-                                bool boolValue = valueData["value"];
-                                // Handle boolean value
-                                if (auto booleanValue = dynamic_cast<V::BooleanValue *>(valueObject))
-                                {
-                                    booleanValue->SetValue(boolValue);
-                                }
-                            }
-                            else if (type == "list")
-                            {
-                                std::string selectedValue = valueData["value"];
-                                // Handle list value
-                                if (auto listValue = dynamic_cast<V::ListValue *>(valueObject))
-                                {
-                                    listValue->SetSelected(selectedValue);
-                                }
-                            }
-                            else if (type == "number")
-                            {
-                                int numValue = valueData["value"];
-                                // Handle number value
-                                if (auto numberValue = dynamic_cast<V::NumberValue *>(valueObject))
-                                {
-                                    numberValue->SetValue(numValue);
-                                }
-                            }
-                            else if (type == "float")
-                            {
-                                float fValue = valueData["value"];
-                                // Handle float value
-                                if (auto floatValue = dynamic_cast<V::FloatValue *>(valueObject))
-                                {
-                                    floatValue->SetValue(fValue);
-                                }
-                            }
-                        }
-                    }
-                }
+                auto combat = data["Combat"];
+                loadCategory(combat, Client::Module::ModuleCategory::Combat);
             }
+            // for (auto module : Client::client.moduleManager.featurelist)
+            // {
+            //     if (data.contains(module->getName()))
+            //     {
+            //         auto settings = data[module->getName()];
+            //         module->setEnabled(settings["enabled"]);
+            //         module->setKey(settings["key"]);
+            //         // check if settings["values"] is null
+            //         if (settings["values"].is_null())
+            //         {
+            //             continue;
+            //         }
+            //         // Get values for the module
+            //         auto values = settings["values"];
+            //         if (values.is_null())
+            //             continue;
+            //         for (auto &value : values)
+            //         {
+            //             for (auto &item : value.items())
+            //             {
+            //                 std::string valueName = item.key(); // Get value name
+            //                 auto valueData = item.value();      // Get value data
+
+            //                 // Get value object from the module
+            //                 auto valueObject = module->vManager.GetValue(valueName);
+            //                 if (valueObject == nullptr)
+            //                     continue;
+
+            //                 // Handle different value types
+            //                 std::string type = valueData["type"];
+            //                 if (type == "boolean")
+            //                 {
+            //                     bool boolValue = valueData["value"];
+            //                     // Handle boolean value
+            //                     if (auto booleanValue = dynamic_cast<V::BooleanValue *>(valueObject))
+            //                     {
+            //                         booleanValue->SetValue(boolValue);
+            //                     }
+            //                 }
+            //                 else if (type == "list")
+            //                 {
+            //                     std::string selectedValue = valueData["value"];
+            //                     // Handle list value
+            //                     if (auto listValue = dynamic_cast<V::ListValue *>(valueObject))
+            //                     {
+            //                         listValue->SetSelected(selectedValue);
+            //                     }
+            //                 }
+            //                 else if (type == "number")
+            //                 {
+            //                     int numValue = valueData["value"];
+            //                     // Handle number value
+            //                     if (auto numberValue = dynamic_cast<V::NumberValue *>(valueObject))
+            //                     {
+            //                         numberValue->SetValue(numValue);
+            //                     }
+            //                 }
+            //                 else if (type == "float")
+            //                 {
+            //                     float fValue = valueData["value"];
+            //                     // Handle float value
+            //                     if (auto floatValue = dynamic_cast<V::FloatValue *>(valueObject))
+            //                     {
+            //                         floatValue->SetValue(fValue);
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+            // }
         }
         else
         {
