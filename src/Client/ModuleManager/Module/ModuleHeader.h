@@ -3,8 +3,9 @@
 #include "../../../SDK/SDK.h"
 #include "Utils/UtilsCollector.h"
 #include "../../Value/ValueManager.h"
-#include "../None.h"
-namespace Client::Module
+#include "../../None.h"
+using namespace Client;
+namespace Module
 {
     enum class ModuleCategory {
         Combat = 1,
@@ -64,7 +65,7 @@ namespace Client::Module
         void toggle()
         {
             setEnabled(!state);
-            client.fileManager.save();
+            Client::client.fileManager.save();
         };
         virtual void onEnabled(){};
         virtual void onDisabled(){};
