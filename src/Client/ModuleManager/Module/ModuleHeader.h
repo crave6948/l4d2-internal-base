@@ -3,7 +3,6 @@
 #include "../../../SDK/SDK.h"
 #include "Utils/UtilsCollector.h"
 #include "../../Value/ValueManager.h"
-#include "../../None.h"
 namespace Client::Module
 {
     enum class ModuleCategory {
@@ -61,12 +60,7 @@ namespace Client::Module
         virtual void onPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal, int PredictedFlags){};
         virtual void onPostPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
         virtual void onRender2D(){};
-        void toggle()
-        {
-            setEnabled(!state);
-            using namespace Client;
-            client.fileManager.save();
-        };
+        void toggle();
         virtual void onEnabled(){};
         virtual void onDisabled(){};
         int keytimeout = 0;

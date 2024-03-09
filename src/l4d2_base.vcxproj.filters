@@ -34,6 +34,9 @@
     <ClCompile Include="Client\ModuleManager\Module\Utils\UtilsCollector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Client\ModuleManager\Module\ModuleHeader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Client\ModuleManager\ModuleManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

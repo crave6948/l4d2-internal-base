@@ -162,6 +162,7 @@
     <ClCompile Include="Client\ModuleManager\Module\Modules\Render\ESPHelper.cpp" />
     <ClCompile Include="Client\ModuleManager\Module\Utils\FindTarget.cpp" />
     <ClCompile Include="Client\ModuleManager\Module\Utils\UtilsCollector.cpp" />
+    <ClCompile Include="Client\ModuleManager\Module\ModuleHeader.cpp" />
     <ClCompile Include="Client\ModuleManager\ModuleManager.cpp" />
     <ClCompile Include="Client\None.cpp" />
     <ClCompile Include="Client\Rotation\RotationManager.cpp" />
