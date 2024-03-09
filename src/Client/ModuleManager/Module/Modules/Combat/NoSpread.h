@@ -10,7 +10,7 @@ namespace Client::Module
 		public:
 			NoSpread()
 			{
-				this->Create("NoSpread", true, VK_NUMPAD8, Client::Module::ModuleCategory::Combat);
+				this->Create("NoSpread", true, VK_NUMPAD8, ModuleCategory::Combat);
 				vManager.AddValue(removeRecoil);
 				vManager.AddValue(spreadPercent);
 			};

@@ -4,7 +4,6 @@
 #include "Utils/UtilsCollector.h"
 #include "../../Value/ValueManager.h"
 #include "../../None.h"
-#include "ModuleCategory.h"
 namespace Client::Module
 {
     class Module
@@ -88,5 +87,12 @@ namespace Client::Module
         bool state = false;
         int key = 0;
         ModuleCategory category;
+    };
+
+    enum ModuleCategory {
+        Combat = 1,
+        Visuals = 2,
+        Player = 3,
+        Misc = 4
     };
 }

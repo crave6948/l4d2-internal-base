@@ -9,7 +9,7 @@ namespace Client::Module
 		public:
 			Aimbot()
 			{
-				this->Create("Aimbot", true, VK_NUMPAD7, Client::Module::ModuleCategory::Combat);
+				this->Create("Aimbot", true, VK_NUMPAD7, ModuleCategory::Combat);
 				vManager.AddValue(fov);
 				vManager.AddValue(silent);
 				vManager.AddValue(switchDelay);
