@@ -156,6 +156,9 @@
     <ClInclude Include="Client\ModuleManager\Module\ModuleHeader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Client\ModuleManager\Module\ModuleCategory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Client\ModuleManager\Module\Modules\Combat\Aimbot.h">
       <Filter>Header Files</Filter>
     </ClInclude>

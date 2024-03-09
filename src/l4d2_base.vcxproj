@@ -197,6 +197,7 @@
     <ClInclude Include="Client\Engine\Prediction\EnginePrediction.h" />
     <ClInclude Include="Client\FileManager\FileManager.h" />
     <ClInclude Include="Client\ModuleManager\Module\ModuleHeader.h" />
+    <ClInclude Include="Client\ModuleManager\Module\ModuleCategory.h" />
     <ClInclude Include="Client\ModuleManager\Module\Modules\Combat\Aimbot.h" />
     <ClInclude Include="Client\ModuleManager\Module\Modules\Combat\AutoShoot\AutoShoot.h" />
     <ClInclude Include="Client\ModuleManager\Module\Modules\Combat\FastMelee\FastMelee.h" />

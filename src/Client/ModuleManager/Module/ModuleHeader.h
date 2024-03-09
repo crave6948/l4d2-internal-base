@@ -4,7 +4,7 @@
 #include "Utils/UtilsCollector.h"
 #include "../../Value/ValueManager.h"
 #include "../../None.h"
-#include "ModuleCatagory.h"
+#include "ModuleCategory.h"
 namespace Client::Module
 {
     class Module
