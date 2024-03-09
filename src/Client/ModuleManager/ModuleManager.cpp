@@ -146,4 +146,27 @@ namespace Client::Module
             }
         }
     }
+    Module *ModuleManager::getFeature(std::string name)
+    {
+        for (Module *mod : featurelist)
+        {
+            if (mod->getName().compare(name) == 0)
+            {
+                return mod;
+            }
+        }
+        return nullptr;
+    }
+    std::vector<Module *> ModuleManager::getFeatureListByCategory(ModuleCategory category)
+    {
+        std::vector<Module *> result;
+        for (Module *mod : featurelist)
+        {
+            if (mod->getCategory() == category)
+            {
+                result.push_back(mod);
+            }
+        }
+        return result;
+    }
 }

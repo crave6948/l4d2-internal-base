@@ -102,22 +102,16 @@ namespace Client::File
             save();
         }
     }
-    void FileManager::save()
+    inline nlohmann::json CategoryToJson(std::string name, Client::Module::ModuleCategory category) 
     {
-        std::filesystem::path currentPath = std::filesystem::current_path();
-        // Create a JSON object
-
+        //get all module in this category
         nlohmann::json feature;
-        for (auto module : Client::client.moduleManager.featurelist)
+        auto modules = Client::client.moduleManager.getFeatureListByCategory(category);
+        for (auto module : modules)
         {
             nlohmann::json settings;
             settings["enabled"] = module->getEnabled();
             settings["key"] = module->getKey();
-        //     Combat = 1,
-        // Visuals = 2,
-        // Player = 3,
-        // Misc = 4
-            settings["category"] = module->getCategory() == Client::Module::ModuleCategory::Combat ? "Combat" : module->getCategory() == Client::Module::ModuleCategory::Visuals ? "Visuals" : module->getCategory() == Client::Module::ModuleCategory::Player ? "Player" : module->getCategory() == Client::Module::ModuleCategory::Misc ? "Misc" : "None";
             // get all value
             nlohmann::json allValuesJson;
             for (auto value : module->vManager.GetValues())
@@ -178,6 +172,18 @@ namespace Client::File
             settings["values"] = allValuesJson;
             feature[module->getName()] = settings;
         }
+        return feature;
+    }
+    void FileManager::save()
+    {
+        std::filesystem::path currentPath = std::filesystem::current_path();
+        // Create a JSON object
+
+        nlohmann::json categoryLists;
+        categoryLists["Combat"] = CategoryToJson("Combat", Client::Module::ModuleCategory::Combat);
+        categoryLists["Visuals"] = CategoryToJson("Visuals", Client::Module::ModuleCategory::Visuals);
+        categoryLists["Player"] = CategoryToJson("Player", Client::Module::ModuleCategory::Player);
+        categoryLists["Misc"] = CategoryToJson("Misc", Client::Module::ModuleCategory::Misc);
 
         // file path
         std::string filePath = currentPath.string() + "/settings.json";
@@ -194,7 +200,7 @@ namespace Client::File
             file = std::ofstream(filePath, std::ofstream::out);
             std::cout << "File does not exist" << std::endl;
         }
-        write_new_file(file, feature, true);
+        write_new_file(file, categoryLists, true);
         last_save = I::GlobalVars->realtime;
     }
     void FileManager::write_new_file(std::ofstream &file, nlohmann::json data, bool overwrite)
