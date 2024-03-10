@@ -100,82 +100,37 @@ namespace Client::File
             std::ifstream file(filePath);
             file >> data;
             file.close();
-            // if data contains the category
-            if (data.contains("Combat"))
+            //load data
+            if (data.is_null())
             {
-                auto combat = data["Combat"];
-                loadCategory(combat, Client::Module::ModuleCategory::Combat);
+                return;
             }
-            // for (auto module : Client::client.moduleManager.featurelist)
-            // {
-            //     if (data.contains(module->getName()))
-            //     {
-            //         auto settings = data[module->getName()];
-            //         module->setEnabled(settings["enabled"]);
-            //         module->setKey(settings["key"]);
-            //         // check if settings["values"] is null
-            //         if (settings["values"].is_null())
-            //         {
-            //             continue;
-            //         }
-            //         // Get values for the module
-            //         auto values = settings["values"];
-            //         if (values.is_null())
-            //             continue;
-            //         for (auto &value : values)
-            //         {
-            //             for (auto &item : value.items())
-            //             {
-            //                 std::string valueName = item.key(); // Get value name
-            //                 auto valueData = item.value();      // Get value data
-
-            //                 // Get value object from the module
-            //                 auto valueObject = module->vManager.GetValue(valueName);
-            //                 if (valueObject == nullptr)
-            //                     continue;
-
-            //                 // Handle different value types
-            //                 std::string type = valueData["type"];
-            //                 if (type == "boolean")
-            //                 {
-            //                     bool boolValue = valueData["value"];
-            //                     // Handle boolean value
-            //                     if (auto booleanValue = dynamic_cast<V::BooleanValue *>(valueObject))
-            //                     {
-            //                         booleanValue->SetValue(boolValue);
-            //                     }
-            //                 }
-            //                 else if (type == "list")
-            //                 {
-            //                     std::string selectedValue = valueData["value"];
-            //                     // Handle list value
-            //                     if (auto listValue = dynamic_cast<V::ListValue *>(valueObject))
-            //                     {
-            //                         listValue->SetSelected(selectedValue);
-            //                     }
-            //                 }
-            //                 else if (type == "number")
-            //                 {
-            //                     int numValue = valueData["value"];
-            //                     // Handle number value
-            //                     if (auto numberValue = dynamic_cast<V::NumberValue *>(valueObject))
-            //                     {
-            //                         numberValue->SetValue(numValue);
-            //                     }
-            //                 }
-            //                 else if (type == "float")
-            //                 {
-            //                     float fValue = valueData["value"];
-            //                     // Handle float value
-            //                     if (auto floatValue = dynamic_cast<V::FloatValue *>(valueObject))
-            //                     {
-            //                         floatValue->SetValue(fValue);
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     }
-            // }
+            if (data.is_array())
+            {
+                for (auto category : data)
+                {
+                    if (category.is_null())
+                    {
+                        continue;
+                    }
+                    if (category.contains("Combat"))
+                    {
+                        loadCategory(category["Combat"], Client::Module::ModuleCategory::Combat);
+                    }
+                    if (category.contains("Visuals"))
+                    {
+                        loadCategory(category["Visuals"], Client::Module::ModuleCategory::Visuals);
+                    }
+                    if (category.contains("Player"))
+                    {
+                        loadCategory(category["Player"], Client::Module::ModuleCategory::Player);
+                    }
+                    if (category.contains("Misc"))
+                    {
+                        loadCategory(category["Misc"], Client::Module::ModuleCategory::Misc);
+                    }
+                }
+            }
         }
         else
         {
@@ -252,6 +207,8 @@ namespace Client::File
             settings["values"] = allValuesJson;
             feature[module->getName()] = settings;
         }
+        nlohmann::json categoryJson;
+        categoryJson[name] = feature;
         return feature;
     }
     void FileManager::save()
@@ -259,11 +216,11 @@ namespace Client::File
         std::filesystem::path currentPath = std::filesystem::current_path();
         // Create a JSON object
 
-        nlohmann::json categoryLists;
-        categoryLists["Combat"] = CategoryToJson("Combat", Client::Module::ModuleCategory::Combat);
-        categoryLists["Visuals"] = CategoryToJson("Visuals", Client::Module::ModuleCategory::Visuals);
-        categoryLists["Player"] = CategoryToJson("Player", Client::Module::ModuleCategory::Player);
-        categoryLists["Misc"] = CategoryToJson("Misc", Client::Module::ModuleCategory::Misc);
+        nlohmann::json categoryLists = nlohmann::json::array();
+        categoryLists.push_back(CategoryToJson("Combat", Client::Module::ModuleCategory::Combat));
+        categoryLists.push_back(CategoryToJson("Visuals", Client::Module::ModuleCategory::Visuals));
+        categoryLists.push_back(CategoryToJson("Player", Client::Module::ModuleCategory::Player));
+        categoryLists.push_back(CategoryToJson("Misc", Client::Module::ModuleCategory::Misc));
 
         // file path
         std::string filePath = currentPath.string() + "/settings.json";
