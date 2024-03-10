@@ -208,8 +208,9 @@ namespace Client::File
             feature[module->getName()] = settings;
         }
         nlohmann::json categoryJson;
-        categoryJson[name] = feature;
-        return feature;
+        categoryJson["Category"] = name;
+        categoryJson["Modules"] = feature;
+        return categoryJson;
     }
     void FileManager::save()
     {
