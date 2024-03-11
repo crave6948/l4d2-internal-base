@@ -7,6 +7,9 @@
     <ClCompile Include="Client\FileManager\FileManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Client\ModuleManager\Module\ModuleHeader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Client\ModuleManager\Module\Modules\Combat\Aimbot.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -17,6 +20,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Client\ModuleManager\Module\Modules\Combat\NoSpread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Client\ModuleManager\Module\Modules\Player\BhopModes\NormalBhop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Client\ModuleManager\Module\Modules\Player\BunnyHop.cpp">
@@ -32,9 +38,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Client\ModuleManager\Module\Utils\UtilsCollector.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Client\ModuleManager\Module\ModuleHeader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Client\ModuleManager\ModuleManager.cpp">
@@ -174,6 +177,9 @@
     <ClInclude Include="Client\ModuleManager\Module\Modules\Combat\NoSpread.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Client\ModuleManager\Module\Modules\Player\BhopModes\NormalBhop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Client\ModuleManager\Module\Modules\Player\BunnyHop.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -205,6 +211,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Client\Value\Values\BooleanValue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Client\Value\Values\FloatValue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Client\Value\Values\ListValue.h">

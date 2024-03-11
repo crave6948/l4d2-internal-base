@@ -153,16 +153,17 @@
   <ItemGroup>
     <ClCompile Include="Client\Engine\Prediction\EnginePrediction.cpp" />
     <ClCompile Include="Client\FileManager\FileManager.cpp" />
+    <ClCompile Include="Client\ModuleManager\Module\ModuleHeader.cpp" />
     <ClCompile Include="Client\ModuleManager\Module\Modules\Combat\Aimbot.cpp" />
     <ClCompile Include="Client\ModuleManager\Module\Modules\Combat\AutoShoot\AutoShoot.cpp" />
     <ClCompile Include="Client\ModuleManager\Module\Modules\Combat\FastMelee\FastMelee.cpp" />
     <ClCompile Include="Client\ModuleManager\Module\Modules\Combat\NoSpread.cpp" />
+    <ClCompile Include="Client\ModuleManager\Module\Modules\Player\BhopModes\NormalBhop.cpp" />
     <ClCompile Include="Client\ModuleManager\Module\Modules\Player\BunnyHop.cpp" />
     <ClCompile Include="Client\ModuleManager\Module\Modules\Render\Arraylist.cpp" />
     <ClCompile Include="Client\ModuleManager\Module\Modules\Render\ESPHelper.cpp" />
     <ClCompile Include="Client\ModuleManager\Module\Utils\FindTarget.cpp" />
     <ClCompile Include="Client\ModuleManager\Module\Utils\UtilsCollector.cpp" />
-    <ClCompile Include="Client\ModuleManager\Module\ModuleHeader.cpp" />
     <ClCompile Include="Client\ModuleManager\ModuleManager.cpp" />
     <ClCompile Include="Client\None.cpp" />
     <ClCompile Include="Client\Rotation\RotationManager.cpp" />
@@ -203,6 +204,7 @@
     <ClInclude Include="Client\ModuleManager\Module\Modules\Combat\AutoShoot\AutoShoot.h" />
     <ClInclude Include="Client\ModuleManager\Module\Modules\Combat\FastMelee\FastMelee.h" />
     <ClInclude Include="Client\ModuleManager\Module\Modules\Combat\NoSpread.h" />
+    <ClInclude Include="Client\ModuleManager\Module\Modules\Player\BhopModes\NormalBhop.h" />
     <ClInclude Include="Client\ModuleManager\Module\Modules\Player\BunnyHop.h" />
     <ClInclude Include="Client\ModuleManager\Module\Modules\Render\Arraylist.h" />
     <ClInclude Include="Client\ModuleManager\Module\Modules\Render\ESPHelper.h" />
@@ -214,6 +216,7 @@
     <ClInclude Include="Client\Value\Value.h" />
     <ClInclude Include="Client\Value\ValueManager.h" />
     <ClInclude Include="Client\Value\Values\BooleanValue.h" />
+    <ClInclude Include="Client\Value\Values\FloatValue.h" />
     <ClInclude Include="Client\Value\Values\ListValue.h" />
     <ClInclude Include="Client\Value\Values\NumberValue.h" />
     <ClInclude Include="Entry\Entry.h" />

@@ -4,7 +4,6 @@ namespace Client::Module
 	namespace AutoShootModule
 	{
 		int check = false;
-		int lastTime = 0;
 		bool nextPunch = false;
 		inline bool isSniper(int id)
 		{
@@ -79,7 +78,7 @@ namespace Client::Module
 
 			if (cmd->buttons & IN_ATTACK)
 			{
-				bool attack = pWeapon->CanPrimaryAttack(-0.2);
+				bool attack = pWeapon->CanPrimaryAttack();
 				if (attack)
 				{
 					if (check)
@@ -91,7 +90,6 @@ namespace Client::Module
 					{
 						check = true;
 					}
-					lastTime = 10;
 					if (getAutoPunch(pWeapon))
 						nextPunch = true;
 				}

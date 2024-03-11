@@ -12,7 +12,7 @@ namespace Client::Module::FastMeleeModule
         if (pWeapon->GetWeaponID() != WEAPON_MELEE)
             return false;
 
-        if (!pWeapon->CanPrimaryAttack(-0.2))
+        if (!pWeapon->CanPrimaryAttack())
             return false;
 
         return true;
@@ -64,7 +64,8 @@ namespace Client::Module::FastMeleeModule
             }
             return;
         }
-        if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000)) {
+        // if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000)) {
+        if (!(cmd->buttons & IN_ATTACK)) {
             stage = 0;
             nextSwap = false;
             waiting = 0;
