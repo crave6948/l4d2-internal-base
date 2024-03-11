@@ -99,7 +99,6 @@ namespace Client::File
             nlohmann::json data;
             std::ifstream file(filePath);
             file >> data;
-            file.close();
             //load data
             if (data.is_null())
             {
