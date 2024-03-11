@@ -104,29 +104,27 @@ namespace Client::File
             {
                 return;
             }
-            if (data.is_array())
-            {
-                for (auto category : data)
-                {
-                    if (category.is_null())
+            if (data.is_array()) {
+                for (auto object : data) {
+                    if (object.is_null())
                     {
                         continue;
                     }
-                    if (category.contains("Combat"))
+                    if (object["Category"] == "Combat")
                     {
-                        loadCategory(category["Combat"], Client::Module::ModuleCategory::Combat);
+                        loadCategory(object["Modules"], Client::Module::ModuleCategory::Combat);
                     }
-                    if (category.contains("Visuals"))
+                    else if (object["Category"] == "Visuals")
                     {
-                        loadCategory(category["Visuals"], Client::Module::ModuleCategory::Visuals);
+                        loadCategory(object["Modules"], Client::Module::ModuleCategory::Visuals);
                     }
-                    if (category.contains("Player"))
+                    else if (object["Category"] == "Player")
                     {
-                        loadCategory(category["Player"], Client::Module::ModuleCategory::Player);
+                        loadCategory(object["Modules"], Client::Module::ModuleCategory::Player);
                     }
-                    if (category.contains("Misc"))
+                    else if (object["Category"] == "Misc")
                     {
-                        loadCategory(category["Misc"], Client::Module::ModuleCategory::Misc);
+                        loadCategory(object["Modules"], Client::Module::ModuleCategory::Misc);
                     }
                 }
             }
