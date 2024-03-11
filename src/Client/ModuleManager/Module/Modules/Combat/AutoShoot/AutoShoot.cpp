@@ -67,7 +67,7 @@ namespace Client::Module
 				{
 					cmd->buttons &= ~IN_ATTACK2;
 				}else {
-					bool attack = pLocal->IsReadyToShove() || pWeapon->CanSecondaryAttack(-0.2);
+					bool attack = pLocal->IsReadyToShove() || pWeapon->CanSecondaryAttack(-0.1);
 					if (attack)
 					{
 						cmd->buttons |= IN_ATTACK2;
@@ -78,7 +78,7 @@ namespace Client::Module
 
 			if (cmd->buttons & IN_ATTACK)
 			{
-				bool attack = pWeapon->CanPrimaryAttack();
+				bool attack = pWeapon->CanPrimaryAttack(-0.1);
 				if (attack)
 				{
 					if (check)

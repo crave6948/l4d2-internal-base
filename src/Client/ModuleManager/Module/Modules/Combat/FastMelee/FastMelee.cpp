@@ -12,7 +12,7 @@ namespace Client::Module::FastMeleeModule
         if (pWeapon->GetWeaponID() != WEAPON_MELEE)
             return false;
 
-        if (!pWeapon->CanPrimaryAttack())
+        if (!pWeapon->CanPrimaryAttack(-0.1))
             return false;
 
         return true;
