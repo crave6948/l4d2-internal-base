@@ -15,6 +15,7 @@ namespace Client::Module
 			void onRender2D() override;
 
 		private:
+			void drawESP(C_BaseEntity *pBaseEntity, int hit);
 		};
 	};
 };

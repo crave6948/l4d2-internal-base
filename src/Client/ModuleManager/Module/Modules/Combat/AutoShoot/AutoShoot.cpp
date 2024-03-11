@@ -3,17 +3,16 @@ namespace Client::Module
 {
 	namespace AutoShootModule
 	{
-		int check = false;
-		bool nextPunch = false;
-		inline bool isSniper(int id)
+
+		bool AutoShoot::isSniper(int id)
 		{
 			return (id == WEAPON_AWP || id == WEAPON_SCOUT);
 		}
-		inline bool isShotgun(int id)
+		bool AutoShoot::isShotgun(int id)
 		{
 			return (id == WEAPON_PUMP_SHOTGUN || id == WEAPON_CHROME_SHOTGUN);
 		}
-		inline bool ShouldRun(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd)
+		bool AutoShoot::ShouldRun(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd)
 		{
 			if (cmd->buttons & IN_USE)
 				return false;
@@ -63,17 +62,12 @@ namespace Client::Module
 
 			if (nextPunch)
 			{
-				if (cmd->buttons & IN_ATTACK2)
+				bool attack = pLocal->IsReadyToShove() || pWeapon->CanSecondaryAttack(-0.1);
+				if (attack)
 				{
-					cmd->buttons &= ~IN_ATTACK2;
-				}else {
-					bool attack = pLocal->IsReadyToShove() || pWeapon->CanSecondaryAttack(-0.1);
-					if (attack)
-					{
-						cmd->buttons |= IN_ATTACK2;
-					}
-					nextPunch = false;
+					cmd->buttons |= IN_ATTACK2;
 				}
+				nextPunch = false;
 			}
 
 			if (cmd->buttons & IN_ATTACK)
@@ -97,7 +91,9 @@ namespace Client::Module
 				{
 					check = false;
 				}
-			}else {
+			}
+			else
+			{
 				check = false;
 			}
 		}

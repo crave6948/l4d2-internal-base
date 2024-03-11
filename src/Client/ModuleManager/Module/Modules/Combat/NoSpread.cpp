@@ -3,7 +3,7 @@ namespace Client::Module
 {
 	namespace NoSpreadModule
 	{
-		inline bool ShouldRun(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd)
+		bool NoSpread::ShouldRun(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd)
 		{
 			if (!(cmd->buttons & IN_ATTACK) || (cmd->buttons & IN_USE))
 				return false;
@@ -61,7 +61,8 @@ namespace Client::Module
 			}
 
 			// Remove punch from current viewangles
-			if (removeRecoil->GetValue()) {
+			if (removeRecoil->GetValue())
+			{
 				vAngle -= pLocal->GetPunchAngle();
 			}
 

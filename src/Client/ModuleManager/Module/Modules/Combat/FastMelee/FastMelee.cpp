@@ -1,9 +1,6 @@
 #include "FastMelee.h"
 namespace Client::Module::FastMeleeModule
 {
-    inline bool nextSwap = false;
-    // 0 = nothing, 1 = swap to primary or medkit grenade pills, 2 = swap to secondary
-    inline int stage = 0, waiting = 0;
     bool FastMelee::shouldRun(C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
     {
         if (!pWeapon || !pLocal)
@@ -16,6 +13,10 @@ namespace Client::Module::FastMeleeModule
             return false;
 
         return true;
+    }
+    void FastMelee::onPreCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
+    {
+        buttonstate = (cmd->buttons & IN_ATTACK) != 0;
     }
     void FastMelee::onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
     {
@@ -65,7 +66,7 @@ namespace Client::Module::FastMeleeModule
             return;
         }
         // if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000)) {
-        if (!(cmd->buttons & IN_ATTACK)) {
+        if (!(buttonstate)) {
             stage = 0;
             nextSwap = false;
             waiting = 0;
