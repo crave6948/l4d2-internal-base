@@ -97,8 +97,14 @@ namespace Client::Module
 				check = false;
 			}
 		}
-		bool AutoShoot::getAutoPunch(C_TerrorWeapon *pWeapon)
-		{
+        void AutoShoot::onRender2D()
+        {
+			if (!Debug->GetValue()) return;
+			std::string str = "AutoShoot: nextPunch->" + std::string(nextPunch ? "true" : "false");
+        	G::Draw.String(EFonts::DEBUG, 100, 140, Color(255, 255, 255, 255), TXT_DEFAULT, str.c_str());
+        }
+        bool AutoShoot::getAutoPunch(C_TerrorWeapon *pWeapon)
+        {
 			if (!autoPunch->GetValue())
 				return false;
 			if (!onlySniper->GetValue() && !onlyShotgun->GetValue())

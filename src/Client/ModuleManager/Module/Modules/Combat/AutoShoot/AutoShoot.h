@@ -14,6 +14,7 @@ namespace Client::Module
 				vManager.AddValue(autoPunch);
 				vManager.AddValue(onlySniper);
 				vManager.AddValue(onlyShotgun);
+				vManager.AddValue(Debug);
 			};
 			// autoPunch
 			V::BooleanValue *autoPunch = new V::BooleanValue("AutoPunch", true);
@@ -21,7 +22,11 @@ namespace Client::Module
 			V::BooleanValue *onlySniper = new V::BooleanValue("OnlySniper", true);
 			// onlyShotgun
 			V::BooleanValue *onlyShotgun = new V::BooleanValue("OnlyShotgun", true);
+			// Debug
+			V::BooleanValue *Debug = new V::BooleanValue("Debug", false);
+			
 			void onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal) override;
+			void onRender2D() override;
 			bool getAutoPunch(C_TerrorWeapon *pWeapon);
 
 		private:
