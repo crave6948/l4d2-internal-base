@@ -110,6 +110,6 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MyCMake-BuildArtifacts
+          name: MyTest-BuildArtifacts
           path: D:\a\l4d2-internal-base\l4d2-internal-base\build\Release\${{env.FILE_NAME}} # Replace with the actual path to your build artifacts
 

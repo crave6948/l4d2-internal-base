@@ -1,5 +1,12 @@
 cmake_minimum_required(VERSION 3.12)
 project(l4d2_base)  # Replace l4d2_base with the actual project name
+
+# Import the Windows SDK
+include_directories($ENV{WINDOWSSDKDIR}/Include)
+
+# Set the build platform to x86
+set(CMAKE_GENERATOR_PLATFORM x86)
+
 # Source files
 # Set the source files directory
 set(SOURCE_FILES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
