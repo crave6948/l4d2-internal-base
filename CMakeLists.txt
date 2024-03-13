@@ -9,6 +9,7 @@ set(CMAKE_CXX_FLAGS "-m32")
 set(SOURCE_FILES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(CMAKE_WARN_DEPRECATED FALSE)
 add_compile_options(-w)
+set(CMAKE_SUPPRESS_REGENERATION true)
 
 # Use GLOB_RECURSE to find all source files in subdirectories
 file(GLOB_RECURSE SOURCE_FILES ${SOURCE_FILES_DIR}/*.cpp)
