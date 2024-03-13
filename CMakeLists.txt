@@ -4,6 +4,7 @@ project(l4d2_base)  # Replace l4d2_base with the actual project name
 # Set the source files directory
 set(SOURCE_FILES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(CMAKE_WARN_DEPRECATED FALSE)
+add_compile_options(-w)
 
 # Use GLOB_RECURSE to find all source files in subdirectories
 file(GLOB_RECURSE SOURCE_FILES ${SOURCE_FILES_DIR}/*.cpp)
@@ -20,9 +21,5 @@ add_library(l4d2_base SHARED ${SOURCE_FILES} ${HEADER_FILES} ${SOURCE_FILES1} ${
 set_target_properties(l4d2_base PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
-)
-
-# Set the output directory for the DLL file
-set_target_properties(l4d2_base PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
+    OUTPUT_NAME "pol" # Replace pol with the actual library name
 )

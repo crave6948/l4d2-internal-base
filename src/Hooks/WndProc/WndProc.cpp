@@ -1,4 +1,5 @@
 #include "WndProc.h"
+#include <winuser.h>
 
 using namespace Hooks;
 
