@@ -3,6 +3,7 @@ project(l4d2_base)  # Replace l4d2_base with the actual project name
 # Source files
 # Set the source files directory
 set(SOURCE_FILES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(CMAKE_WARN_DEPRECATED FALSE)
 
 # Use GLOB_RECURSE to find all source files in subdirectories
 file(GLOB_RECURSE SOURCE_FILES ${SOURCE_FILES_DIR}/*.cpp)
