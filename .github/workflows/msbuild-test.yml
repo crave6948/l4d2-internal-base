@@ -97,7 +97,7 @@ jobs:
         run: |
           cd ./build
           cmake ..
-          cmake --build . --config ${{env.BUILD_CONFIGURATION}}|win32
+          cmake --build . --config ${{env.BUILD_CONFIGURATION}}
 
       # - name: Add MSBuild to PATH
       #   uses: microsoft/setup-msbuild@v1.0.2
