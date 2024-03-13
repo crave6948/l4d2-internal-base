@@ -16,10 +16,10 @@ void WndProc::Init()
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 
-	oWndProc = reinterpret_cast<WNDPROC>(SetWindowLongW(hwGame, GWL_WNDPROC, reinterpret_cast<LONG>(Detour)));
+	oWndProc = reinterpret_cast<WNDPROC>(SetWindowLongW(hwGame, GWLP_WNDPROC, reinterpret_cast<LONG>(Detour)));
 }
 
 void WndProc::UnInitialize()
 {
-	SetWindowLongW(hwGame, GWL_WNDPROC, reinterpret_cast<LONG_PTR>(oWndProc));
+	SetWindowLongW(hwGame, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(oWndProc));
 }
