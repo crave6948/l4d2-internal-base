@@ -95,7 +95,7 @@ jobs:
 
       - name: Build Project
         run: |
-          mdkir build
+          mkdir build
           cd ./build
           cmake ..
           cmake --build . --config ${{env.BUILD_CONFIGURATION}}
