@@ -13,15 +13,15 @@ file(GLOB_RECURSE SOURCE_FILES1 ${SOURCE_FILES_DIR}/*.hpp)
 file(GLOB_RECURSE SOURCE_FILES2 ${SOURCE_FILES_DIR}/*.c)
 
 # Add the library target
-add_library(l4d2_base_dll SHARED ${SOURCE_FILES} ${HEADER_FILES} ${SOURCE_FILES1} ${SOURCE_FILES2})
+add_library(l4d2_base SHARED ${SOURCE_FILES} ${HEADER_FILES} ${SOURCE_FILES1} ${SOURCE_FILES2})
 
 # Set C++ standard
-set_target_properties(l4d2_base_dll PROPERTIES
+set_target_properties(l4d2_base PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
 )
 
 # Set the output directory for the DLL file
-set_target_properties(l4d2_base_dll PROPERTIES
+set_target_properties(l4d2_base PROPERTIES
     LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bin
 )
