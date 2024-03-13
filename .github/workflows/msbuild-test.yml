@@ -95,7 +95,6 @@ jobs:
 
       - name: Build Project
         run: |
-          mkdir build
           cd ./build
           cmake ..
           cmake --build . --config ${{env.BUILD_CONFIGURATION}}
