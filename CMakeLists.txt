@@ -1,11 +1,24 @@
 cmake_minimum_required(VERSION 3.12)
 project(l4d2_base)  # Replace l4d2_base with the actual project name
 
-# Import the Windows SDK
-include_directories($ENV{WINDOWSSDKDIR}/Include)
-
 # Set the build platform to x86
 set(CMAKE_GENERATOR_PLATFORM x86)
+# Set the build configuration to Release
+set(CMAKE_BUILD_TYPE Release)
+# Set PlatformToolset to v143
+set(CMAKE_GENERATOR_TOOLSET "v143")
+# Set WindowsTargetPlatformVersion to 10.0
+set(CMAKE_SYSTEM_VERSION 10.0)
+# Set UseWindowsSDK to true
+set(CMAKE_VS_WINDOWS_TARGET_PLATFORM_VERSION "10.0")
+# Set CharacterSet to Unicode
+add_definitions(-DUNICODE -D_UNICODE)
+# Set UseUnicodeCharacterSet to true
+add_definitions(-D_UNICODE)
+# Set NoWarn to **
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+# Set LanguageStandard to c++17
+set(CMAKE_CXX_STANDARD 17)
 
 # Source files
 # Set the source files directory
