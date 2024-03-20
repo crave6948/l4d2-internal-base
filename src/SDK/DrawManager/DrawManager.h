@@ -49,7 +49,7 @@ public:
 	void Circle(const int x, const int y, const int r, const int s, const Color clr);
 	void Triangle(Vector2D* v, const Color clr);
 	int GetFontHeight(const EFonts& font);
-	int GetFontWidth(const EFonts& font, const char* const str);
+	int GetFontWidth(const EFonts& font, const char* const str, ...);
 private:
 	std::map<EFonts, CFont> m_Fonts = { };
 	std::map<int, int> m_Textures = { };

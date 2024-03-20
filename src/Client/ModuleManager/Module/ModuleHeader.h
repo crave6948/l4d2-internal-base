@@ -3,16 +3,19 @@
 #include "../../../SDK/SDK.h"
 #include "Utils/UtilsCollector.h"
 #include "../../Value/ValueManager.h"
+#include "ModuleCategory.h"
 namespace Client::Module
 {
     class Module
     {
     public:
-        void Create(std::string name, bool state, int keyCode)
+        V::ValueManager vManager = V::ValueManager();
+        void Create(std::string name, bool state, int keyCode, ModuleCategory category)
         {
             this->name = name;
             this->state = state;
             this->key = keyCode;
+            this->category = category;
         };
         std::string getName()
         {
@@ -22,19 +25,9 @@ namespace Client::Module
         {
             return state;
         };
-        int getKey()
+        void setEnabled(bool state)
         {
-            return key;
-        };
-        virtual void onPreCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
-        virtual void onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
-        virtual void onPrePrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
-        virtual void onPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal, int PredictedFlags){};
-        virtual void onPostPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
-        virtual void onRender2D(){};
-        void toggle()
-        {
-            state = !state;
+            this->state = state;
             if (state)
             {
                 onEnabled();
@@ -44,6 +37,25 @@ namespace Client::Module
                 onDisabled();
             }
         };
+        int getKey()
+        {
+            return key;
+        };
+        void setKey(int key)
+        {
+            this->key = key;
+        };
+        ModuleCategory getCategory()
+        {
+            return category;
+        };
+        virtual void onPreCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
+        virtual void onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
+        virtual void onPrePrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
+        virtual void onPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal, int PredictedFlags){};
+        virtual void onPostPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
+        virtual void onRender2D(){};
+        void toggle();
         virtual void onEnabled(){};
         virtual void onDisabled(){};
         int keytimeout = 0;
@@ -51,7 +63,7 @@ namespace Client::Module
         {
             return keytimeout <= 0;
         }
-        int animate = 20;
+        int animate = 10;
         void updateanimate()
         {
             if (state)
@@ -63,13 +75,13 @@ namespace Client::Module
             }
             else
             {
-                animate = 20;
+                animate = 10;
             }
         }
-
     private:
         std::string name;
         bool state = false;
         int key = 0;
+        ModuleCategory category;
     };
 }

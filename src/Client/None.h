@@ -1,6 +1,6 @@
 #pragma once
-#include "FileManager/FileManager.h"
 #include "ModuleManager/ModuleManager.h"
+#include "FileManager/FileManager.h"
 namespace Client
 {
     class None
@@ -8,6 +8,7 @@ namespace Client
     public:
         None();
         void initialize();
+        void shutdown();
         Module::ModuleManager moduleManager = Module::ModuleManager();
         File::FileManager fileManager = File::FileManager();
     };

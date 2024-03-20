@@ -3,12 +3,12 @@ namespace Client::Module
 {
 	namespace NoSpreadModule
 	{
-		inline bool ShouldRun(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd)
+		bool NoSpread::ShouldRun(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd)
 		{
 			if (!(cmd->buttons & IN_ATTACK) || (cmd->buttons & IN_USE))
 				return false;
 
-			if (pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || !pLocal->CanAttackFull())
+			if (pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || !pLocal->CanAttackFull() || pLocal->m_isIncapacitated())
 				return false;
 
 			// You could also check if the current spread is -1.0f and not run nospread I guess.
@@ -54,13 +54,14 @@ namespace Client::Module
 				pWeapon->UpdateSpread();
 				const float flSpread = pWeapon->GetCurrentSpread();
 
-				vAngle.x -= pfSharedRandomFloat("CTerrorGun::FireBullet HorizSpread", -flSpread, flSpread, 0);
-				vAngle.y -= pfSharedRandomFloat("CTerrorGun::FireBullet VertSpread", -flSpread, flSpread, 0);
+				vAngle.x -= pfSharedRandomFloat("CTerrorGun::FireBullet HorizSpread", -flSpread, flSpread, 0) * (spreadPercent->GetValue() / 100.0f);
+				vAngle.y -= pfSharedRandomFloat("CTerrorGun::FireBullet VertSpread", -flSpread, flSpread, 0) * (spreadPercent->GetValue() / 100.0f);
 
 				pWeapon->GetCurrentSpread() = flOldSpread;
 			}
 
 			// Remove punch from current viewangles
+			if (removeRecoil->GetValue())
 			{
 				vAngle -= pLocal->GetPunchAngle();
 			}

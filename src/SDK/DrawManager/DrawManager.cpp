@@ -140,7 +140,7 @@ void CGlobal_DrawManager::Circle(const int x, const int y, const int r, const in
 		I::MatSystemSurface->DrawTexturedPolygon(s, vecVertices.data(), true);
 	}
 }
-int CGlobal_DrawManager::GetFontWidth(const EFonts& font, const char* const str)
+int CGlobal_DrawManager::GetFontWidth(const EFonts& font, const char* const str, ...)
 {
 	va_list va_alist;
 	char cbuffer[1024] = { '\0' };

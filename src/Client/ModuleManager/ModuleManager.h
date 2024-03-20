@@ -41,5 +41,9 @@ namespace Client::Module
 		void onRender2D();
 		void onCreateMove(CUserCmd* cmd, C_TerrorPlayer* pLocal);
 		void onKey();
+		Module* getFeature(std::string name);
+		std::vector<Module*> getFeatureListByCategory(ModuleCategory category);
+		private:
+		int keyTimeout = 0;
     };
 }

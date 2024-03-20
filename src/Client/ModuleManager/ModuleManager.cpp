@@ -1,5 +1,6 @@
 #include "ModuleManager.h"
 #include "../Rotation/RotationManager.h"
+#include "../None.h"
 namespace Client::Module
 {
 
@@ -118,11 +119,17 @@ namespace Client::Module
             G::Util.FixMovement(oldViewangles, cmd);
         }
     }
-
     void ModuleManager::onKey()
     {
         // bool isToggled = keyState & 1;
         // bool isDown = keyState & 0x8000;
+        if (GetAsyncKeyState(VK_HOME) & 0x8000 && keyTimeout <= 0) {
+            Client::client.fileManager.load();
+            keyTimeout = 1;
+        }else {
+            if (keyTimeout > 0)
+                keyTimeout--;
+        }
         for (Module *mod : featurelist)
         {
             if (GetAsyncKeyState(mod->getKey()) & 0x8000)
@@ -138,5 +145,28 @@ namespace Client::Module
                     mod->keytimeout--;
             }
         }
+    }
+    Module *ModuleManager::getFeature(std::string name)
+    {
+        for (Module *mod : featurelist)
+        {
+            if (mod->getName().compare(name) == 0)
+            {
+                return mod;
+            }
+        }
+        return nullptr;
+    }
+    std::vector<Module *> ModuleManager::getFeatureListByCategory(ModuleCategory category)
+    {
+        std::vector<Module *> result;
+        for (Module *mod : featurelist)
+        {
+            if (mod->getCategory() == category)
+            {
+                result.push_back(mod);
+            }
+        }
+        return result;
     }
 }

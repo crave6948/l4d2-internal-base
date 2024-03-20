@@ -4,7 +4,7 @@ namespace Client::Module
 {
 	namespace ESPHelperModule
 	{
-		inline void drawESP(C_BaseEntity *pBaseEntity, int hit)
+		void ESPHelper::drawESP(C_BaseEntity *pBaseEntity, int hit)
 		{
 			Vector EntityPosition = pBaseEntity->GetBaseAnimating()->GetHitboxPositionByGroup(hit);
 			Vector screen;

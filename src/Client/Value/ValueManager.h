@@ -1,3 +1,4 @@
+#pragma once
 #include <vector>
 #include <string>
 #include "Values/ListValue.h"
@@ -14,7 +15,6 @@ namespace V
         ValueBase *GetValue(std::string name);
 
         std::vector<ValueBase *> GetValues();
-
     private:
         std::vector<ValueBase *> m_Values;
     };

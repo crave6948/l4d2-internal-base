@@ -3,13 +3,13 @@
 # separate terms of service, privacy policy, and support
 # documentation.
 
-name: MSBuild - Test
+name: MSBuild - CMake Build Test
 
 on:
   push:
-    branches: ["test"]
+    branches: ["cmake-test"]
   pull_request:
-    branches: ["test"]
+    branches: ["cmake-test"]
 
 env:
   # Path to the solution file relative to the root of the project.
@@ -20,7 +20,7 @@ env:
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
   # File Name
-  FILE_NAME: pol-crave-git.dll
+  FILE_NAME: pol-crave-git-cmake.dll
 
 permissions:
   contents: read
@@ -42,22 +42,10 @@ jobs:
           cmake ..
           cmake --build . --config ${{env.BUILD_CONFIGURATION}}
 
-      # - name: Add MSBuild to PATH
-      #   uses: microsoft/setup-msbuild@v1.0.2
-
-      # - name: Restore NuGet packages
-      #   working-directory: ${{env.GITHUB_WORKSPACE}}
-      #   run: nuget restore ${{env.SOLUTION_FILE_PATH}}
-
-      # - name: Build
-      #   working-directory: ${{env.GITHUB_WORKSPACE}}
-      #   run: |
-      #     msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:PlatformToolset=v143 /p:WindowsTargetPlatformVersion=10.0 /p:UseWindowsSDK=true /p:CharacterSet=Unicode /p:UseUnicodeCharacterSet=true /p:NoWarn=** /p:LanguageStandard=c++17 ${{env.SOLUTION_FILE_PATH}}
-
-      # - name: Rename File
-      #   working-directory: ${{env.GITHUB_WORKSPACE}}
-      #   run: |
-      #     mv build/Release/pol.dll build/Release/${{env.FILE_NAME}}
+      - name: Rename File
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: |
+          mv build/Release/pol.dll build/Release/${{env.FILE_NAME}}
 
       # - name: List Files
       #   run: |
@@ -65,6 +53,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MyTest-BuildArtifacts
+          name: MyCMake-BuildArtifacts
           path: D:\a\l4d2-internal-base\l4d2-internal-base\build\Release\${{env.FILE_NAME}} # Replace with the actual path to your build artifacts
-
