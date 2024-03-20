@@ -1,6 +1,5 @@
 #include "NormalBhop.h"
 #include "../BunnyHop.h"
-#include "../../../../../None.h"
 
 namespace Client::Module::BunnyHopModule::BhopModes
 {
@@ -45,10 +44,6 @@ namespace Client::Module::BunnyHopModule::BhopModes
 
     void NormalBhop::onRender2D()
     {
-        if (Client::client.moduleManager.bhop.Debug->GetValue() == false)
-            return;
-        std::string str = "Bhop: " + std::to_string(delayedTicks) + " ticks / Jump:" + (isJumping ? "true" : "false") + " / Ground:" + (nextGround ? "true" : "false");
-        G::Draw.String(EFonts::DEBUG, 100, 100, Color(255, 255, 255, 255), TXT_DEFAULT, str.c_str());
     }
     void NormalBhop::onChangeBhopType()
     {
@@ -56,5 +51,10 @@ namespace Client::Module::BunnyHopModule::BhopModes
         isJumping = false;
         nextGround = false;
         oldbuttons = 0;
+    }
+    void NormalBhop::onDebug()
+    {
+        std::string str = "Bhop: " + std::to_string(delayedTicks) + " ticks / Jump:" + (isJumping ? "true" : "false") + " / Ground:" + (nextGround ? "true" : "false");
+        G::Draw.String(EFonts::DEBUG, 100, 100, Color(255, 255, 255, 255), TXT_DEFAULT, str.c_str());
     }
 };

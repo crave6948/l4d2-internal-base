@@ -15,6 +15,7 @@ namespace Client::Module
                 void onPostPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal);
                 void onRender2D();
                 void onChangeBhopType();
+                void onDebug();
             private:
                 int delayedTicks = 0;
                 bool isJumping = false, nextGround = false;

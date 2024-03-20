@@ -1,10 +1,10 @@
 #include "FileManager.h"
-#include "../None.h"
 #include "../Value/Values/BooleanValue.h"
 #include "../Value/Values/ListValue.h"
 #include "../Value/Values/NumberValue.h"
 #include "../Value/Values/FloatValue.h"
 #include "../../SDK/SDK.h"
+#include "../None.h"
 namespace Client::File
 {
     FileManager::FileManager()
@@ -14,37 +14,48 @@ namespace Client::File
     void FileManager::init()
     {
         load();
+        firstload = false;
     }
-    inline void loadCategory(nlohmann::json category, Client::Module::ModuleCategory moduleCategory)
+    void FileManager::loadCategory(nlohmann::json category, Client::Module::ModuleCategory moduleCategory)
     {
         for (auto module : Client::client.moduleManager.getFeatureListByCategory(moduleCategory))
         {
-            if (category.contains(module->getName()))
+            if (category.is_null() || !category.is_array())
             {
-                auto settings = category[module->getName()];
-                module->setEnabled(settings["enabled"]);
-                module->setKey(settings["key"]);
-                // check if settings["values"] is null
-                if (settings["values"].is_null())
+                return;
+            }
+            for (auto moduleObject : category)
+            {
+                if (moduleObject.is_null())
                 {
                     continue;
                 }
-                // Get values for the module
-                auto values = settings["values"];
-                if (values.is_null())
-                    continue;
-                for (auto &value : values)
+                if (moduleObject["Name"] == module->getName())
                 {
-                    for (auto &item : value.items())
+                    auto settings = moduleObject["Settings"];
+                    if (firstload)
                     {
-                        std::string valueName = item.key(); // Get value name
-                        auto valueData = item.value();      // Get value data
+                        module->setEnabled(settings["enabled"]);
+                    }
+                    module->setKey(settings["key"]);
+                    // check if settings["values"] is null
+                    if (settings["values"].is_null())
+                    {
+                        continue;
+                    }
+                    // Get values for the module
+                    auto values = settings["values"];
+                    if (values.is_null())
+                        continue;
+                    for (auto value : values)
+                    {
+                        std::string valueName = value["name"]; // Get value name
+                        auto valueData = value;                // Get value data
 
                         // Get value object from the module
                         auto valueObject = module->vManager.GetValue(valueName);
                         if (valueObject == nullptr)
                             continue;
-
                         // Handle different value types
                         std::string type = valueData["type"];
                         if (type == "boolean")
@@ -99,13 +110,16 @@ namespace Client::File
             nlohmann::json data;
             std::ifstream file(filePath);
             file >> data;
-            //load data
+            file.close();
+            // load data
             if (data.is_null())
             {
                 return;
             }
-            if (data.is_array()) {
-                for (auto object : data) {
+            if (data.is_array())
+            {
+                for (auto object : data)
+                {
                     if (object.is_null())
                     {
                         continue;
@@ -134,10 +148,10 @@ namespace Client::File
             save();
         }
     }
-    inline nlohmann::json CategoryToJson(std::string name, Client::Module::ModuleCategory category) 
+    inline nlohmann::json CategoryToJson(std::string name, Client::Module::ModuleCategory category)
     {
-        //get all module in this category
-        nlohmann::json feature;
+        // get all module in this category
+        nlohmann::json featureArray = nlohmann::json::array();
         auto modules = Client::client.moduleManager.getFeatureListByCategory(category);
         for (auto module : modules)
         {
@@ -153,13 +167,15 @@ namespace Client::File
                 if (auto booleanValue = dynamic_cast<V::BooleanValue *>(value))
                 {
                     nlohmann::json booleanValueJson;
+                    booleanValueJson["name"] = booleanValue->GetName();
                     booleanValueJson["type"] = "boolean";
                     booleanValueJson["value"] = booleanValue->GetValue();
-                    valueJson[booleanValue->GetName()] = booleanValueJson;
+                    valueJson = booleanValueJson;
                 }
                 else if (auto listValue = dynamic_cast<V::ListValue *>(value))
                 {
                     nlohmann::json listValueJson;
+                    listValueJson["name"] = listValue->GetName();
                     listValueJson["type"] = "list";
                     listValueJson["value"] = listValue->GetSelected();
                     // get all list value
@@ -169,11 +185,12 @@ namespace Client::File
                         allListJson.push_back(str);
                     }
                     listValueJson["lists"] = allListJson;
-                    valueJson[listValue->GetName()] = listValueJson;
+                    valueJson = listValueJson;
                 }
                 else if (auto numberValue = dynamic_cast<V::NumberValue *>(value))
                 {
                     nlohmann::json numberValueJson;
+                    numberValueJson["name"] = numberValue->GetName();
                     numberValueJson["type"] = "number";
                     numberValueJson["value"] = numberValue->GetValue();
                     // get min and max value
@@ -181,11 +198,12 @@ namespace Client::File
                     numberValueJson["max"] = numberValue->GetMax();
                     // get format
                     numberValueJson["format"] = numberValue->GetFormat();
-                    valueJson[numberValue->GetName()] = numberValueJson;
+                    valueJson = numberValueJson;
                 }
                 else if (auto floatValue = dynamic_cast<V::FloatValue *>(value))
                 {
                     nlohmann::json floatValueJson;
+                    floatValueJson["name"] = floatValue->GetName();
                     floatValueJson["type"] = "float";
                     floatValueJson["value"] = floatValue->GetValue();
                     // get min and max value
@@ -193,20 +211,19 @@ namespace Client::File
                     floatValueJson["max"] = floatValue->GetMax();
                     // get format
                     floatValueJson["format"] = floatValue->GetFormat();
-                    valueJson[floatValue->GetName()] = floatValueJson;
-                }
-                else
-                {
-                    valueJson[value->GetName()] = "None";
+                    valueJson = floatValueJson;
                 }
                 allValuesJson.push_back(valueJson);
             }
             settings["values"] = allValuesJson;
-            feature[module->getName()] = settings;
+            nlohmann::json moduleJson;
+            moduleJson["Name"] = module->getName();
+            moduleJson["Settings"] = settings;
+            featureArray.push_back(moduleJson);
         }
         nlohmann::json categoryJson;
         categoryJson["Category"] = name;
-        categoryJson["Modules"] = feature;
+        categoryJson["Modules"] = featureArray;
         return categoryJson;
     }
     void FileManager::save()
@@ -254,11 +271,18 @@ namespace Client::File
     }
     void FileManager::running_auto_save()
     {
-        if (I::GlobalVars->realtime - last_save > auto_save_interval)
+        if (I::GlobalVars->realtime - last_load > auto_load_interval)
         {
             load();
-            save();
-            last_save = I::GlobalVars->realtime;
+            last_load = I::GlobalVars->realtime;
+        }
+        else
+        {
+            if (I::GlobalVars->realtime - last_save > auto_save_interval)
+            {
+                save();
+                last_save = I::GlobalVars->realtime;
+            }
         }
     }
 }

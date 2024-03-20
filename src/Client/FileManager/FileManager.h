@@ -3,14 +3,19 @@
 #include <fstream>
 #include <filesystem>
 #include "../../Util/Json/json.hpp"
+#include "../ModuleManager/Module/ModuleCategory.h"
 namespace Client::File
 {
     class FileManager
     {
     private:
-        const float auto_save_interval = 30.f;
-        int last_save = 0;
+        const float auto_load_interval = 1.f;
+        const float auto_save_interval = 15.f;
+        bool firstload = true;
+        void loadCategory(nlohmann::json category, Client::Module::ModuleCategory moduleCategory);
     public:
+        float last_load = 0;
+        float last_save = 0;
         FileManager();
         void init();
         void load();

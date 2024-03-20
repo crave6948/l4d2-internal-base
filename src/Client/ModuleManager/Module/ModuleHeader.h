@@ -63,7 +63,7 @@ namespace Client::Module
         {
             return keytimeout <= 0;
         }
-        int animate = 20;
+        int animate = 10;
         void updateanimate()
         {
             if (state)
@@ -75,7 +75,7 @@ namespace Client::Module
             }
             else
             {
-                animate = 20;
+                animate = 10;
             }
         }
     private:

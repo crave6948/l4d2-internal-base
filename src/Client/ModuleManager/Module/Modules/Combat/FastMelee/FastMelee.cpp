@@ -3,13 +3,13 @@ namespace Client::Module::FastMeleeModule
 {
     bool FastMelee::shouldRun(C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
     {
-        if (!pWeapon || !pLocal)
+        if (!pWeapon || !pLocal  || pLocal->m_isIncapacitated())
             return false;
 
         if (pWeapon->GetWeaponID() != WEAPON_MELEE)
             return false;
 
-        if (!pWeapon->CanPrimaryAttack(-0.1))
+        if (!pWeapon->CanPrimaryAttack(-0.2))
             return false;
 
         return true;

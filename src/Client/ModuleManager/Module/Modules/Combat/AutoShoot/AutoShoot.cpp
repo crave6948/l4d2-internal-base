@@ -17,7 +17,7 @@ namespace Client::Module
 			if (cmd->buttons & IN_USE)
 				return false;
 
-			if (pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || pWeapon->m_bInReload())
+			if (pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || pWeapon->m_bInReload() || pLocal->m_isIncapacitated())
 				return false;
 
 			// You could also check if the current spread is -1.0f and not run nospread I guess.
@@ -26,20 +26,12 @@ namespace Client::Module
 				return false;
 			switch (pWeapon->GetWeaponID())
 			{
-			case WEAPON_AK47:
 			case WEAPON_AWP:
 			case WEAPON_DEAGLE:
 			case WEAPON_HUNTING_RIFLE:
-			case WEAPON_M16A1:
-			case WEAPON_M60:
-			case WEAPON_MAC10:
 			case WEAPON_MILITARY_SNIPER:
-			case WEAPON_MP5:
 			case WEAPON_PISTOL:
-			case WEAPON_SCAR:
 			case WEAPON_SCOUT:
-			case WEAPON_SSG552:
-			case WEAPON_UZI:
 			case WEAPON_AUTO_SHOTGUN:
 			case WEAPON_SPAS:
 			case WEAPON_PUMP_SHOTGUN:
@@ -53,58 +45,65 @@ namespace Client::Module
 		}
 		void AutoShoot::onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
 		{
+			isClicking = false;
 			if (!ShouldRun(pLocal, pWeapon, cmd))
 			{
-				check = false;
+				keepClicks = 0;
 				nextPunch = false;
 				return;
 			}
-
 			if (nextPunch)
 			{
-				bool attack = pLocal->IsReadyToShove() || pWeapon->CanSecondaryAttack(-0.1);
+				bool attack = pWeapon->CanSecondaryAttack(-0.2);
 				if (attack)
 				{
 					cmd->buttons |= IN_ATTACK2;
 				}
 				nextPunch = false;
 			}
-
 			if (cmd->buttons & IN_ATTACK)
 			{
-				bool attack = pWeapon->CanPrimaryAttack(-0.1);
-				if (attack)
+				cmd->buttons &= ~IN_ATTACK;
+				bool attack = pWeapon->CanPrimaryAttack(-0.2);
+				if (!attack) {
+					nextPunch = false;
+				}
+				if (attack && keepClicks <= 0)
 				{
-					if (check)
-					{
-						cmd->buttons &= ~IN_ATTACK;
-						check = false;
-					}
-					else
-					{
-						check = true;
-					}
+					keepClicks = keepForTicks->GetValue();
 					if (getAutoPunch(pWeapon))
 						nextPunch = true;
-				}
-				else
-				{
-					check = false;
+					cmd->buttons |= IN_ATTACK;
+				}else {
+					if (attack && keepClicks <= keepForTicks->GetValue() / 2) {
+						cmd->buttons &= ~IN_ATTACK;
+					}
+					if (attack && keepClicks > keepForTicks->GetValue() / 2) {
+						cmd->buttons |= IN_ATTACK;
+					}
 				}
 			}
 			else
 			{
-				check = false;
+				if (keepClicks > 0)
+					cmd->buttons |= IN_ATTACK;
+				nextPunch = false;
 			}
+			if (keepClicks > 0)
+			{
+				keepClicks--;
+			}
+			isClicking = (cmd->buttons & IN_ATTACK) != 0;
 		}
-        void AutoShoot::onRender2D()
-        {
-			if (!Debug->GetValue()) return;
-			std::string str = "AutoShoot: nextPunch->" + std::string(nextPunch ? "true" : "false");
-        	G::Draw.String(EFonts::DEBUG, 100, 140, Color(255, 255, 255, 255), TXT_DEFAULT, str.c_str());
-        }
-        bool AutoShoot::getAutoPunch(C_TerrorWeapon *pWeapon)
-        {
+		void AutoShoot::onRender2D()
+		{
+			if (!Debug->GetValue())
+				return;
+			std::string str = "AutoShoot: nextPunch-> " + std::string(nextPunch ? "true" : "false") + " || IsClicking-> " + std::string(isClicking ? "true" : "false") + " || KeepClicks-> " + std::to_string(keepClicks);
+			G::Draw.String(EFonts::DEBUG, 100, 140, Color(255, 255, 255, 255), TXT_DEFAULT, str.c_str());
+		}
+		bool AutoShoot::getAutoPunch(C_TerrorWeapon *pWeapon)
+		{
 			if (!autoPunch->GetValue())
 				return false;
 			if (!onlySniper->GetValue() && !onlyShotgun->GetValue())

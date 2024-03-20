@@ -8,7 +8,7 @@ namespace Client::Module
 			if (!(cmd->buttons & IN_ATTACK) || (cmd->buttons & IN_USE))
 				return false;
 
-			if (pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || !pLocal->CanAttackFull())
+			if (pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || !pLocal->CanAttackFull() || pLocal->m_isIncapacitated())
 				return false;
 
 			// You could also check if the current spread is -1.0f and not run nospread I guess.

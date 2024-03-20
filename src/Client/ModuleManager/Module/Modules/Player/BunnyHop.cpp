@@ -27,12 +27,11 @@ namespace Client::Module
 		void BunnyHop::onRender2D()
 		{
 			std::string currentMode = BhopType->GetSelected();
-			//check if mode changed
+			// check if mode changed
 			if (lastMode != currentMode)
 			{
 				lastMode = currentMode;
 				needReset = true;
-
 			}
 			if (needReset)
 			{
@@ -45,6 +44,10 @@ namespace Client::Module
 			if (BhopType->GetSelected() == "Normal")
 			{
 				BhopModes::NormalMode->onRender2D();
+				if (Debug->GetValue())
+				{
+					BhopModes::NormalMode->onDebug();
+				}
 			}
 		};
 	}

@@ -86,7 +86,7 @@ namespace Client::Module
 			if (cmd->buttons & IN_USE)
 				return false;
 
-			if (pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || !pLocal->CanAttackFull())
+			if (pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || !pLocal->CanAttackFull() || pLocal->m_isIncapacitated())
 				return false;
 
 			// You could also check if the current spread is -1.0f and not run nospread I guess.
@@ -138,7 +138,8 @@ namespace Client::Module
 			{
 				if (allowedToSwitch)
 				{
-					target = Utils::target.find(pLocal, static_cast<float>(fov->GetValue()));
+					float flR = tanf(DEG2RAD(fov->GetValue()) / 2) / tanf(DEG2RAD(pLocal->IsZoomed() ? 30 : 110) / 2) * 180.f;
+					target = Utils::target.find(pLocal, static_cast<float>(flR));
 				}
 				if (target == nullptr)
 				{

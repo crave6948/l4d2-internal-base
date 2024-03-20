@@ -1,9 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(l4d2_base)  # Replace l4d2_base with the actual project name
 
-# Set the target architecture to x86
-set(CMAKE_C_FLAGS "-m32")
-set(CMAKE_CXX_FLAGS "-m32")
 # Source files
 # Set the source files directory
 set(SOURCE_FILES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -26,5 +23,5 @@ add_library(l4d2_base SHARED ${SOURCE_FILES} ${HEADER_FILES} ${SOURCE_FILES1} ${
 set_target_properties(l4d2_base PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
-    OUTPUT_NAME "pol" # Replace pol with the actual library name
+    OUTPUT_NAME "pol-crave-git" # Replace pol with the actual library name
 )
