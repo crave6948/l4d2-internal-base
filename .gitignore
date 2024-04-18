@@ -16,3 +16,4 @@ src/Release/vc142.pdb
 build
 !CMakeLists.txt
 Injector.lnk
+*.code-workspace
