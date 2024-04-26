@@ -15,5 +15,6 @@ src/Release/vc142.pdb
 *.opendb
 build
 !CMakeLists.txt
-Injector.lnk
 *.code-workspace
+*.bat
+*.lnk
