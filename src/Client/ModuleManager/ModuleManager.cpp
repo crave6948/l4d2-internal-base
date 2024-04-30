@@ -12,14 +12,14 @@ namespace Client::Module
     {
         featurelist.push_back(bhop_ptr);
 
-        featurelist.push_back(arraylist_ptr);
-
         featurelist.push_back(aimbot_ptr);
         featurelist.push_back(autoShoot_ptr);
         featurelist.push_back(noSpread_ptr);
         featurelist.push_back(fastMelee_ptr);
 
+        featurelist.push_back(arraylist_ptr);
         featurelist.push_back(espHelper_ptr);
+        featurelist.push_back(clickGui_ptr);
     }
 
     void ModuleManager::onRender2D()
@@ -63,6 +63,16 @@ namespace Client::Module
                 G::Draw.Line(screen.x, screen.y, screen.x + 4, screen.y + 4, Color(255, 255, 255, 255));
             }
             // G::Draw.Circle(screen.x, screen.y, 2, 8, );
+        }
+    }
+
+    void ModuleManager::onOverrideView(CViewSetup* view)
+    {
+        for (Module *mod : featurelist)
+        {
+            if (!mod->getEnabled())
+                continue;
+            mod->onOverrideView(view);
         }
     }
 
@@ -123,10 +133,13 @@ namespace Client::Module
     {
         // bool isToggled = keyState & 1;
         // bool isDown = keyState & 0x8000;
-        if (GetAsyncKeyState(VK_HOME) & 0x8000 && keyTimeout <= 0) {
+        if (GetAsyncKeyState(VK_HOME) & 0x8000 && keyTimeout <= 0)
+        {
             Client::client.fileManager.load();
             keyTimeout = 1;
-        }else {
+        }
+        else
+        {
             if (keyTimeout > 0)
                 keyTimeout--;
         }

@@ -28,14 +28,7 @@ namespace Client::Module
         void setEnabled(bool state)
         {
             this->state = state;
-            if (state)
-            {
-                onEnabled();
-            }
-            else
-            {
-                onDisabled();
-            }
+            state ? onEnabled() : onDisabled();
         };
         int getKey()
         {
@@ -55,6 +48,7 @@ namespace Client::Module
         virtual void onPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal, int PredictedFlags){};
         virtual void onPostPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
         virtual void onRender2D(){};
+        virtual void onOverrideView(CViewSetup* view){};
         void toggle();
         virtual void onEnabled(){};
         virtual void onDisabled(){};

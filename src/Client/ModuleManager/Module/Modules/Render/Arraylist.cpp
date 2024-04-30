@@ -1,5 +1,4 @@
 #include "Arraylist.h"
-#pragma once
 #include "../../../../None.h"
 
 namespace Client::Module {
@@ -13,10 +12,12 @@ namespace Client::Module {
 				bool isEnabled = m->getEnabled();
 				if (isEnabled) {
 					std::string str = name;
-					G::Draw.Rect(startX - G::Draw.GetFontWidth(EFonts::DEBUG, str.c_str()) - 12 + m->animate, startY, G::Draw.GetFontWidth(EFonts::DEBUG, str.c_str()), G::Draw.GetFontHeight(EFonts::DEBUG), Color(0, 0, 0, 170));
-					G::Draw.Rect(startX - 10 + m->animate, startY, 10, G::Draw.GetFontHeight(EFonts::DEBUG), Color(255, 255, 255, 120));
-					G::Draw.String(EFonts::DEBUG, startX - 12 + m->animate, startY, Color(255, 255, 255, 255), TXT_LEFT, str.c_str());
-					startY += G::Draw.GetFontHeight(EFonts::DEBUG) + 1;
+					int getFontWidth = G::Draw.GetFontWidth(EFonts::SDK_SC_WEB, str.c_str());
+					int getFontHeight = G::Draw.GetFontHeight(EFonts::SDK_SC_WEB);
+					G::Draw.Rect(startX - getFontWidth - 12 + m->animate, startY, getFontWidth, getFontHeight, Color(0, 0, 0, 170));
+					G::Draw.Rect(startX - 10 + m->animate, startY, 10, getFontHeight, Color(255, 255, 255, 120));
+					G::Draw.String(EFonts::SDK_SC_WEB, startX - 12 + m->animate, startY, Color(255, 255, 255, 255), TXT_LEFT, str.c_str());
+					startY += getFontHeight + 1;
 				}
 				m->updateanimate();
 			}

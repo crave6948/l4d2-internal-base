@@ -2,7 +2,8 @@
 
 void CGlobal_DrawManager::Init()
 {
-	m_Fonts[EFonts::DEBUG]         = { "Consolas",  16, FW_DONTCARE, EFontFlags::FONTFLAG_OUTLINE };
+	m_Fonts[EFonts::DEBUG] = { "Consolas",  12, FW_DONTCARE, EFontFlags::FONTFLAG_OUTLINE };
+	m_Fonts[EFonts::SDK_SC_WEB]    = { "SDK_SC_Web",  48, FW_DONTCARE, EFontFlags::FONTFLAG_OUTLINE | EFontFlags::FONTFLAG_ANTIALIAS | EFontFlags::FONTFLAG_GAUSSIANBLUR };
 	m_Fonts[EFonts::ESP]           = { "Tahoma",    11, FW_DONTCARE, EFontFlags::FONTFLAG_OUTLINE };
 	m_Fonts[EFonts::ESP_NAME]      = { "Arial",     14, FW_DONTCARE, EFontFlags::FONTFLAG_OUTLINE };
 	m_Fonts[EFonts::ESP_WEAPON]    = { "Verdana",   12, FW_DONTCARE, EFontFlags::FONTFLAG_OUTLINE };

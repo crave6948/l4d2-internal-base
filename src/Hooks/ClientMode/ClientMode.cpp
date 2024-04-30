@@ -25,12 +25,13 @@ bool __fastcall ClientMode::CreateMove::Detour(void* ecx, void* edx, float input
 	return false;
 }
 
-//void __fastcall Hooks::ClientMode::OverrideView::Detour(void* ecx, void* edx, CViewSetup* pSetup)
-//{
-//	Table.Original<FN>(Index)(ecx, edx, pSetup);
-//
-//	//pSetup->fov = 125.0f;
-//}
+void __fastcall Hooks::ClientMode::OverrideView::Detour(void* ecx, void* edx, CViewSetup* pSetup)
+{
+	Client::client.moduleManager.onOverrideView(pSetup);
+	Table.Original<FN>(Index)(ecx, edx, pSetup);
+
+	//pSetup->fov = 125.0f;
+}
 
 void __fastcall ClientMode::DoPostScreenSpaceEffects::Detour(void* ecx, void* edx, const void* pSetup)
 {
