@@ -50,6 +50,11 @@ void CUtil_Offsets::Init()
 	if (m_dwSharedRandomFloat)
 		m_dwRandomSeed = (m_dwSharedRandomFloat + 0x7);
 
+	if (const DWORD dwIInput = U::Pattern.Find(_("client.dll"), _("8B 0D ? ? ? ? 8B 01 8B 40 0C 52 8B 55 08")))
+	// if (const DWORD dwIInput = U::Pattern.Find(_("client.dll"), _("8B 0D ? ? ? ? 8B 01 8B 50 58 FF E2")))
+	    m_dwIInput = (dwIInput + 0x2);
+
+	XASSERT(m_dwIInput == 0x0);
 	XASSERT(m_dwStartDrawing == 0x0);
 	XASSERT(m_dwFinishDrawing == 0x0);
 	XASSERT(m_dwClientMode == 0x0);

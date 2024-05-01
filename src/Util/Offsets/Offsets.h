@@ -24,6 +24,7 @@ public:
 	DWORD m_dwPhysicsRunThink = 0x0;
 	DWORD m_dwSetPredictionRandomSeed = 0x0;
 	DWORD m_dwGetSurvivorSet = 0x0;
+	DWORD m_dwIInput = 0x0;
 };
 
 namespace U { inline CUtil_Offsets Offsets; }

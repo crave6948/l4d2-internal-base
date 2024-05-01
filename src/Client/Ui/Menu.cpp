@@ -23,7 +23,7 @@ namespace Client::Menu
     {
         if (!this->toggled) return;
         int x,y;
-		I::VGuiInput->GetCursorPos(x,y);
+		// I::VGuiInput->GetCursorPos(x,y);
         Color color = Color(255, 255, 255, 255);
         if (x > 100 && x < 100 + 100 && y > 100 && y < 100 + 100) {
             color = Color(255, 0, 0, 255);

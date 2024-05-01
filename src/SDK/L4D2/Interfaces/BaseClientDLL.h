@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Includes/ehandle.h"
+#include "IInput.h"
 
 class IBaseClientDLL
 {

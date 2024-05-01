@@ -4,6 +4,7 @@
 #include "Module/Modules/Render/Arraylist.h"
 #include "Module/Modules/Render/ClickGui/ClickGuiModule.h"
 #include "Module/Modules/Render/ESPHelper.h"
+#include "Module/Modules/Render/ThirdPerson/ThirdPerson.h"
 
 #include "Module/Modules/Combat/Aimbot.h"
 #include "Module/Modules/Combat/NoSpread.h"
@@ -15,8 +16,6 @@ namespace Client::Module
 {
     class ModuleManager
     {
-    private:
-        /* data */
     public:
         ModuleManager();
 		std::vector<Module*> featurelist;
@@ -31,6 +30,7 @@ namespace Client::Module
 		ArraylistModule::Arraylist arraylist = ArraylistModule::Arraylist();
 		ESPHelperModule::ESPHelper espHelper = ESPHelperModule::ESPHelper();
 		ClickGuiModule::ClickGui clickGui = ClickGuiModule::ClickGui();
+		ThirdPersonModule::ThirdPerson thirdPerson = ThirdPersonModule::ThirdPerson();
 		
 		//pointer
 		BunnyHopModule::BunnyHop* bhop_ptr = &bhop;
@@ -43,6 +43,7 @@ namespace Client::Module
 		ArraylistModule::Arraylist* arraylist_ptr = &arraylist;
 		ESPHelperModule::ESPHelper* espHelper_ptr = &espHelper;
 		ClickGuiModule::ClickGui* clickGui_ptr = &clickGui;
+		ThirdPersonModule::ThirdPerson* thirdPerson_ptr = &thirdPerson;
 		
 		void Init();
 		void onRender2D();

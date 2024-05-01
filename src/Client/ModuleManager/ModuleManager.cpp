@@ -20,6 +20,7 @@ namespace Client::Module
         featurelist.push_back(arraylist_ptr);
         featurelist.push_back(espHelper_ptr);
         featurelist.push_back(clickGui_ptr);
+        featurelist.push_back(thirdPerson_ptr);
     }
 
     void ModuleManager::onRender2D()
