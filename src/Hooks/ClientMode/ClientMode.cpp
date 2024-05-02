@@ -21,6 +21,7 @@ bool __fastcall ClientMode::CreateMove::Detour(void *ecx, void *edx, float input
 	// bool* pSendPacket = (bool*)(***(uintptr_t***)_ebp - 0x1D);
 	C_TerrorPlayer *pLocal = I::ClientEntityList->GetClientEntity(I::EngineClient->GetLocalPlayer())->As<C_TerrorPlayer *>();
 	Client::client.moduleManager.onCreateMove(cmd, pLocal);
+	I::Prediction->SetLocalViewAngles(cmd->viewangles);
 	return false;
 }
 
