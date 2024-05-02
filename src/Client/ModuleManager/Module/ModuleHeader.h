@@ -49,6 +49,8 @@ namespace Client::Module
         virtual void onPostPrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal){};
         virtual void onRender2D(){};
         virtual void onOverrideView(CViewSetup* view){};
+        virtual void onPostOverrideView(CViewSetup* view){};
+        virtual void onFrameStageNotify(ClientFrameStage_t curStage){};
         void toggle();
         virtual void onEnabled(){};
         virtual void onDisabled(){};

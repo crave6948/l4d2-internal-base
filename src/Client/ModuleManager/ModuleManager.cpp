@@ -77,6 +77,16 @@ namespace Client::Module
         }
     }
 
+    void ModuleManager::onPostOverrideView(CViewSetup *view)
+    {
+        for (Module *mod : featurelist)
+        {
+            if (!mod->getEnabled())
+                continue;
+            mod->onPostOverrideView(view);
+        }
+    }
+
     void ModuleManager::onCreateMove(CUserCmd *cmd, C_TerrorPlayer *pLocal)
     {
         if (pLocal && !pLocal->deadflag())
@@ -128,6 +138,15 @@ namespace Client::Module
                 mod->onPostPrediction(cmd, pWeapon, pLocal);
             }
             G::Util.FixMovement(oldViewangles, cmd);
+        }
+    }
+    void ModuleManager::onFrameStageNotify(ClientFrameStage_t curStage)
+    {
+        for (Module *mod : featurelist)
+        {
+            if (!mod->getEnabled())
+                continue;
+            mod->onFrameStageNotify(curStage);
         }
     }
     void ModuleManager::onKey()

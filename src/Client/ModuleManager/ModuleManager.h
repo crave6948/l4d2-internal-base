@@ -48,7 +48,9 @@ namespace Client::Module
 		void Init();
 		void onRender2D();
 		void onOverrideView(CViewSetup* view);
+		void onPostOverrideView(CViewSetup* view);
 		void onCreateMove(CUserCmd* cmd, C_TerrorPlayer* pLocal);
+		void onFrameStageNotify(ClientFrameStage_t curStage);
 		void onKey();
 		Module* getFeature(std::string name);
 		std::vector<Module*> getFeatureListByCategory(ModuleCategory category);

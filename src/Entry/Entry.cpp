@@ -30,6 +30,8 @@ void CGlobal_ModuleEntry::Load()
 
 		I::MaterialSystem   = U::Interface.Get<IMaterialSystem*>("materialsystem.dll", "VMaterialSystem080");
 
+		I::Cvar = U::Interface.Get<ICvar*>("vstdlib.dll", "VEngineCvar007");
+
 		{
 			I::ClientMode = **reinterpret_cast<void***>(U::Offsets.m_dwClientMode);
 			XASSERT(I::ClientMode == nullptr);

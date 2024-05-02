@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IInput.h"
+#include "CVar.h"
 
 class IBaseClientDLL
 {
