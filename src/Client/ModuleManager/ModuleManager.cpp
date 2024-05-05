@@ -40,10 +40,13 @@ namespace Client::Module
             return;
         }
         C_TerrorPlayer *pLocal = I::ClientEntityList->GetClientEntity(I::EngineClient->GetLocalPlayer())->As<C_TerrorPlayer *>();
-        if (!Helper::rotationManager.getCurrentRotation().IsZero())
+        if (!Helper::rotationManager.getServerRotationVector().IsZero())
         {
-            Vector vec = U::Math.AngleVectors(Helper::rotationManager.getCurrentRotation());
-            Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * 1400.0f);
+            Vector vec = U::Math.AngleVectors(Helper::rotationManager.getServerRotationVector());
+            CGameTrace trace;
+            CTraceFilterHitAll filter{pLocal};
+            G::Util.Trace(pLocal->Weapon_ShootPosition(), pLocal->Weapon_ShootPosition() + (vec * 1400.0f), (MASK_SHOT | CONTENTS_GRATE), &filter, &trace);
+            Vector vViewAngleOnWorld = trace.endpos;
             Vector screen;
             G::Util.W2S(vViewAngleOnWorld, screen);
 
@@ -93,18 +96,17 @@ namespace Client::Module
         {
             C_TerrorWeapon *pWeapon = pLocal->GetActiveWeapon()->As<C_TerrorWeapon *>();
             Vector oldViewangles = cmd->viewangles;
-            Utils::target.serverRotation = Helper::rotationManager.DisabledRotation || Helper::rotationManager.getCurrentRotation().IsZero() ? cmd->viewangles : Helper::rotationManager.getCurrentRotation();
+            Utils::target.serverRotation = Helper::rotationManager.DisabledRotation || Helper::rotationManager.getServerRotationVector().IsZero() ? cmd->viewangles : Helper::rotationManager.getServerRotationVector();
             for (Module *mod : featurelist)
             {
                 if (!mod->getEnabled())
                     continue;
                 mod->onPreCreateMove(cmd, pWeapon, pLocal);
             }
-            Helper::rotationManager.onUpdate(pLocal);
-            if (!Helper::rotationManager.getCurrentRotation().IsZero() && !Helper::rotationManager.DisabledRotation)
+            Helper::rotationManager.onUpdate();
+            if (!Helper::rotationManager.getServerRotationVector().IsZero() && !Helper::rotationManager.DisabledRotation)
             {
-                cmd->viewangles = Helper::rotationManager.getCurrentRotation();
-                // I::EngineClient->SetViewAngles(cmd->viewangles);
+                cmd->viewangles = Helper::rotationManager.getServerRotationVector();
             }
             for (Module *mod : featurelist)
             {
