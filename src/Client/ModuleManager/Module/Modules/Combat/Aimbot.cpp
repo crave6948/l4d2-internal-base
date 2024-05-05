@@ -160,12 +160,10 @@ namespace Client::Module
 			Vector destination = getHitBoxPos(target, pLocal);
 			if (destination.IsZero())
 				return;
-			if (I::GlobalVars->realtime - lastRotate >= AttackConfig::rotateTime / 1000)
-			{
-				targetPosition = U::Math.GetAngleToPosition(pLocal->Weapon_ShootPosition(), destination);
-				Helper::rotationManager.setTargetRotation(targetPosition, 1000);
-				lastRotate = I::GlobalVars->realtime;
-			}
+			float distance = pLocal->Weapon_ShootPosition().DistTo(destination);
+			float crosshair = isInCrossHair(cmd, pLocal);
+			targetPosition = U::Math.GetAngleToPosition(pLocal->Weapon_ShootPosition(), destination);
+			Helper::rotationManager.moveTo(Helper::Rotation(targetPosition.y, targetPosition.x), distance, crosshair);
 			aiming = true;
 		}
 		void Aimbot::onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
@@ -179,45 +177,7 @@ namespace Client::Module
 			{
 				I::EngineClient->SetViewAngles(cmd->viewangles);
 			}
-			Vector vec = U::Math.AngleVectors(cmd->viewangles);
-			CTraceFilterHitscan filter{pLocal};
-			bool shouldhit = false;
-			if (auto pHit = G::Util.GetHitEntity(pLocal->Weapon_ShootPosition(), pLocal->Weapon_ShootPosition() + (vec * 1400.f), &filter))
-			{
-				if (pHit->entindex() != target->entindex())
-				{
-					switch (pHit->GetClientClass()->m_ClassID)
-					{
-					case EClientClass::Infected:
-					case EClientClass::Boomer:
-					case EClientClass::Jockey:
-					case EClientClass::Smoker:
-					case EClientClass::Hunter:
-					case EClientClass::Spitter:
-					case EClientClass::Charger:
-					case EClientClass::Tank:
-					{
-						shouldhit = true;
-						break;
-					}
-					case EClientClass::Witch:
-					{
-						shouldhit = true;
-						if (pHit->As<C_Witch *>()->m_rage() != 1.0f)
-						{
-							shouldhit = false;
-						}
-						break;
-					}
-					default:
-						break;
-					}
-				}
-				else
-				{
-					shouldhit = true;
-				}
-			}
+			bool shouldhit = isInCrossHair(cmd,pLocal);
 			IsVisible = shouldhit;
 			if (AttackConfig::holdTick > 0)
 			{
@@ -260,7 +220,6 @@ namespace Client::Module
 			int startX = 2, startY = 100;
 			if (!I::EngineClient->IsInGame())
 			{
-				target = nullptr;
 				return;
 			};
 			if (I::EngineVGui->IsGameUIVisible())
@@ -308,5 +267,48 @@ namespace Client::Module
 		void Aimbot::onDisabled()
 		{
 		}
-	}
+        bool Aimbot::isInCrossHair(CUserCmd *cmd, C_TerrorPlayer *pLocal)
+        {
+			Vector vec = U::Math.AngleVectors(cmd->viewangles);
+			CTraceFilterHitscan filter{pLocal};
+			bool shouldhit = false;
+			if (auto pHit = G::Util.GetHitEntity(pLocal->Weapon_ShootPosition(), pLocal->Weapon_ShootPosition() + (vec * 1400.f), &filter))
+			{
+				if (pHit->entindex() != target->entindex())
+				{
+					switch (pHit->GetClientClass()->m_ClassID)
+					{
+					case EClientClass::Infected:
+					case EClientClass::Boomer:
+					case EClientClass::Jockey:
+					case EClientClass::Smoker:
+					case EClientClass::Hunter:
+					case EClientClass::Spitter:
+					case EClientClass::Charger:
+					case EClientClass::Tank:
+					{
+						shouldhit = true;
+						break;
+					}
+					case EClientClass::Witch:
+					{
+						shouldhit = true;
+						if (pHit->As<C_Witch *>()->m_rage() != 1.0f)
+						{
+							shouldhit = false;
+						}
+						break;
+					}
+					default:
+						break;
+					}
+				}
+				else
+				{
+					shouldhit = true;
+				}
+			}
+            return shouldhit;
+        }
+    }
 }
