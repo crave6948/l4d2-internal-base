@@ -37,6 +37,8 @@ void __fastcall EngineVGui::Paint::Detour(void* ecx, void* edx, int mode)
 	{
 		Client::client.moduleManager.onRender2D();
 		G::Draw.String(EFonts::DEBUG, 5, 5, { 204, 204, 204, 255 }, TXT_DEFAULT, _(L"None - Left 4 dead 2 by Lak3(OC), crave#6948"));
+
+		Client::client.menu.drawScreen();
 	}
 	I::MatSystemSurface->FinishDrawing();
 }
