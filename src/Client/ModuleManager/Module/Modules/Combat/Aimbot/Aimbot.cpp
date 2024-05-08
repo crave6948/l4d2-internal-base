@@ -157,7 +157,6 @@ namespace Client::Module::AimbotModule
 	}
 	TargetInfo Aimbot::GetTarget(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd)
 	{
-		Utils::g_EntityCache.update();
 		IClientEntity *foundTarget = nullptr;
 		// collect all targets and find the best one (compare them by a score)
 		Vector clientViewAngles = Helper::rotationManager.getServerRotationVector();

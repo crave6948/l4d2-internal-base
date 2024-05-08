@@ -34,6 +34,7 @@ void __fastcall BaseClient::FrameStageNotify::Detour(void* ecx, void* edx, Clien
 	case FRAME_NET_UPDATE_POSTDATAUPDATE_END:
 		break;
 	case FRAME_NET_UPDATE_END:
+	    Utils::g_EntityCache.update();
 		break;
 	case FRAME_RENDER_START:
 		break;

@@ -25,7 +25,6 @@ namespace Client::Module
 
     void ModuleManager::onRender2D()
     {
-        Utils::g_EntityCache.update();
         for (Module *mod : featurelist)
         {
             if (!mod->getEnabled())
