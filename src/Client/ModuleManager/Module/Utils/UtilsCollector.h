@@ -1,5 +1,5 @@
 #pragma once
-#include "FindTarget.h"
+#include "EntityCache/EntityCache.h"
 namespace Utils
 {
 	namespace RandomUtils {
@@ -7,5 +7,4 @@ namespace Utils
 		float generateRandomNumber(float min, float max);
 		Vector genVector(float scope = 1.0f, bool x = true, bool y = true, bool z = true);
 	};
-	inline FindTarget target = FindTarget();
 }

@@ -27,7 +27,11 @@ namespace Helper
         // toVector
         Vector toVector(){
             return Vector(pitch, yaw, 0.f);
-        };
+        }
+
+        Rotation toRotation(Vector aimVector) {
+            return Rotation(aimVector.y, aimVector.x);
+        }
 
         bool isZero() {
             return yaw == 0.f && pitch == 0.f;

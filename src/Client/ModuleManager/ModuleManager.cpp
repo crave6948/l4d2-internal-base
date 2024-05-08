@@ -25,6 +25,7 @@ namespace Client::Module
 
     void ModuleManager::onRender2D()
     {
+        Utils::g_EntityCache.update();
         for (Module *mod : featurelist)
         {
             if (!mod->getEnabled())
@@ -96,7 +97,6 @@ namespace Client::Module
         {
             C_TerrorWeapon *pWeapon = pLocal->GetActiveWeapon()->As<C_TerrorWeapon *>();
             Vector oldViewangles = cmd->viewangles;
-            Utils::target.serverRotation = Helper::rotationManager.DisabledRotation || Helper::rotationManager.getServerRotationVector().IsZero() ? cmd->viewangles : Helper::rotationManager.getServerRotationVector();
             for (Module *mod : featurelist)
             {
                 if (!mod->getEnabled())
@@ -105,9 +105,7 @@ namespace Client::Module
             }
             Helper::rotationManager.onUpdate();
             if (!Helper::rotationManager.getServerRotationVector().IsZero() && !Helper::rotationManager.DisabledRotation)
-            {
                 cmd->viewangles = Helper::rotationManager.getServerRotationVector();
-            }
             for (Module *mod : featurelist)
             {
                 if (!mod->getEnabled())

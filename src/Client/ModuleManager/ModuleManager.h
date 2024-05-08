@@ -6,7 +6,7 @@
 #include "Module/Modules/Render/ESPHelper.h"
 #include "Module/Modules/Render/ThirdPerson/ThirdPerson.h"
 
-#include "Module/Modules/Combat/Aimbot.h"
+#include "Module/Modules/Combat/Aimbot/Aimbot.h"
 #include "Module/Modules/Combat/NoSpread.h"
 #include "Module/Modules/Combat/AutoShoot/AutoShoot.h"
 #include "Module/Modules/Combat/FastMelee/FastMelee.h"

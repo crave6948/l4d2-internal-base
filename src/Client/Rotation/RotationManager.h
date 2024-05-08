@@ -37,23 +37,22 @@ namespace Helper
         };
         Rotation clampRotation(Rotation rotation);
         Rotation getAngleDifference(Rotation a, Rotation b);
-        float lastdist = -1;
-        bool is_lac_detected(float aimdist, float laimdist, float tdelta)
-        {
-            if (laimdist == -1)
-            {
-                return false;
-            }
-            bool detected = false;
-            // Check conditions for AIMBOT_FLAG_SNAP
-            if (aimdist < laimdist * 0.2 && tdelta > 10.0)
-                detected |= true;
+        // bool is_lac_detected(float aimdist, float laimdist, float tdelta)
+        // {
+        //     if (laimdist == -1)
+        //     {
+        //         return false;
+        //     }
+        //     bool detected = false;
+        //     // Check conditions for AIMBOT_FLAG_SNAP
+        //     if (aimdist < laimdist * 0.2 && tdelta > 10.0)
+        //         detected |= true;
 
-            // Check conditions for AIMBOT_FLAG_SNAP2
-            if (aimdist < laimdist * 0.1 && tdelta > 5.0)
-                detected |= true;
-            return detected;
-        };
+        //     // Check conditions for AIMBOT_FLAG_SNAP2
+        //     if (aimdist < laimdist * 0.1 && tdelta > 5.0)
+        //         detected |= true;
+        //     return detected;
+        // };
         // returns the turn speed for each axis
         // TurnSpeed computeTurnSpeed(float distance, float diffH, float diffV, bool crosshair);
         // float coefDistance = -1.393f;
@@ -66,12 +65,12 @@ namespace Helper
         // float minimumTurnSpeedH = 3.05e-5f;
         // float minimumTurnSpeedV = 5.96e-8f;
         float computeFactor(float rotationDifference, float turnSpeed);
-        float min_horizontalTurnSpeed = 15;
-        float max_horizontalTurnSpeed = 30;
-        float min_verticalTurnSpeed = 10;
+        float min_horizontalTurnSpeed = 0.2;
+        float max_horizontalTurnSpeed = 25;
+        float min_verticalTurnSpeed = 0.2;
         float max_verticalTurnSpeed = 45;
 
-        float steepness = 10.f;
+        float steepness = 10.5f;
         float midpoint = 0.3f;
     };
     inline RotationManager rotationManager = RotationManager();
