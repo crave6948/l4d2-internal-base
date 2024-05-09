@@ -19,8 +19,6 @@ namespace Helper
             Rotation rotation = Rotation(viewAngles.y, viewAngles.x);
             serverRotation = rotation;
             ticksToRotate = 0;
-            if (DisabledRotation)
-                lastdist = -1;
         }
         bool isReseting = false;
         if (this->keepTicks <= 0)
