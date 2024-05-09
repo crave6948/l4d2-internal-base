@@ -12,13 +12,15 @@ namespace Helper
     }
     void RotationManager::onUpdate()
     {
-        if (DisabledRotation || serverRotation.isZero()) {
+        if (DisabledRotation || serverRotation.isZero())
+        {
             Vector viewAngles;
             I::EngineClient->GetViewAngles(viewAngles);
             Rotation rotation = Rotation(viewAngles.y, viewAngles.x);
             serverRotation = rotation;
             ticksToRotate = 0;
-            if (DisabledRotation) lastdist = -1;
+            if (DisabledRotation)
+                lastdist = -1;
         }
         bool isReseting = false;
         if (this->keepTicks <= 0)
@@ -32,7 +34,9 @@ namespace Helper
         if (ticksToRotate > 0)
         {
             ticksToRotate--;
-        }else {
+        }
+        else
+        {
             if (isReseting)
             {
                 if (DisabledRotation)
@@ -57,30 +61,16 @@ namespace Helper
         Rotation angleDifference = getAngleDifference(currentRotation, targetRotation);
         float rotationDifference = U::Math.GetFovBetween(currentRotation.toVector(), targetRotation.toVector());
         Rotation rotation;
-        bool isBypass = false;
-        float aimdist = -1;
-        while (!isBypass) {
-            // get turnspeed from computeTurnSpeed function
-            // TurnSpeed turnSpeed = this->computeTurnSpeed(
-            //     targetdistance,
-            //     abs(angleDifference.yaw),
-            //     abs(angleDifference.pitch),
-            //     isInCrosshair);
-            
-            // random horizontal and vertical turnspeeds
-            float randomYaw = nextGassain(min_horizontalTurnSpeed, max_horizontalTurnSpeed);
-            float randomPitch = nextGassain(min_verticalTurnSpeed, max_verticalTurnSpeed);
+        // random horizontal and vertical turnspeeds
+        float randomYaw = nextGassain(min_horizontalTurnSpeed, max_horizontalTurnSpeed);
+        float randomPitch = nextGassain(min_verticalTurnSpeed, max_verticalTurnSpeed);
 
-            TurnSpeed turnSpeed = TurnSpeed(computeFactor(rotationDifference, randomYaw), computeFactor(rotationDifference, randomPitch));
-            // float straightLineYaw = std::max(abs(angleDifference.yaw / rotationDifference) * turnSpeed.yawTurnSpeed, minimumTurnSpeedH);
-            // float straightLinePitch = std::max(abs(angleDifference.pitch / rotationDifference) * turnSpeed.pitchTurnSpeed, minimumTurnSpeedV);
-            float straightLineYaw = abs(angleDifference.yaw / rotationDifference) * turnSpeed.yawTurnSpeed;
-            float straightLinePitch = abs(angleDifference.pitch / rotationDifference) * turnSpeed.pitchTurnSpeed;
-            rotation = clampRotation(Rotation(currentRotation.yaw + U::Math.coerceIn(angleDifference.yaw, -straightLineYaw, straightLineYaw), currentRotation.pitch + U::Math.coerceIn(angleDifference.pitch, -straightLinePitch, straightLinePitch)));
-            aimdist = U::Math.GetFovBetween(currentRotation.toVector(), rotation.toVector());
-            isBypass = !is_lac_detected(aimdist,lastdist,rotationDifference);
-        }
-        lastdist = aimdist;
+        TurnSpeed turnSpeed = TurnSpeed(computeFactor(rotationDifference, randomYaw), computeFactor(rotationDifference, randomPitch));
+        // float straightLineYaw = std::max(abs(angleDifference.yaw / rotationDifference) * turnSpeed.yawTurnSpeed, minimumTurnSpeedH);
+        // float straightLinePitch = std::max(abs(angleDifference.pitch / rotationDifference) * turnSpeed.pitchTurnSpeed, minimumTurnSpeedV);
+        float straightLineYaw = abs(angleDifference.yaw / rotationDifference) * turnSpeed.yawTurnSpeed;
+        float straightLinePitch = abs(angleDifference.pitch / rotationDifference) * turnSpeed.pitchTurnSpeed;
+        rotation = clampRotation(Rotation(currentRotation.yaw + U::Math.coerceIn(angleDifference.yaw, -straightLineYaw, straightLineYaw), currentRotation.pitch + U::Math.coerceIn(angleDifference.pitch, -straightLinePitch, straightLinePitch)));
         return rotation;
     }
     void RotationManager::ForceBack()
