@@ -8,7 +8,6 @@ void Client::None::initialize()
 {
     moduleManager.Init();
     fileManager.init();
-    menu.init();
 }
 
 void Client::None::shutdown()
