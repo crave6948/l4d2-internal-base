@@ -8,19 +8,32 @@ namespace Client::Module
     {
     }
 
+    ModuleManager::~ModuleManager()
+    {
+        delete bhop;
+        delete aimbot;
+        delete noSpread;
+        delete autoShoot;
+        delete fastMelee;
+        delete arraylist;
+        delete espHelper;
+        delete clickGui;
+        delete thirdPerson;
+    }
+
     void ModuleManager::Init()
     {
-        featurelist.push_back(bhop_ptr);
+        featurelist.push_back(bhop);
 
-        featurelist.push_back(aimbot_ptr);
-        featurelist.push_back(autoShoot_ptr);
-        featurelist.push_back(noSpread_ptr);
-        featurelist.push_back(fastMelee_ptr);
+        featurelist.push_back(aimbot);
+        featurelist.push_back(autoShoot);
+        featurelist.push_back(noSpread);
+        featurelist.push_back(fastMelee);
 
-        featurelist.push_back(arraylist_ptr);
-        featurelist.push_back(espHelper_ptr);
-        featurelist.push_back(clickGui_ptr);
-        featurelist.push_back(thirdPerson_ptr);
+        featurelist.push_back(arraylist);
+        featurelist.push_back(espHelper);
+        featurelist.push_back(clickGui);
+        featurelist.push_back(thirdPerson);
     }
 
     void ModuleManager::onRender2D()
@@ -70,7 +83,7 @@ namespace Client::Module
         }
     }
 
-    void ModuleManager::onOverrideView(CViewSetup* view)
+    void ModuleManager::onOverrideView(CViewSetup *view)
     {
         for (Module *mod : featurelist)
         {

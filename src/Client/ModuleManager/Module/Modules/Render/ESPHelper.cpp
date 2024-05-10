@@ -9,7 +9,7 @@ namespace Client::Module
 		{
 			Vector EntityPosition = pBaseEntity->GetBaseAnimating()->GetHitboxPositionByGroup(hit);
 			Color boxColor = Color(255, 255, 255, 255);
-			IClientEntity *target = Client::client.moduleManager.aimbot.targetInfo.target;
+			IClientEntity *target = Client::client.moduleManager.aimbot->targetInfo.target;
 			if (target != nullptr)
 			{
 				int aimbotTarget = target->entindex();

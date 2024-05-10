@@ -5,10 +5,15 @@ namespace Utils
     void Utils::EntityCache::update()
     {
         // clear the cache
-        for (auto &it : m_EntityCache)
-        {
-            it.second.clear();
-        }
+        m_EntityCache[EClientClass::Infected].clear();
+        m_EntityCache[EClientClass::Boomer].clear();
+        m_EntityCache[EClientClass::Jockey].clear();
+        m_EntityCache[EClientClass::Smoker].clear();
+        m_EntityCache[EClientClass::Hunter].clear();
+        m_EntityCache[EClientClass::Spitter].clear();
+        m_EntityCache[EClientClass::Charger].clear();
+        m_EntityCache[EClientClass::Witch].clear();
+        m_EntityCache[EClientClass::Tank].clear();
         // local player index
         const int nLocalIndex = I::EngineClient->GetLocalPlayer();
         for (int n = 1; n <= I::ClientEntityList->GetMaxEntities() + 1; n++)

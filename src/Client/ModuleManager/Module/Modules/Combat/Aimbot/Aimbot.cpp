@@ -103,6 +103,11 @@ namespace Client::Module::AimbotModule
 		if (!debug->GetValue())
 			return;
 		//(pLocal->IsScoped() && !gVisuals.bNoZoom) ? 30.0f :
+		// แสดงข้อมูล จาก TargetInfo
+		int getFontHeight = G::Draw.GetFontHeight(EFonts::DEBUG);
+		std::string target_index = targetInfo.target? std::to_string(targetInfo.target->entindex()) : "None";
+		G::Draw.String(EFonts::DEBUG, startX, startY, Color(255, 255, 255, 255), TXT_DEFAULT, target_index.c_str());
+		startY += getFontHeight + 1;
 	}
 	void Aimbot::onEnabled()
 	{
@@ -114,10 +119,10 @@ namespace Client::Module::AimbotModule
 	}
 	bool Aimbot::isInCrossHair(CUserCmd *cmd, C_TerrorPlayer *pLocal, IClientEntity *target)
 	{
-		Vector vec = U::Math.AngleVectors(cmd->viewangles);
+		Vector vec = U::Math.AngleVectors(Helper::rotationManager.getServerRotationVector());
 		CTraceFilterHitscan filter{pLocal};
 		bool shouldhit = false;
-		if (auto pHit = G::Util.GetHitEntity(pLocal->Weapon_ShootPosition(), pLocal->Weapon_ShootPosition() + (vec * 1400.f), &filter))
+		if (auto pHit = G::Util.GetHitEntity(pLocal->Weapon_ShootPosition(), pLocal->Weapon_ShootPosition() + (vec * range->GetValue()), &filter))
 		{
 			if (pHit->entindex() != target->entindex())
 			{
@@ -155,15 +160,18 @@ namespace Client::Module::AimbotModule
 		}
 		return shouldhit;
 	}
-	TargetInfo Aimbot::GetTarget(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd)
-	{
+    bool Aimbot::isInvaildOrDead()
+    {
+        return false;
+    }
+    TargetInfo Aimbot::GetTarget(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd)
+    {
 		IClientEntity *foundTarget = nullptr;
 		// collect all targets and find the best one (compare them by a score)
 		Vector clientViewAngles = Helper::rotationManager.getServerRotationVector();
 		if (Helper::rotationManager.DisabledRotation)
 			I::EngineClient->GetViewAngles(clientViewAngles);
-		float currentScore = 2.f;
-		int type = HITGROUP_HEAD;
+		float currentScore = 1000.f;
 		const auto updateTarget = [&](IClientEntity *target, float fov, float distance) -> bool {
 			float fovScore = fov / this->fov->GetValue();
 			float distanceScore = distance / this->range->GetValue();
@@ -178,6 +186,10 @@ namespace Client::Module::AimbotModule
 		const auto GetHitbox = [&](int classType) -> int
 		{
 			if (classType == EClientClass::Tank)
+			{
+				return HITGROUP_CHEST;
+			}
+			if (classType == EClientClass::Infected)
 			{
 				return HITGROUP_CHEST;
 			}
@@ -198,9 +210,7 @@ namespace Client::Module::AimbotModule
 				return;
 			}
 			auto [fov, distance] = GetFovDistance(target, classType);
-			if (updateTarget(target, fov, distance)) {
-				type = classType;
-			}
+			updateTarget(target, fov, distance);
 		};
 		const auto checkCondition = [&](IClientEntity *target, int classType) -> bool {
 			auto [fov, distance] = GetFovDistance(target, classType);
@@ -208,9 +218,10 @@ namespace Client::Module::AimbotModule
 			if (fov > this->fov->GetValue()) return false;
 
 			Vector hitbox = target->As<C_BaseAnimating*>()->GetHitboxPositionByGroup(GetHitbox(classType));
-			CTraceFilterHitAll filter;
-			bool isVisible = G::Util.IsVisible(pLocal->Weapon_ShootPosition(), hitbox, &filter);
-			return isVisible;
+			CTraceFilterHitscan filter{ pLocal };
+			auto pHit{ G::Util.GetHitEntity(pLocal->Weapon_ShootPosition(), hitbox, &filter) };
+			if (!pHit || pHit->entindex() != target->entindex()) return false;
+			return true;
 		};
 		for (auto &[enabled, classType] : entityTypes)
 		{
@@ -224,8 +235,9 @@ namespace Client::Module::AimbotModule
 			}
 		}
 		if (foundTarget == nullptr) return TargetInfo();
-		Vector hitbox = foundTarget->As<C_BaseAnimating*>()->GetHitboxPositionByGroup(GetHitbox(type));
+		int classid = foundTarget->GetBaseEntity()->GetClientClass()->m_ClassID;
+		Vector hitbox = foundTarget->As<C_BaseAnimating*>()->GetHitboxPositionByGroup(GetHitbox(classid));
 		Vector aimVector = U::Math.GetAngleToPosition(pLocal->Weapon_ShootPosition(), hitbox);
-		return TargetInfo(foundTarget, hitbox, Helper::Rotation().toRotation(aimVector), type);
+		return TargetInfo(foundTarget, hitbox, Helper::Rotation().toRotation(aimVector), classid);
 	}
 }

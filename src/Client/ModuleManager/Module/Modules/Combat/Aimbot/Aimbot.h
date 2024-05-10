@@ -77,8 +77,9 @@ namespace Client::Module
         private:
             bool ShouldRun(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd);
             bool isInCrossHair(CUserCmd *cmd, C_TerrorPlayer *pLocal, IClientEntity *target);
+            bool isInvaildOrDead();
             TargetInfo GetTarget(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd);
-            std::vector<std::pair<std::function<bool()>, EClientClass>> entityTypes = {
+            const std::vector<std::pair<std::function<bool()>, EClientClass>> entityTypes = {
 				{std::bind(&V::BooleanValue::GetValue, infected), EClientClass::Infected},
 				{std::bind(&V::BooleanValue::GetValue, boomer), EClientClass::Boomer},
 				{std::bind(&V::BooleanValue::GetValue, spitter), EClientClass::Spitter},
