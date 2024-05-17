@@ -12,11 +12,11 @@ namespace Client::Module {
 				bool isEnabled = m->getEnabled();
 				if (isEnabled) {
 					std::string str = name;
-					int getFontWidth = G::Draw.GetFontWidth(EFonts::SDK_SC_WEB, str.c_str());
-					int getFontHeight = G::Draw.GetFontHeight(EFonts::SDK_SC_WEB);
+					int getFontWidth = G::Draw.GetFontWidth(EFonts::Amatic_SC, str.c_str());
+					int getFontHeight = G::Draw.GetFontHeight(EFonts::Amatic_SC);
 					G::Draw.Rect(startX - getFontWidth - 12 + m->animate, startY, getFontWidth, getFontHeight, Color(0, 0, 0, 170));
 					G::Draw.Rect(startX - 10 + m->animate, startY, 10, getFontHeight, Color(255, 255, 255, 120));
-					G::Draw.String(EFonts::SDK_SC_WEB, startX - 12 + m->animate, startY, Color(255, 255, 255, 255), TXT_LEFT, str.c_str());
+					G::Draw.String(EFonts::Amatic_SC, startX - 12 + m->animate, startY, Color(255, 255, 255, 255), TXT_LEFT, str.c_str());
 					startY += getFontHeight + 1;
 				}
 				m->updateanimate();
