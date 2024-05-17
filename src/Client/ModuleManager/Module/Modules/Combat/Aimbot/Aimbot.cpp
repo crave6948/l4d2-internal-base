@@ -65,6 +65,11 @@ namespace Client::Module::AimbotModule
 				targetInfo = TargetInfo();
 				targetInfo = GetTarget(pLocal, pWeapon, cmd);
 				lastSwitchTime = 0;
+			}else {
+				Vector hitbox = targetInfo.target->As<C_BaseAnimating*>()->GetHitboxPositionByGroup(targetInfo.hitGroup);
+				Vector aimVector = U::Math.GetAngleToPosition(pLocal->Weapon_ShootPosition(), hitbox);
+				targetInfo.aimRotation = Helper::Rotation().toRotation(aimVector);
+				targetInfo.targetPosition = hitbox;
 			}
 		}else {
 			lastSwitchTime++;
@@ -211,10 +216,10 @@ namespace Client::Module::AimbotModule
 			{
 				return HITGROUP_CHEST;
 			}
-			if (classType == EClientClass::Infected)
-			{
-				return HITGROUP_CHEST;
-			}
+			// if (classType == EClientClass::Infected)
+			// {
+			// 	return HITGROUP_CHEST;
+			// }
 			return HITGROUP_HEAD;
 		};
 		const auto GetFovDistance = [&, clientViewAngles](IClientEntity *target, int classType) -> std::pair<float, float>

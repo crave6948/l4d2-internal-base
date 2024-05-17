@@ -7,9 +7,13 @@ set(CMAKE_WARN_DEPRECATED FALSE)
 add_compile_options(-w)
 set(CMAKE_SUPPRESS_DEVELOPER_WARNINGS 1)
 set(CMAKE_SUPPRESS_REGENERATION true)
-if(COMMAND cmake_policy)
-  cmake_policy(SET CMP0126 NEW)
-endif()
+# if(COMMAND cmake_policy)
+#   cmake_policy(SET CMP0126 NEW)
+# endif()
+# Add /EHsc flag for MSVC globally
+# if (MSVC)
+#     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+# endif()
 
 # Source files
 # Set the source files directory
@@ -31,8 +35,4 @@ set_target_properties(l4d2_base PROPERTIES
     CXX_STANDARD 17
     CXX_STANDARD_REQUIRED ON
     OUTPUT_NAME "pol-crave-git" # Replace pol with the actual library name
-)
-
-target_compile_options(l4d2_base PRIVATE
-    $<$<CXX_COMPILER_ID:MSVC>:/EHsc>
 )

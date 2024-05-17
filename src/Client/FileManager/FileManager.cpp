@@ -94,6 +94,16 @@ namespace Client::File
                                 floatValue->SetValue(fValue);
                             }
                         }
+                        else if (type == "floatRange")
+                        {
+                            float min = valueData["value_min"];
+                            float max = valueData["value_max"];
+                            // Handle floatRange value
+                            if (auto floatRangeValue = dynamic_cast<V::FloatRangeValue *>(valueObject))
+                            {
+                                floatRangeValue->SetValue(min, max);
+                            }
+                        }
                     }
                 }
             }
@@ -212,6 +222,19 @@ namespace Client::File
                     // get format
                     floatValueJson["format"] = floatValue->GetFormat();
                     valueJson = floatValueJson;
+                }
+                else if (auto floatRangeValue = dynamic_cast<V::FloatRangeValue *>(value))
+                {
+                    nlohmann::json floatRangeValueJson;
+                    floatRangeValueJson["name"] = floatRangeValue->GetName();
+                    floatRangeValueJson["type"] = "floatRange";
+                    floatRangeValueJson["value_min"] = floatRangeValue->GetValue().first;
+                    floatRangeValueJson["value_max"] = floatRangeValue->GetValue().second;
+                    floatRangeValueJson["maximumrange_min"] = floatRangeValue->GetMaximumRange().first;
+                    floatRangeValueJson["maximumrange_max"] = floatRangeValue->GetMaximumRange().second;
+                    // get format
+                    floatRangeValueJson["format"] = floatRangeValue->GetFormat();
+                    valueJson = floatRangeValueJson;
                 }
                 allValuesJson.push_back(valueJson);
             }

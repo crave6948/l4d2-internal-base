@@ -5,6 +5,7 @@
 #include "Module/Modules/Render/ClickGui/ClickGuiModule.h"
 #include "Module/Modules/Render/ESPHelper.h"
 #include "Module/Modules/Render/ThirdPerson/ThirdPerson.h"
+#include "Module/Modules/Render/Rotation/Rotations.h"
 
 #include "Module/Modules/Combat/Aimbot/Aimbot.h"
 #include "Module/Modules/Combat/NoSpread.h"
@@ -32,6 +33,7 @@ namespace Client::Module
 		ESPHelperModule::ESPHelper *espHelper = new ESPHelperModule::ESPHelper();
 		ClickGuiModule::ClickGui *clickGui = new ClickGuiModule::ClickGui();
 		ThirdPersonModule::ThirdPerson *thirdPerson = new ThirdPersonModule::ThirdPerson();
+		RotationsModule::Rotations *rotations = new RotationsModule::Rotations();
 
 		void Init();
 		void onRender2D();

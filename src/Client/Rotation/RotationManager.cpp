@@ -1,5 +1,6 @@
 #include "RotationManager.h"
 
+#include "../None.h"
 namespace Helper
 {
     void RotationManager::moveTo(Rotation rotation, float targetDistance, bool isInCrosshair)
@@ -58,24 +59,44 @@ namespace Helper
     {
         Rotation angleDifference = getAngleDifference(currentRotation, targetRotation);
         float rotationDifference = U::Math.GetFovBetween(currentRotation.toVector(), targetRotation.toVector());
-        Rotation rotation;
-        // get turnspeed from computeTurnSpeed function
-        // TurnSpeed turnSpeed = this->computeTurnSpeed(
-        //     targetdistance,
-        //     abs(angleDifference.yaw),
-        //     abs(angleDifference.pitch),
-        //     isInCrosshair);
+        const auto rotations = Client::client.moduleManager.rotations;
+        TurnSpeed turnSpeed;
+        float straightLineYaw;
+        float straightLinePitch;
+        if (rotations->rotationModes->GetSelected() == "Linear")
+        {
+            auto [minH, maxH] = rotations->linear_horizontalTurnSpeed->GetValue();
+            auto [minV, maxV] = rotations->linear_verticalTurnSpeed->GetValue();
+            float randomYaw = nextGassain(minH, maxH);
+            float randomPitch = nextGassain(minV, maxV);
 
-        // random horizontal and vertical turnspeeds
-        float randomYaw = nextGassain(min_horizontalTurnSpeed, max_horizontalTurnSpeed);
-        float randomPitch = nextGassain(min_verticalTurnSpeed, max_verticalTurnSpeed);
-      
-        TurnSpeed turnSpeed = TurnSpeed(computeFactor(rotationDifference, randomYaw), computeFactor(rotationDifference, randomPitch));
-        // float straightLineYaw = std::max(abs(angleDifference.yaw / rotationDifference) * turnSpeed.yawTurnSpeed, minimumTurnSpeedH);
-        // float straightLinePitch = std::max(abs(angleDifference.pitch / rotationDifference) * turnSpeed.pitchTurnSpeed, minimumTurnSpeedV);
-        float straightLineYaw = abs(angleDifference.yaw / rotationDifference) * turnSpeed.yawTurnSpeed;
-        float straightLinePitch = abs(angleDifference.pitch / rotationDifference) * turnSpeed.pitchTurnSpeed;
-        rotation = clampRotation(Rotation(currentRotation.yaw + U::Math.coerceIn(angleDifference.yaw, -straightLineYaw, straightLineYaw), currentRotation.pitch + U::Math.coerceIn(angleDifference.pitch, -straightLinePitch, straightLinePitch)));
+            straightLineYaw = abs(angleDifference.yaw / rotationDifference) * randomYaw;
+            straightLinePitch = abs(angleDifference.pitch / rotationDifference) * randomPitch;
+        }
+        if (rotations->rotationModes->GetSelected() == "Conditional")
+        {
+            // get turnspeed from computeTurnSpeed function
+            turnSpeed = this->computeTurnSpeed(
+                targetdistance,
+                abs(angleDifference.yaw),
+                abs(angleDifference.pitch),
+                isInCrosshair);
+            straightLineYaw = std::max(abs(angleDifference.yaw / rotationDifference) * turnSpeed.yawTurnSpeed, rotations->minimumTurnSpeedH->GetValue());
+            straightLinePitch = std::max(abs(angleDifference.pitch / rotationDifference) * turnSpeed.pitchTurnSpeed, rotations->minimumTurnSpeedV->GetValue());
+        }
+        if (rotations->rotationModes->GetSelected() == "Sigmoid")
+        {
+            // random horizontal and vertical turnspeeds
+            auto [minH, maxH] = rotations->sigmoid_horizontalTurnSpeed->GetValue();
+            auto [minV, maxV] = rotations->sigmoid_verticalTurnSpeed->GetValue();
+            float randomYaw = nextGassain(minH, maxH);
+            float randomPitch = nextGassain(minV, maxV);
+
+            turnSpeed = TurnSpeed(computeFactor(rotationDifference, randomYaw), computeFactor(rotationDifference, randomPitch));
+            straightLineYaw = abs(angleDifference.yaw / rotationDifference) * turnSpeed.yawTurnSpeed;
+            straightLinePitch = abs(angleDifference.pitch / rotationDifference) * turnSpeed.pitchTurnSpeed;
+        }
+        Rotation rotation = clampRotation(Rotation(currentRotation.yaw + U::Math.coerceIn(angleDifference.yaw, -straightLineYaw, straightLineYaw), currentRotation.pitch + U::Math.coerceIn(angleDifference.pitch, -straightLinePitch, straightLinePitch)));
         return rotation;
     }
     void RotationManager::ForceBack()
@@ -98,23 +119,25 @@ namespace Helper
     }
     float RotationManager::computeFactor(float rotationDifference, float turnSpeed)
     {
+        const auto rotations = Client::client.moduleManager.rotations;
         // Scale the rotation difference to fit within a reasonable range
         const float scaledDifference = rotationDifference / 120.f;
 
         // Compute the sigmoid function
-        const float sigmoid = 1 / (1 + exp((-steepness * (scaledDifference - midpoint))));
+        const float sigmoid = 1 / (1 + exp((-rotations->steepness->GetValue() * (scaledDifference - rotations->midpoint->GetValue()))));
 
         // Interpolate sigmoid value to fit within the range of turnSpeed
         float interpolatedSpeed = sigmoid * turnSpeed;
 
         return U::Math.coerceIn(interpolatedSpeed, 0.f, 180.f);
     }
-    // TurnSpeed RotationManager::computeTurnSpeed(float distance, float diffH, float diffV, bool crosshair)
-    // {
-    //     float turnSpeedH = coefDistance * distance + coefDiffH * diffH +
-    //                        (crosshair ? coefCrosshairH : 0.f) + interceptH;
-    //     float turnSpeedV = coefDistance * distance + coefDiffV * std::max(0.f, diffV - diffH) +
-    //                        (crosshair ? coefCrosshairV : 0.f) + interceptV;
-    //     return TurnSpeed(std::max(abs(turnSpeedH), minimumTurnSpeedH), std::max(abs(turnSpeedV), minimumTurnSpeedV));
-    // }
+    TurnSpeed RotationManager::computeTurnSpeed(float distance, float diffH, float diffV, bool crosshair)
+    {
+        const auto rotations = Client::client.moduleManager.rotations;
+        float turnSpeedH = rotations->coefDistance->GetValue() * distance + rotations->coefDiffH->GetValue() * diffH +
+                           (crosshair ? rotations->coefCrosshairH->GetValue() : 0.f) + rotations->interceptH->GetValue();
+        float turnSpeedV = rotations->coefDistance->GetValue() * distance + rotations->coefDiffV->GetValue() * std::max(0.f, diffV - diffH) +
+                           (crosshair ? rotations->coefCrosshairV->GetValue() : 0.f) + rotations->interceptV->GetValue();
+        return TurnSpeed(std::max(abs(turnSpeedH), rotations->minimumTurnSpeedH->GetValue()), std::max(abs(turnSpeedV), rotations->minimumTurnSpeedV->GetValue()));
+    }
 }

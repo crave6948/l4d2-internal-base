@@ -19,6 +19,7 @@ namespace Client::Module
         delete espHelper;
         delete clickGui;
         delete thirdPerson;
+        delete rotations;
     }
 
     void ModuleManager::Init()
@@ -34,6 +35,7 @@ namespace Client::Module
         featurelist.push_back(espHelper);
         featurelist.push_back(clickGui);
         featurelist.push_back(thirdPerson);
+        featurelist.push_back(rotations);
     }
 
     void ModuleManager::onRender2D()

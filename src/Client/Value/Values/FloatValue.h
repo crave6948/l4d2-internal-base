@@ -1,5 +1,5 @@
 #pragma once
-#include "NumberValue.h"
+#include "FloatRangeValue.h"
 namespace V
 {
     class FloatValue : public ValueBase
