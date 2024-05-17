@@ -61,9 +61,11 @@ namespace Client::Module::AimbotModule
 			return;
 		}
 		if (lastSwitchTime >= TIME_TO_TICKS(switchDelay->GetValue() / 1000)) {
-			targetInfo = TargetInfo();
-			targetInfo = GetTarget(pLocal, pWeapon, cmd);
-			lastSwitchTime = 0;
+			if (isInvaildOrDead()) {
+				targetInfo = TargetInfo();
+				targetInfo = GetTarget(pLocal, pWeapon, cmd);
+				lastSwitchTime = 0;
+			}
 		}else {
 			lastSwitchTime++;
 		}
@@ -108,6 +110,13 @@ namespace Client::Module::AimbotModule
 		std::string target_index = targetInfo.target? std::to_string(targetInfo.target->entindex()) : "None";
 		G::Draw.String(EFonts::DEBUG, startX, startY, Color(255, 255, 255, 255), TXT_DEFAULT, target_index.c_str());
 		startY += getFontHeight + 1;
+		// show target eclientclass
+		if (targetInfo.target)
+		{
+			std::string classname = className(targetInfo.classId);
+			G::Draw.String(EFonts::DEBUG, startX, startY, Color(255,255,255,255), TXT_DEFAULT, classname.c_str());
+			startY += getFontHeight + 1;
+		}
 	}
 	void Aimbot::onEnabled()
 	{
@@ -162,6 +171,19 @@ namespace Client::Module::AimbotModule
 	}
     bool Aimbot::isInvaildOrDead()
     {
+		auto [target, targetPosition, aimRotation, hitGroup, classId] = targetInfo.getTargetInfo();
+		// check if target is dead or nullptr
+		if (target == nullptr) return true;
+		if (classId == EClientClass::Infected || classId == EClientClass::Witch)
+		{
+			auto c_infected = target->As<C_Infected *>();
+			if (!G::Util.IsInfectedAlive(c_infected->m_usSolidFlags(), c_infected->m_nSequence()))
+                return true;
+		}else {
+			auto c_terror = target->As<C_TerrorPlayer *>();
+            if (c_terror->deadflag())
+				return true;
+		}
         return false;
     }
     TargetInfo Aimbot::GetTarget(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd)
@@ -236,8 +258,9 @@ namespace Client::Module::AimbotModule
 		}
 		if (foundTarget == nullptr) return TargetInfo();
 		int classid = foundTarget->GetBaseEntity()->GetClientClass()->m_ClassID;
-		Vector hitbox = foundTarget->As<C_BaseAnimating*>()->GetHitboxPositionByGroup(GetHitbox(classid));
+		int hitgroup = GetHitbox(classid);
+		Vector hitbox = foundTarget->As<C_BaseAnimating*>()->GetHitboxPositionByGroup(hitgroup);
 		Vector aimVector = U::Math.GetAngleToPosition(pLocal->Weapon_ShootPosition(), hitbox);
-		return TargetInfo(foundTarget, hitbox, Helper::Rotation().toRotation(aimVector), classid);
+		return TargetInfo(foundTarget, hitbox, Helper::Rotation().toRotation(aimVector), hitgroup, classid);
 	}
 }
