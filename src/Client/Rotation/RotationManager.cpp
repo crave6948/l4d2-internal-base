@@ -59,10 +59,17 @@ namespace Helper
         Rotation angleDifference = getAngleDifference(currentRotation, targetRotation);
         float rotationDifference = U::Math.GetFovBetween(currentRotation.toVector(), targetRotation.toVector());
         Rotation rotation;
+        // get turnspeed from computeTurnSpeed function
+        // TurnSpeed turnSpeed = this->computeTurnSpeed(
+        //     targetdistance,
+        //     abs(angleDifference.yaw),
+        //     abs(angleDifference.pitch),
+        //     isInCrosshair);
+
         // random horizontal and vertical turnspeeds
         float randomYaw = nextGassain(min_horizontalTurnSpeed, max_horizontalTurnSpeed);
         float randomPitch = nextGassain(min_verticalTurnSpeed, max_verticalTurnSpeed);
-
+      
         TurnSpeed turnSpeed = TurnSpeed(computeFactor(rotationDifference, randomYaw), computeFactor(rotationDifference, randomPitch));
         // float straightLineYaw = std::max(abs(angleDifference.yaw / rotationDifference) * turnSpeed.yawTurnSpeed, minimumTurnSpeedH);
         // float straightLinePitch = std::max(abs(angleDifference.pitch / rotationDifference) * turnSpeed.pitchTurnSpeed, minimumTurnSpeedV);

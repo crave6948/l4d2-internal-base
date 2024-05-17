@@ -37,6 +37,7 @@ namespace Helper
         };
         Rotation clampRotation(Rotation rotation);
         Rotation getAngleDifference(Rotation a, Rotation b);
+      
         // returns the turn speed for each axis
         // TurnSpeed computeTurnSpeed(float distance, float diffH, float diffV, bool crosshair);
         // float coefDistance = -1.393f;
@@ -49,12 +50,12 @@ namespace Helper
         // float minimumTurnSpeedH = 3.05e-5f;
         // float minimumTurnSpeedV = 5.96e-8f;
         float computeFactor(float rotationDifference, float turnSpeed);
-        float min_horizontalTurnSpeed = 15;
-        float max_horizontalTurnSpeed = 30;
-        float min_verticalTurnSpeed = 10;
+        float min_horizontalTurnSpeed = 0.2;
+        float max_horizontalTurnSpeed = 25;
+        float min_verticalTurnSpeed = 0.2;
         float max_verticalTurnSpeed = 45;
 
-        float steepness = 10.f;
+        float steepness = 10.5f;
         float midpoint = 0.3f;
     };
     inline RotationManager rotationManager = RotationManager();

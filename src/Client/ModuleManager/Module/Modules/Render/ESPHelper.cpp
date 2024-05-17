@@ -1,5 +1,6 @@
 #include "ESPHelper.h"
 
+#include "../../../../None.h"
 namespace Client::Module
 {
 	namespace ESPHelperModule
@@ -7,17 +8,26 @@ namespace Client::Module
 		void ESPHelper::drawESP(C_BaseEntity *pBaseEntity, int hit)
 		{
 			Vector EntityPosition = pBaseEntity->GetBaseAnimating()->GetHitboxPositionByGroup(hit);
+			Color boxColor = Color(255, 255, 255, 255);
+			IClientEntity *target = Client::client.moduleManager.aimbot->targetInfo.target;
+			if (target != nullptr)
+			{
+				int aimbotTarget = target->entindex();
+				if (aimbotTarget == pBaseEntity->entindex()) {
+					boxColor = Color(0, 255, 0, 255);
+				}
+			}
 			Vector screen;
 			int size = 5;
 			G::Util.W2S(EntityPosition, screen);
-			G::Draw.Line(screen.x, screen.y, screen.x - size, screen.y - size, Color(255, 255, 255, 255));
-			G::Draw.Line(screen.x, screen.y, screen.x + size, screen.y - size, Color(255, 255, 255, 255));
-			G::Draw.Line(screen.x, screen.y, screen.x + size, screen.y + size, Color(255, 255, 255, 255));
-			G::Draw.Line(screen.x, screen.y, screen.x - size, screen.y + size, Color(255, 255, 255, 255));
-			G::Draw.Line(screen.x - size, screen.y - size, screen.x + size, screen.y - size, Color(255, 255, 255, 255));
-			G::Draw.Line(screen.x + size, screen.y - size, screen.x + size, screen.y + size, Color(255, 255, 255, 255));
-			G::Draw.Line(screen.x + size, screen.y + size, screen.x - size, screen.y + size, Color(255, 255, 255, 255));
-			G::Draw.Line(screen.x - size, screen.y + size, screen.x - size, screen.y - size, Color(255, 255, 255, 255));
+			G::Draw.Line(screen.x, screen.y, screen.x - size, screen.y - size, boxColor);
+			G::Draw.Line(screen.x, screen.y, screen.x + size, screen.y - size, boxColor);
+			G::Draw.Line(screen.x, screen.y, screen.x + size, screen.y + size, boxColor);
+			G::Draw.Line(screen.x, screen.y, screen.x - size, screen.y + size, boxColor);
+			G::Draw.Line(screen.x - size, screen.y - size, screen.x + size, screen.y - size, boxColor);
+			G::Draw.Line(screen.x + size, screen.y - size, screen.x + size, screen.y + size, boxColor);
+			G::Draw.Line(screen.x + size, screen.y + size, screen.x - size, screen.y + size, boxColor);
+			G::Draw.Line(screen.x - size, screen.y + size, screen.x - size, screen.y - size, boxColor);
 			std::string name = "Zombie";
 			Color color = Color(255, 255, 255, 255);
 			switch (pBaseEntity->GetClientClass()->m_ClassID)
@@ -85,87 +95,22 @@ namespace Client::Module
 
 			if (!pLocal)
 				return;
-			for (int n = 1; n < (I::ClientEntityList->GetMaxEntities() + 1); n++)
+			const auto doDrawEntity = [this](std::vector<IClientEntity *> list, int classType)
 			{
-				if (n == nLocalIndex)
-					continue;
-
-				IClientEntity *pEntity = I::ClientEntityList->GetClientEntity(n);
-
-				if (!pEntity || pEntity->IsDormant())
-					continue;
-
-				ClientClass *pCC = pEntity->GetClientClass();
-
-				if (!pCC)
-					continue;
-
-				switch (pCC->m_ClassID)
+				if (list.size() <= 0)
+					return;
+				for (int i = 0; i < list.size(); i++)
 				{
-				case EClientClass::Witch:
-				{
-					C_Witch *pWitch = pEntity->As<C_Witch *>();
-					if (!pWitch)
-						continue;
-					if (!G::Util.IsInfectedAlive(pWitch->m_usSolidFlags(), pWitch->m_nSequence()))
-					{
-						continue;
-					}
-					drawESP(pWitch->GetBaseEntity(), HITGROUP_HEAD);
-					break;
+					this->drawESP(list[i]->GetBaseEntity(), classType == EClientClass::Tank ? HITGROUP_CHEST : HITGROUP_HEAD);
 				}
-				case EClientClass::Tank:
-				{
-					C_Tank *pTank = pEntity->As<C_Tank *>();
-					if (!pTank)
-						continue;
-					if (pTank->deadflag())
-						continue;
-					drawESP(pTank->GetBaseEntity(), HITGROUP_STOMACH);
-					break;
-				}
-				case EClientClass::Boomer:
-				case EClientClass::Jockey:
-				case EClientClass::Smoker:
-				case EClientClass::Hunter:
-				case EClientClass::Spitter:
-				case EClientClass::Charger:
-				{
-					C_TerrorPlayer *pPlayer = pEntity->As<C_TerrorPlayer *>();
-					if (!pPlayer)
-						continue;
-					if (pPlayer->deadflag())
-					{
-						continue;
-					}
-					C_BaseAnimating *pAnimating = pEntity->As<C_BaseAnimating *>();
-					int hit = HITGROUP_HEAD;
-					if (pCC->m_ClassID == EClientClass::Boomer)
-					{
-						hit = HITGROUP_STOMACH;
-					};
-					drawESP(pPlayer->GetBaseEntity(), hit);
-					break;
-				}
-				case EClientClass::Infected:
-				{
-					C_Infected *pInfected = pEntity->As<C_Infected *>();
-					if (!pInfected)
-						continue;
-					if (!G::Util.IsInfectedAlive(pInfected->m_usSolidFlags(), pInfected->m_nSequence()) || pInfected->m_bIsBurning())
-					{
-						continue;
-					}
-					Vector min, max;
-					int bone;
-					drawESP(pInfected->GetBaseEntity(), HITGROUP_CHEST);
+			};
+			// Infected, Boomer, Spitter, Charger, Smoker, Jockey, Hunter, Witch, Tank
 
-					break;
-				}
-				default:
+			for (auto &[enabled, classType] : entityTypes)
+			{
+				if (enabled())
 				{
-					break;
-				}
+					doDrawEntity(Utils::g_EntityCache.getEntityFromGroup(classType), classType);
 				}
 			}
 		}

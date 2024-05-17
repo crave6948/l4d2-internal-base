@@ -6,7 +6,7 @@
 #include "Module/Modules/Render/ESPHelper.h"
 #include "Module/Modules/Render/ThirdPerson/ThirdPerson.h"
 
-#include "Module/Modules/Combat/Aimbot.h"
+#include "Module/Modules/Combat/Aimbot/Aimbot.h"
 #include "Module/Modules/Combat/NoSpread.h"
 #include "Module/Modules/Combat/AutoShoot/AutoShoot.h"
 #include "Module/Modules/Combat/FastMelee/FastMelee.h"
@@ -14,47 +14,36 @@
 #include "../Engine/Prediction/EnginePrediction.h"
 namespace Client::Module
 {
-    class ModuleManager
-    {
-    public:
-        ModuleManager();
-		std::vector<Module*> featurelist;
-		//real class
-		BunnyHopModule::BunnyHop bhop = BunnyHopModule::BunnyHop();
-		
-		AimbotModule::Aimbot aimbot = AimbotModule::Aimbot();
-		NoSpreadModule::NoSpread noSpread = NoSpreadModule::NoSpread();
-		AutoShootModule::AutoShoot autoShoot = AutoShootModule::AutoShoot();
-		FastMeleeModule::FastMelee fastMelee = FastMeleeModule::FastMelee();
+	class ModuleManager
+	{
+	public:
+		ModuleManager();
+		~ModuleManager();
+		std::vector<Module *> featurelist;
+		// Pointer declarations
+		BunnyHopModule::BunnyHop *bhop = new BunnyHopModule::BunnyHop();
 
-		ArraylistModule::Arraylist arraylist = ArraylistModule::Arraylist();
-		ESPHelperModule::ESPHelper espHelper = ESPHelperModule::ESPHelper();
-		ClickGuiModule::ClickGui clickGui = ClickGuiModule::ClickGui();
-		ThirdPersonModule::ThirdPerson thirdPerson = ThirdPersonModule::ThirdPerson();
-		
-		//pointer
-		BunnyHopModule::BunnyHop* bhop_ptr = &bhop;
-		
-		AimbotModule::Aimbot* aimbot_ptr = &aimbot;
-		NoSpreadModule::NoSpread* noSpread_ptr = &noSpread;
-		AutoShootModule::AutoShoot* autoShoot_ptr = &autoShoot;
-		FastMeleeModule::FastMelee* fastMelee_ptr = &fastMelee;
+		AimbotModule::Aimbot *aimbot = new AimbotModule::Aimbot();
+		NoSpreadModule::NoSpread *noSpread = new NoSpreadModule::NoSpread();
+		AutoShootModule::AutoShoot *autoShoot = new AutoShootModule::AutoShoot();
+		FastMeleeModule::FastMelee *fastMelee = new FastMeleeModule::FastMelee();
 
-		ArraylistModule::Arraylist* arraylist_ptr = &arraylist;
-		ESPHelperModule::ESPHelper* espHelper_ptr = &espHelper;
-		ClickGuiModule::ClickGui* clickGui_ptr = &clickGui;
-		ThirdPersonModule::ThirdPerson* thirdPerson_ptr = &thirdPerson;
-		
+		ArraylistModule::Arraylist *arraylist = new ArraylistModule::Arraylist();
+		ESPHelperModule::ESPHelper *espHelper = new ESPHelperModule::ESPHelper();
+		ClickGuiModule::ClickGui *clickGui = new ClickGuiModule::ClickGui();
+		ThirdPersonModule::ThirdPerson *thirdPerson = new ThirdPersonModule::ThirdPerson();
+
 		void Init();
 		void onRender2D();
-		void onOverrideView(CViewSetup* view);
-		void onPostOverrideView(CViewSetup* view);
-		void onCreateMove(CUserCmd* cmd, C_TerrorPlayer* pLocal);
+		void onOverrideView(CViewSetup *view);
+		void onPostOverrideView(CViewSetup *view);
+		void onCreateMove(CUserCmd *cmd, C_TerrorPlayer *pLocal);
 		void onFrameStageNotify(ClientFrameStage_t curStage);
 		void onKey();
-		Module* getFeature(std::string name);
-		std::vector<Module*> getFeatureListByCategory(ModuleCategory category);
-		private:
+		Module *getFeature(std::string name);
+		std::vector<Module *> getFeatureListByCategory(ModuleCategory category);
+
+	private:
 		int keyTimeout = 0;
-    };
+	};
 }
