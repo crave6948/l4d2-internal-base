@@ -37,22 +37,7 @@ namespace Helper
         };
         Rotation clampRotation(Rotation rotation);
         Rotation getAngleDifference(Rotation a, Rotation b);
-        // bool is_lac_detected(float aimdist, float laimdist, float tdelta)
-        // {
-        //     if (laimdist == -1)
-        //     {
-        //         return false;
-        //     }
-        //     bool detected = false;
-        //     // Check conditions for AIMBOT_FLAG_SNAP
-        //     if (aimdist < laimdist * 0.2 && tdelta > 10.0)
-        //         detected |= true;
-
-        //     // Check conditions for AIMBOT_FLAG_SNAP2
-        //     if (aimdist < laimdist * 0.1 && tdelta > 5.0)
-        //         detected |= true;
-        //     return detected;
-        // };
+      
         // returns the turn speed for each axis
         // TurnSpeed computeTurnSpeed(float distance, float diffH, float diffV, bool crosshair);
         // float coefDistance = -1.393f;

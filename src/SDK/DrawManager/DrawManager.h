@@ -20,7 +20,8 @@ enum class EFonts {
 	MENU_ARIAL,
 	MENU_TAB,
 	FONT_LAST,
-	SDK_SC_WEB
+	SDK_SC_WEB,
+	Amatic_SC
 };
 
 class CGlobal_DrawManager

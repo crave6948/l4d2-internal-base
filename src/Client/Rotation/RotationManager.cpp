@@ -69,7 +69,7 @@ namespace Helper
         // random horizontal and vertical turnspeeds
         float randomYaw = nextGassain(min_horizontalTurnSpeed, max_horizontalTurnSpeed);
         float randomPitch = nextGassain(min_verticalTurnSpeed, max_verticalTurnSpeed);
-
+      
         TurnSpeed turnSpeed = TurnSpeed(computeFactor(rotationDifference, randomYaw), computeFactor(rotationDifference, randomPitch));
         // float straightLineYaw = std::max(abs(angleDifference.yaw / rotationDifference) * turnSpeed.yawTurnSpeed, minimumTurnSpeedH);
         // float straightLinePitch = std::max(abs(angleDifference.pitch / rotationDifference) * turnSpeed.pitchTurnSpeed, minimumTurnSpeedV);
