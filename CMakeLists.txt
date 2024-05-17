@@ -32,3 +32,7 @@ set_target_properties(l4d2_base PROPERTIES
     CXX_STANDARD_REQUIRED ON
     OUTPUT_NAME "pol-crave-git" # Replace pol with the actual library name
 )
+
+target_compile_options(l4d2_base PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/EHsc>
+)
