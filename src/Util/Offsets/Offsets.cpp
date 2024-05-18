@@ -53,7 +53,7 @@ void CUtil_Offsets::Init()
 	if (const DWORD dwIInput = U::Pattern.Find(_("client.dll"), _("8B 0D ? ? ? ? 8B 01 8B 40 0C 52 8B 55 08")))
 	// if (const DWORD dwIInput = U::Pattern.Find(_("client.dll"), _("8B 0D ? ? ? ? 8B 01 8B 50 58 FF E2")))
 	    m_dwIInput = (dwIInput + 0x2);
-	
+
 	// 6729A0
 	m_dwSVCheat = reinterpret_cast<DWORD>(GetModuleHandleA(_("engine.dll"))) + 0x6729A0;
 

@@ -1,6 +1,5 @@
 #pragma once
-#include "../../SDK/SDK.h"
-#include "components/CategoryUI.h"
+#include "MouseUtils.h"
 
 namespace Client::Menu
 {
@@ -11,15 +10,22 @@ namespace Client::Menu
         void toggle()
         {
             toggled = !toggled;
-            toggled ? onEnabled() : onDisabled();
+            if (toggled)
+            {
+                onEnabled();
+            }
+            else
+            {
+                onDisabled();
+            }
         }
         void onEnabled();
         void onDisabled();
 
         void drawScreen();
 
-    private:
-        std::vector<Components::CategoryUI> categories;
         bool toggled = false;
+    private:
+        float popupanimate = 0.f;
     };
 }

@@ -25,6 +25,7 @@ void CGlobal_ModuleEntry::Load()
 
 		I::VGuiPanel        = U::Interface.Get<IVGuiPanel*>("vgui2.dll", "VGUI_Panel009");
 		I::VGuiSurface      = U::Interface.Get<IVGuiSurface*>("vgui2.dll", "VGUI_Surface031");
+		I::VGuiInput = U::Interface.Get<IVGuiInput*>("vgui2.dll", "VGUI_InputInternal001");
 
 		I::MatSystemSurface = U::Interface.Get<IMatSystemSurface*>("vguimatsurface.dll", "VGUI_Surface031");
 
