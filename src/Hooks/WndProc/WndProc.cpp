@@ -1,13 +1,10 @@
 #include "WndProc.h"
-#include "../../Client/None.h"
 #include <winuser.h>
 
 using namespace Hooks;
 
 LRESULT CALLBACK WndProc::Detour(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	if (Client::client.menu.toggled && (I::EngineClient->Con_IsVisible() || I::EngineVGui->IsGameUIVisible()))
-		return 1;
 	return CallWindowProcW(oWndProc, hwnd, uMsg, wParam, lParam);
 }
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "VGuiInput.h"
+#include "RenderView.h"
 
 #ifdef SendMessage
 #undef SendMessage

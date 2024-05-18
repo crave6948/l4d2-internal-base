@@ -118,7 +118,7 @@ public:
 	virtual void					SetModalPanel(VPANEL) = 0;
 	virtual VPANEL					GetModalPanel() = 0;
 	virtual void					UnlockCursor() = 0;
-	virtual void					LockCursor() = 0; //59
+	virtual void					LockCursor() = 0;
 	virtual void					SetTranslateExtendedKeys(bool state) = 0;
 	virtual VPANEL					GetTopmostPopup() = 0;
 	virtual void					SetTopLevelFocus(VPANEL panel) = 0;
@@ -149,7 +149,7 @@ public:
 	virtual void					GetWorkspaceBounds(int& x, int& y, int& wide, int& tall) = 0;
 	virtual void					GetAbsoluteWindowBounds(int& x, int& y, int& wide, int& tall) = 0;
 	virtual void					GetProportionalBase(int& width, int& height) = 0;
-	virtual void					CalculateMouseVisible() = 0; // 90
+	virtual void					CalculateMouseVisible() = 0;
 	virtual bool					NeedKBInput() = 0;
 	virtual bool					HasCursorPosFunctions() = 0;
 	virtual void					SurfaceGetCursorPos(int& x, int& y) = 0;

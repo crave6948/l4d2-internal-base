@@ -12,8 +12,6 @@
 #include "TerrorGameRules/TerrorGameRules.h"
 #include "TerrorPlayer/TerrorPlayer.h"
 #include "WndProc/WndProc.h"
-#include "VGuiSurface/VGuiSurface.h"
-#include "WindowHook/WindowHook.h"
 
 class CGlobal_Hooks
 {
