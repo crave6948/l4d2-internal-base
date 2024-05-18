@@ -1,8 +1,8 @@
 #include "VGuiSurface.h"
-#include "../../Client/None.h"
+#include "../../Client/Ui/gui.h"
 void __fastcall Hooks::VGuiSurface::LockCursor::Detour()
 {
-    Client::client.menu.toggled ? I::VGuiSurface->UnlockCursor() : Table.Original<FN>(Index)(I::VGuiSurface);
+    gui::open ? I::VGuiSurface->UnlockCursor() : Table.Original<FN>(Index)(I::VGuiSurface);
 }
 
 void Hooks::VGuiSurface::Init()

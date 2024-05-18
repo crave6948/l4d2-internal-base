@@ -5,20 +5,20 @@
 #include "../../ext/imgui/imgui_impl_win32.h"
 
 #include "../../Util/XorString/XorString.h"
-
+#include "../../Hooks/WndProc/WndProc.h"
 #include <stdexcept>
-extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(
-    HWND window,
-    UINT message,
-    WPARAM wideParam,
-    LPARAM longParam);
+// extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(
+//     HWND window,
+//     UINT message,
+//     WPARAM wideParam,
+//     LPARAM longParam);
 
-// window process
-LRESULT CALLBACK WindowProcess(
-    HWND window,
-    UINT message,
-    WPARAM wideParam,
-    LPARAM longParam);
+// // window process
+// LRESULT CALLBACK WindowProcess(
+//     HWND window,
+//     UINT message,
+//     WPARAM wideParam,
+//     LPARAM longParam);
 namespace gui
 {
     bool SetupWindowClass(const char *windowClassName) noexcept
@@ -143,12 +143,14 @@ namespace gui
     }
     void SetupMenu(LPDIRECT3DDEVICE9 device) noexcept
     {
-        auto params = D3DDEVICE_CREATION_PARAMETERS{};
-        device->GetCreationParameters(&params);
+        // auto params = D3DDEVICE_CREATION_PARAMETERS{};
+        // device->GetCreationParameters(&params);
 
-        window = params.hFocusWindow;
-        originalWindowProcess = reinterpret_cast<WNDPROC>(
-            SetWindowLongPtr(window, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProcess)));
+        // window = params.hFocusWindow;
+        window = Hooks::WndProc::hwGame;
+        originalWindowProcess = Hooks::WndProc::oWndProc;
+        // originalWindowProcess = reinterpret_cast<WNDPROC>(
+        //     SetWindowLongPtr(window, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(WindowProcess)));
         ImGui::CreateContext();
         ImGui::StyleColorsDark();
 
@@ -184,28 +186,28 @@ namespace gui
     }
 }
 
-LRESULT CALLBACK WindowProcess(
-    HWND window,
-    UINT message,
-    WPARAM wideParam,
-    LPARAM longParam)
-{
-    // toggle menu
-    if (GetAsyncKeyState(VK_INSERT) & 1)
-        gui::open = !gui::open;
+// LRESULT CALLBACK WindowProcess(
+//     HWND window,
+//     UINT message,
+//     WPARAM wideParam,
+//     LPARAM longParam)
+// {
+//     // toggle menu
+//     if (GetAsyncKeyState(VK_INSERT) & 1)
+//         gui::open = !gui::open;
 
-    // pass message to imgui
-    if (gui::open && ImGui_ImplWin32_WndProcHandler(
-                         window,
-                         message,
-                         wideParam,
-                         longParam))
-        return 1L;
+//     // pass message to imgui
+//     if (gui::open && ImGui_ImplWin32_WndProcHandler(
+//                          window,
+//                          message,
+//                          wideParam,
+//                          longParam))
+//         return 1L;
 
-    return CallWindowProc(
-        gui::originalWindowProcess,
-        window,
-        message,
-        wideParam,
-        longParam);
-}
+//     return CallWindowProc(
+//         gui::originalWindowProcess,
+//         window,
+//         message,
+//         wideParam,
+//         longParam);
+// }
