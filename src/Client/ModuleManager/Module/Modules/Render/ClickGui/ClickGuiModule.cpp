@@ -7,6 +7,7 @@ namespace Client::Module::ClickGuiModule
 {
     void ClickGui::onEnabled()
     {
+        Client::client.menu.toggle();
         this->setEnabled(false);
     }
 }
