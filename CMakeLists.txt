@@ -11,9 +11,9 @@ set(CMAKE_SUPPRESS_REGENERATION true)
 #   cmake_policy(SET CMP0126 NEW)
 # endif()
 # Add /EHsc flag for MSVC globally
-# if (MSVC)
-#     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
-# endif()
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+endif()
 
 # Source files
 # Set the source files directory
@@ -29,6 +29,10 @@ file(GLOB_RECURSE SOURCE_FILES2 ${SOURCE_FILES_DIR}/*.c)
 
 # Add the library target
 add_library(l4d2_base SHARED ${SOURCE_FILES} ${HEADER_FILES} ${SOURCE_FILES1} ${SOURCE_FILES2})
+
+# additional libraries
+find_package(Crow CONFIG REQUIRED)
+target_link_libraries(l4d2_base PRIVATE Crow::Crow asio::asio)
 
 # Set C++ standard
 set_target_properties(l4d2_base PROPERTIES

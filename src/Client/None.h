@@ -13,6 +13,9 @@ namespace Client
         Module::ModuleManager moduleManager = Module::ModuleManager();
         File::FileManager fileManager = File::FileManager();
         Menu::Menu menu = Menu::Menu();
+
+    private:
+        void startServer();
     };
     inline None client = None();
 }

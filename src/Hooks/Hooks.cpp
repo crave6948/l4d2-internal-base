@@ -21,7 +21,6 @@ void CGlobal_Hooks::Init()
 		TerrorGameRules::Init();
 		TerrorPlayer::Init();
 		WndProc::Init();
-		VGuiSurface::Init();
 	}
 
 	XASSERT(MH_EnableHook(MH_ALL_HOOKS) != MH_STATUS::MH_OK);
