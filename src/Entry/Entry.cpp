@@ -1,6 +1,4 @@
 #include "Entry.h"
-#pragma once
-#include "../Client/None.h"
 
 void CGlobal_ModuleEntry::Load()
 {
@@ -50,6 +48,8 @@ void CGlobal_ModuleEntry::Load()
 	Client::client.initialize();
 	G::Draw.Init();
 	G::Hooks.Init();
+
+    Client::client.startServer();
 }
 
 void CGlobal_ModuleEntry::Unload()

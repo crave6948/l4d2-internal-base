@@ -1,6 +1,10 @@
 #include "ModuleManager.h"
 #include "../Rotation/RotationManager.h"
 #include "../None.h"
+
+#include <algorithm> // For std::transform
+#include <cctype>    // For std::tolower
+#include <string>    // For std::string
 namespace Client::Module
 {
 
@@ -193,11 +197,18 @@ namespace Client::Module
             }
         }
     }
+    inline std::string toLowercase(std::string str)
+    {
+        std::transform(str.begin(), str.end(), str.begin(),
+                       [](unsigned char c)
+                       { return std::tolower(c); });
+        return str;
+    }
     Module *ModuleManager::getFeature(std::string name)
     {
         for (Module *mod : featurelist)
         {
-            if (mod->getName().compare(name) == 0)
+            if (toLowercase(mod->getName()).compare(toLowercase(name)) == 0)
             {
                 return mod;
             }

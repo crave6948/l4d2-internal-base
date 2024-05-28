@@ -7,15 +7,16 @@ namespace Client
     class None
     {
     public:
-        None();
         void initialize();
         void shutdown();
         Module::ModuleManager moduleManager = Module::ModuleManager();
         File::FileManager fileManager = File::FileManager();
         Menu::Menu menu = Menu::Menu();
 
-    private:
         void startServer();
+
+    private:
+        bool stop_server = false;
     };
     inline None client = None();
 }
