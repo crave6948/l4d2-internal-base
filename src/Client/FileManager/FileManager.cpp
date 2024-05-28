@@ -296,7 +296,7 @@ namespace Client::File
     {
         if (I::GlobalVars->realtime - last_load > auto_load_interval)
         {
-            load();
+            // load();
             last_load = I::GlobalVars->realtime;
         }
         else

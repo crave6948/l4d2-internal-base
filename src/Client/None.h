@@ -12,9 +12,8 @@ namespace Client
         Module::ModuleManager moduleManager = Module::ModuleManager();
         File::FileManager fileManager = File::FileManager();
         Menu::Menu menu = Menu::Menu();
-
+        void setupRoutes();
         void startServer();
-
     private:
         bool stop_server = false;
     };
