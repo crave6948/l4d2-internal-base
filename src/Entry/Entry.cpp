@@ -54,9 +54,9 @@ void CGlobal_ModuleEntry::Load()
 
 void CGlobal_ModuleEntry::Unload()
 {
+	Client::client.shutdown();
 	XASSERT(MH_Uninitialize() != MH_STATUS::MH_OK);
 	Hooks::WndProc::UnInitialize();
-	Client::client.shutdown();
 
 	std::this_thread::sleep_for(std::chrono::seconds(1));
 }

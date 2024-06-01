@@ -33,10 +33,10 @@ namespace Client::File
                 if (moduleObject["Name"] == module->getName())
                 {
                     auto settings = moduleObject["Settings"];
-                    if (firstload)
-                    {
+                    // if (firstload)
+                    // {
                         module->setEnabled(settings["enabled"]);
-                    }
+                    // }
                     module->setKey(settings["key"]);
                     // check if settings["values"] is null
                     if (settings["values"].is_null())
@@ -158,6 +158,41 @@ namespace Client::File
             save();
         }
     }
+    void FileManager::loadFromJson(std::string jsonData)
+    {
+        nlohmann::json data = nlohmann::json::parse(jsonData);
+        // load data
+        if (data.is_null())
+        {
+            return;
+        }
+        if (data.is_array())
+        {
+            for (auto object : data)
+            {
+                if (object.is_null())
+                {
+                    continue;
+                }
+                if (object["Category"] == "Combat")
+                {
+                    loadCategory(object["Modules"], Client::Module::ModuleCategory::Combat);
+                }
+                else if (object["Category"] == "Visuals")
+                {
+                    loadCategory(object["Modules"], Client::Module::ModuleCategory::Visuals);
+                }
+                else if (object["Category"] == "Player")
+                {
+                    loadCategory(object["Modules"], Client::Module::ModuleCategory::Player);
+                }
+                else if (object["Category"] == "Misc")
+                {
+                    loadCategory(object["Modules"], Client::Module::ModuleCategory::Misc);
+                }
+            }
+        }
+    }
     inline nlohmann::json CategoryToJson(std::string name, Client::Module::ModuleCategory category)
     {
         // get all module in this category
@@ -253,12 +288,7 @@ namespace Client::File
     {
         std::filesystem::path currentPath = std::filesystem::current_path();
         // Create a JSON object
-
-        nlohmann::json categoryLists = nlohmann::json::array();
-        categoryLists.push_back(CategoryToJson("Combat", Client::Module::ModuleCategory::Combat));
-        categoryLists.push_back(CategoryToJson("Visuals", Client::Module::ModuleCategory::Visuals));
-        categoryLists.push_back(CategoryToJson("Player", Client::Module::ModuleCategory::Player));
-        categoryLists.push_back(CategoryToJson("Misc", Client::Module::ModuleCategory::Misc));
+        nlohmann::json categoryLists = getData();
 
         // file path
         std::string filePath = currentPath.string() + "/settings.json";
@@ -291,6 +321,15 @@ namespace Client::File
 
         // Close the file
         file.close();
+    }
+    nlohmann::json FileManager::getData()
+    {
+        nlohmann::json categoryLists = nlohmann::json::array();
+        categoryLists.push_back(CategoryToJson("Combat", Client::Module::ModuleCategory::Combat));
+        categoryLists.push_back(CategoryToJson("Visuals", Client::Module::ModuleCategory::Visuals));
+        categoryLists.push_back(CategoryToJson("Player", Client::Module::ModuleCategory::Player));
+        categoryLists.push_back(CategoryToJson("Misc", Client::Module::ModuleCategory::Misc));
+        return categoryLists;
     }
     void FileManager::running_auto_save()
     {

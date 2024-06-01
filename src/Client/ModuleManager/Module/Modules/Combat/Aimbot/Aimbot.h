@@ -51,6 +51,7 @@ namespace Client::Module
                 vManager.AddValue(jockey);
                 vManager.AddValue(hunter);
                 vManager.AddValue(witch);
+                vManager.AddValue(witchRage);
                 vManager.AddValue(tank);
 
                 vManager.AddValue(debug);
@@ -70,6 +71,7 @@ namespace Client::Module
             V::BooleanValue *hunter = new V::BooleanValue("Hunter", true);
             // witch and tank are separate from specialInfected value
             V::BooleanValue *witch = new V::BooleanValue("Witch", true);
+            V::BooleanValue *witchRage = new V::BooleanValue("Witch-Rage", true);
             V::BooleanValue *tank = new V::BooleanValue("Tank", true);
 
             V::BooleanValue *debug = new V::BooleanValue("Debug Mode", false);
@@ -85,7 +87,7 @@ namespace Client::Module
         private:
             bool ShouldRun(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd);
             bool isInCrossHair(CUserCmd *cmd, C_TerrorPlayer *pLocal, IClientEntity *target);
-            bool isInvaildOrDead();
+            bool isInvaildOrDead(C_TerrorPlayer *pLocal);
             TargetInfo GetTarget(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd);
             const std::vector<std::pair<std::function<bool()>, EClientClass>> entityTypes = {
                 {std::bind(&V::BooleanValue::GetValue, infected), EClientClass::Infected},

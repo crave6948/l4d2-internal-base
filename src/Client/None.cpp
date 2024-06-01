@@ -1,7 +1,12 @@
 #include <WinSock2.h>
+#define CROW_STATIC_DIRECTORY "None/dist/"
+#define CROW_STATIC_ENDPOINT "/<path>"
 #include "crow.h"
+#include "crow/middlewares/cors.h"
 #include "None.h"
 #include <thread>
+#include <filesystem>
+#include <fstream>
 
 namespace Client
 {
@@ -24,102 +29,53 @@ namespace Client
 
     void None::setupRoutes()
     {
-        // @param name of the module
-        // @return module or nullptr
-        const auto findModule = [&](std::string name)
-        {
-            return moduleManager.getFeature(name);
-        };
-        const auto findValue = [&](Client::Module::Module *it, std::string name)
-        {
-            return it->vManager.GetValue(name);
-        };
         // define your endpoint at the root directory
         CROW_ROUTE(app, "/")
         ([]()
-         { return "Hello world"; });
-        CROW_ROUTE(app, "/toggle").methods("GET"_method)([&]()
-                                                         {
-            std::string modulesName = "";
-            for (auto it : moduleManager.featurelist)
-            {
-                std::string name = it->getName();
-                modulesName.append(name + "\n");
+         {
+            // load html file
+            return crow::mustache::load("index.html").render();
+        });
+        CROW_ROUTE(app, "/getjson").methods("GET"_method)([&]()
+                                                          { return fileManager.getData().dump(); });
+        CROW_ROUTE(app, "/loadjson").methods("POST"_method)([&](const crow::request &req, crow::response &res)
+                                                                          {
+            fileManager.loadFromJson(req.body);
+            res.code = 200;
+            res.body = fileManager.getData().dump();
+            res.end(); });
+        // Assuming 'app' is your Crow application instance
+        CROW_ROUTE(app, "/assets/<path>")
+        ([](const crow::request& req, crow::response& res, std::string path){
+            std::string basePath = "None/dist/assets"; // Base path to your assets
+            // std::string requestedPath = req.url_params.get("path");
+            std::string requestedPath = path;
+
+            // Security check: Prevent path traversal attacks
+            if (requestedPath.find("..") != std::string::npos) {
+                res.code = 404;
+                res.end();
             }
-            return modulesName; 
-        });
-        CROW_ROUTE(app, "/toggle/<string>").methods("GET"_method)([&](std::string name)
-                                                                  {
-            auto it = findModule(name);
-            if (it == nullptr) return "Not found Module " + name;
-            it->toggle();
-            return "Toggled " + name + " to " + (it->getEnabled()?  "On" : "Off"); 
-        });
-        CROW_ROUTE(app, "/keybind/<string>").methods("GET"_method)([&](std::string name)
-                                                                   {
-            auto it = findModule(name);
-            if (it == nullptr) return "Not found Module " + name;                                       
-            return "Keybind of " + it->getName() + " is " + std::to_string(it->getKey());
-        });
-        CROW_ROUTE(app, "/keybind/<string>/<int>").methods("GET"_method)([&](std::string name, int keycode)
-                                                                         {
-            auto it = findModule(name);
-            if (it == nullptr) return "Not found Module " + name;
-            it->setKey(keycode);
-            return "Set keybind of " + it->getName() + " to " + std::to_string(it->getKey());
-        });
-        CROW_ROUTE(app, "/module/<string>/values").methods("GET"_method)([&](std::string name)
-                                                                         {
-            auto it = findModule(name);
-            if (it == nullptr) return "Not found Module " + name;
-            std::string valuesName = "";
-            for (auto value : it->vManager.GetValues())
-            {
-                valuesName.append(value->GetName() + "\n");
+
+            std::string fullPath = basePath + "/" + requestedPath;
+            if (std::filesystem::exists(fullPath) && std::filesystem::is_regular_file(fullPath)) {
+                res.set_static_file_info(fullPath);
+            } else {
+                // File not found or is not a regular file
+                res.code = 404;
             }
-            return valuesName; });
-        CROW_ROUTE(app, "/module/value").methods("POST"_method)([&](const crow::request& req)
-                                                                                                  {
-            // nlohmann::json json = nlohmann::json::parse(req.body);
-            crow::json::rvalue json = crow::json::load(req.body);
-            
-            std::string moduleName = json["ModuleName"].s();
-            // auto it = findModule(moduleName);
-            // if (it == nullptr) return "Not found Module " + moduleName;
-            // std::string valueName = json["ValueName"].s();
-            // return "Everything okay" + valueName;
-            return moduleName;
-            // V::ValueBase* value = findValue(it, valueName);
-            // if (value == nullptr) return "Not found Value " + valueName + " in Module " + name;
-            // const auto getBoolean = [](std::string value_str) -> bool
-            // {
-            //     if (value_str == "true")
-            //     {
-            //         return true;
-            //     }
-            //     else if (value_str == "false")
-            //     {
-            //         return false;
-            //     }
-            //     // if not true or false, return false
-            //     return false;
-            // };
-            // auto bvalue = reinterpret_cast<V::BooleanValue*>(value);
-            // return "Set " + valueName + " of " + name + " to " + (bvalue->GetValue() ? "true" : "false"); 
-            });
+            res.end();
+        });
     }
 
     void None::startServer()
     {
         setupRoutes();
-        // crow::SimpleApp app;
-        //  app.port(18080).multithreaded().run_async();
         // Create a new thread to run the app
         serverThread = std::thread([&]()
                                    {
                                      // set the port, set the app to run on multiple threads, and run the app
                                      app.port(18080).run(); });
-
         // Detach the server thread so it runs independently
         serverThread.detach();
     }

@@ -58,10 +58,11 @@ namespace Client::Module::AimbotModule
 		{
 			targetInfo = TargetInfo();
 			Helper::rotationManager.ForceBack();
+			lastSwitchTime = 0;
 			return;
 		}
 		if (lastSwitchTime >= TIME_TO_TICKS(switchDelay->GetValue() / 1000)) {
-			if (isInvaildOrDead()) {
+			if (isInvaildOrDead(pLocal)) {
 				targetInfo = TargetInfo();
 				targetInfo = GetTarget(pLocal, pWeapon, cmd);
 				lastSwitchTime = 0;
@@ -174,7 +175,7 @@ namespace Client::Module::AimbotModule
 		}
 		return shouldhit;
 	}
-    bool Aimbot::isInvaildOrDead()
+    bool Aimbot::isInvaildOrDead(C_TerrorPlayer *pLocal)
     {
 		auto [target, targetPosition, aimRotation, hitGroup, classId] = targetInfo.getTargetInfo();
 		// check if target is dead or nullptr
@@ -189,6 +190,18 @@ namespace Client::Module::AimbotModule
             if (c_terror->deadflag())
 				return true;
 		}
+		// check if target is out of range
+		float distance = pLocal->Weapon_ShootPosition().DistTo(targetPosition);
+        if (distance > range->GetValue())
+			return true;
+		// check if target is outside FOV
+		Vector clientViewAngles = Helper::rotationManager.getServerRotationVector();
+		float fov = U::Math.GetFovBetween(clientViewAngles, aimRotation.toVector());
+        if (fov > this->fov->GetValue()) return true;
+		// check if target is visible
+		CTraceFilterHitscan filter{ pLocal };
+		auto pHit{ G::Util.GetHitEntity(pLocal->Weapon_ShootPosition(), targetPosition, &filter) };
+		if (!pHit || pHit->entindex() != target->entindex()) return true;
         return false;
     }
     TargetInfo Aimbot::GetTarget(C_TerrorPlayer *pLocal, C_TerrorWeapon *pWeapon, CUserCmd *cmd)
@@ -200,8 +213,8 @@ namespace Client::Module::AimbotModule
 			I::EngineClient->GetViewAngles(clientViewAngles);
 		float currentScore = 1000.f;
 		const auto updateTarget = [&](IClientEntity *target, float fov, float distance) -> bool {
-			float fovScore = fov / this->fov->GetValue();
-			float distanceScore = distance / this->range->GetValue();
+			float fovScore = (fov * 100) / this->fov->GetValue();
+			float distanceScore = (distance * 100) / this->range->GetValue();
 			float score = fovScore + distanceScore;
 			if (score < currentScore) {
 				foundTarget = target;
@@ -257,6 +270,7 @@ namespace Client::Module::AimbotModule
 				for (auto entity : Utils::g_EntityCache.getEntityFromGroup(classType))
 				{
 					if (!checkCondition(entity, classType)) continue;
+					if (classType == EClientClass::Witch && this->witchRage->GetValue() && entity->As<C_Witch *>()->m_rage() != 1.0f) continue;
 					doCompare(entity, classType);
 				}
 			}

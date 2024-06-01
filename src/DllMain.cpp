@@ -10,7 +10,6 @@ DWORD APIENTRY MainThread(LPVOID lpParam)
 	}
 
 	G::ModuleEntry.Unload();
-
 	FreeLibraryAndExitThread(static_cast<HMODULE>(lpParam), EXIT_SUCCESS);
 }
 
