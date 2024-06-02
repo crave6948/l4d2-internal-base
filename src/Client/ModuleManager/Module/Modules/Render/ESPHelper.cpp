@@ -7,27 +7,40 @@ namespace Client::Module
 	{
 		void ESPHelper::drawESP(C_BaseEntity *pBaseEntity, int hit)
 		{
+			const int nLocalIndex = I::EngineClient->GetLocalPlayer();
+			C_TerrorPlayer *pLocal = I::ClientEntityList->GetClientEntity(nLocalIndex)->As<C_TerrorPlayer *>();
+
 			Vector EntityPosition = pBaseEntity->GetBaseAnimating()->GetHitboxPositionByGroup(hit);
 			Color boxColor = Color(255, 255, 255, 255);
-			IClientEntity *target = Client::client.moduleManager.aimbot->targetInfo.target;
+			auto aimbot = Client::client.moduleManager.aimbot;
+			IClientEntity *target = aimbot->targetInfo.target;
+
+			float distance = pLocal->Weapon_ShootPosition().DistTo(EntityPosition);
+			if (distance <= aimbot->range->GetValue())
+			{
+				auto [r, g, b, a] = this->aimbotInRangeColor->GetValue();
+				boxColor = Color(r, g, b, a);
+			}
+
 			if (target != nullptr)
 			{
-				int aimbotTarget = target->entindex();
-				if (aimbotTarget == pBaseEntity->entindex()) {
-					boxColor = Color(0, 255, 0, 255);
+				if (target->entindex() == pBaseEntity->entindex()) {
+					auto [r, g, b, a] = this->aimbotColor->GetValue();
+					boxColor = Color(r, g, b, a);
 				}
 			}
+			
 			Vector screen;
 			int size = 5;
 			G::Util.W2S(EntityPosition, screen);
-			G::Draw.Line(screen.x, screen.y, screen.x - size, screen.y - size, boxColor);
-			G::Draw.Line(screen.x, screen.y, screen.x + size, screen.y - size, boxColor);
-			G::Draw.Line(screen.x, screen.y, screen.x + size, screen.y + size, boxColor);
-			G::Draw.Line(screen.x, screen.y, screen.x - size, screen.y + size, boxColor);
-			G::Draw.Line(screen.x - size, screen.y - size, screen.x + size, screen.y - size, boxColor);
-			G::Draw.Line(screen.x + size, screen.y - size, screen.x + size, screen.y + size, boxColor);
-			G::Draw.Line(screen.x + size, screen.y + size, screen.x - size, screen.y + size, boxColor);
-			G::Draw.Line(screen.x - size, screen.y + size, screen.x - size, screen.y - size, boxColor);
+			G::Draw.Line(screen.x - size / 2, screen.y - size / 2, screen.x - size, screen.y - size, boxColor);
+			G::Draw.Line(screen.x + size / 2, screen.y - size / 2, screen.x + size, screen.y - size, boxColor);
+			G::Draw.Line(screen.x + size / 2, screen.y + size / 2, screen.x + size, screen.y + size, boxColor);
+			G::Draw.Line(screen.x - size / 2, screen.y + size / 2, screen.x - size, screen.y + size, boxColor);
+			// G::Draw.Line(screen.x - size, screen.y - size, screen.x + size, screen.y - size, boxColor);
+			// G::Draw.Line(screen.x + size, screen.y - size, screen.x + size, screen.y + size, boxColor);
+			// G::Draw.Line(screen.x + size, screen.y + size, screen.x - size, screen.y + size, boxColor);
+			// G::Draw.Line(screen.x - size, screen.y + size, screen.x - size, screen.y - size, boxColor);
 			std::string name = "Zombie";
 			Color color = Color(255, 255, 255, 255);
 			switch (pBaseEntity->GetClientClass()->m_ClassID)

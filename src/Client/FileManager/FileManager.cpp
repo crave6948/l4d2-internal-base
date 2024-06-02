@@ -103,6 +103,15 @@ namespace Client::File
                             {
                                 floatRangeValue->SetValue(min, max);
                             }
+                        }else if (type == "color")
+                        {
+                            nlohmann::json color = valueData["value"];
+                            auto colortuple = std::make_tuple(color["r"], color["g"], color["b"], color["a"]);
+                            // Handle color value
+                            if (auto colorValue = dynamic_cast<V::ColorValue *>(valueObject))
+                            {
+                                colorValue->SetValue(colortuple);
+                            }
                         }
                     }
                 }
@@ -270,6 +279,19 @@ namespace Client::File
                     // get format
                     floatRangeValueJson["format"] = floatRangeValue->GetFormat();
                     valueJson = floatRangeValueJson;
+                }else if (auto colorValue = dynamic_cast<V::ColorValue *>(value))
+                {
+                    nlohmann::json colorValueJson;
+                    colorValueJson["name"] = colorValue->GetName();
+                    colorValueJson["type"] = "color";
+                    nlohmann::json value;
+                    auto [r, g, b, a] = colorValue->GetValue();
+                    value["r"] = r;
+                    value["g"] = g;
+                    value["b"] = b;
+                    value["a"] = a;
+                    colorValueJson["value"] = value;
+                    valueJson = colorValueJson;
                 }
                 allValuesJson.push_back(valueJson);
             }

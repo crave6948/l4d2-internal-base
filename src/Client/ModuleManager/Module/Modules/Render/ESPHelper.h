@@ -12,6 +12,8 @@ namespace Client::Module
 			ESPHelper()
 			{
 				this->Create("ESPHelper", true, VK_RIGHT, ModuleCategory::Visuals);
+				vManager.AddValue(aimbotColor);
+				vManager.AddValue(aimbotInRangeColor);
 				vManager.AddValue(infected);
 				vManager.AddValue(boomer);
 				vManager.AddValue(spitter);
@@ -23,6 +25,9 @@ namespace Client::Module
 				vManager.AddValue(tank);
 			};
 			void onRender2D() override;
+			// color of aimbotesp
+			V::ColorValue* aimbotColor = new V::ColorValue("Aimbot ESP Color", 44, 100, 41, 255);
+			V::ColorValue* aimbotInRangeColor = new V::ColorValue("Aimbot In Range Color", 41, 85, 100, 255);
 			// infected, special infected, witch, tank
 			V::BooleanValue* infected = new V::BooleanValue("Infected", true);
 			// specialInfected has boomer, spitter, charger, smoker, jockey, hunter
