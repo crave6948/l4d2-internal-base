@@ -18,7 +18,7 @@ namespace Client::Module::AimbotModule
 		if (cmd->buttons & IN_USE)
 			return false;
 
-		if (pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || pLocal->m_isIncapacitated())
+		if (!pLocal->CanAttackFull() || pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || pLocal->m_isIncapacitated())
 			return false;
 
 		// You could also check if the current spread is -1.0f and not run nospread I guess.
@@ -58,25 +58,25 @@ namespace Client::Module::AimbotModule
 		{
 			targetInfo = TargetInfo();
 			Helper::rotationManager.ForceBack();
-			lastSwitchTime = 0;
+			lastTime = 0;
 			return;
 		}
-		if (lastSwitchTime >= TIME_TO_TICKS(switchDelay->GetValue() / 1000)) {
-			if (isInvaildOrDead(pLocal)) {
-				targetInfo = TargetInfo();
-				targetInfo = GetTarget(pLocal, pWeapon, cmd);
-				lastSwitchTime = 0;
-			}else {
-				Vector hitbox = targetInfo.target->As<C_BaseAnimating*>()->GetHitboxPositionByGroup(targetInfo.hitGroup);
-				Vector aimVector = U::Math.GetAngleToPosition(pLocal->Weapon_ShootPosition(), hitbox);
-				targetInfo.aimRotation = Helper::Rotation().toRotation(aimVector);
-				targetInfo.targetPosition = hitbox;
-			}
-		}else {
-			lastSwitchTime++;
+		bool allowedToSwitch = false;
+		if (I::GlobalVars->realtime - lastTime >= switchDelay->GetValue() / 1000.f)
+		{
+			allowedToSwitch = true;
+		}
+		if (allowedToSwitch && isInvaildOrDead(pLocal)) {
+			targetInfo = TargetInfo();
+			targetInfo = GetTarget(pLocal, pWeapon, cmd);
+			lastTime = I::GlobalVars->realtime;
 		}
 		if (targetInfo.target == nullptr) return;
-		float distance = pLocal->Weapon_ShootPosition().DistTo(targetInfo.targetPosition);
+		Vector hitbox = targetInfo.target->As<C_BaseAnimating*>()->GetHitboxPositionByGroup(targetInfo.hitGroup);
+		Vector aimVector = U::Math.GetAngleToPosition(pLocal->Weapon_ShootPosition(), hitbox);
+		targetInfo.aimRotation = Helper::Rotation().toRotation(aimVector);
+		targetInfo.targetPosition = hitbox;
+		float distance = pLocal->Weapon_ShootPosition().DistTo(targetInfo.targetPosition) / 571.43f;
 		bool isInCrosshair = isInCrossHair(cmd, pLocal, targetInfo.target);
 		Helper::rotationManager.moveTo(targetInfo.aimRotation,distance, isInCrosshair);
 
@@ -127,7 +127,7 @@ namespace Client::Module::AimbotModule
 	void Aimbot::onEnabled()
 	{
 		targetInfo = TargetInfo();
-		lastSwitchTime = 0;
+		lastTime = I::GlobalVars->realtime;
 	}
 	void Aimbot::onDisabled()
 	{

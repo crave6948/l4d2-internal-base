@@ -45,7 +45,7 @@ namespace Helper
                 Rotation rotation = Rotation(viewAngles.y, viewAngles.x);
                 serverRotation = calculateRotation(serverRotation, rotation, 0.f, false);
                 float rotationDifference = U::Math.GetFovBetween(serverRotation.toVector(), rotation.toVector());
-                if (rotationDifference <= 1.f)
+                if (rotationDifference <= 0.1f)
                     DisabledRotation = true;
             }
             else

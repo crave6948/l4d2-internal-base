@@ -99,7 +99,7 @@ namespace Client::Module
                 {std::bind(&V::BooleanValue::GetValue, hunter), EClientClass::Hunter},
                 {std::bind(&V::BooleanValue::GetValue, witch), EClientClass::Witch},
                 {std::bind(&V::BooleanValue::GetValue, tank), EClientClass::Tank}};
-            int lastSwitchTime = 0;
+            float lastTime = 0;
             std::string className(int classId)
             {
                 switch (classId)

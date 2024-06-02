@@ -27,12 +27,14 @@ file(GLOB_RECURSE HEADER_FILES ${SOURCE_FILES_DIR}/*.h)
 file(GLOB_RECURSE SOURCE_FILES1 ${SOURCE_FILES_DIR}/*.hpp)
 file(GLOB_RECURSE SOURCE_FILES2 ${SOURCE_FILES_DIR}/*.c)
 
+find_package(Crow CONFIG REQUIRED)
 # Add the library target
 add_library(l4d2_base SHARED ${SOURCE_FILES} ${HEADER_FILES} ${SOURCE_FILES1} ${SOURCE_FILES2})
+target_link_libraries(l4d2_base PRIVATE Crow::Crow asio::asio)
+list(REMOVE_ITEM _CROW_ICD "_CROW_ICD-NOTFOUND") 
+set_target_properties(Crow::Crow PROPERTIES INTERFACE_COMPILE_DEFINITIONS "${_CROW_ICD}")
 
 # additional libraries
-find_package(Crow CONFIG REQUIRED)
-target_link_libraries(l4d2_base PRIVATE Crow::Crow asio::asio)
 
 # Set C++ standard
 set_target_properties(l4d2_base PROPERTIES
