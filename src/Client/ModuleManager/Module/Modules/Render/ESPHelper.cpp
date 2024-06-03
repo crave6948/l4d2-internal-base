@@ -19,14 +19,16 @@ namespace Client::Module
 			if (distance <= aimbot->range->GetValue())
 			{
 				auto [r, g, b, a] = this->aimbotInRangeColor->GetValue();
-				boxColor = Color(r, g, b, a);
+				int alpha = round(a * 255);
+				boxColor = Color(r, g, b, alpha);
 			}
 
 			if (target != nullptr)
 			{
 				if (target->entindex() == pBaseEntity->entindex()) {
 					auto [r, g, b, a] = this->aimbotColor->GetValue();
-					boxColor = Color(r, g, b, a);
+					int alpha = round(a * 255);
+					boxColor = Color(r, g, b, alpha);
 				}
 			}
 			

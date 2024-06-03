@@ -26,8 +26,8 @@ namespace Client::Module
 			};
 			void onRender2D() override;
 			// color of aimbotesp
-			V::ColorValue* aimbotColor = new V::ColorValue("Aimbot ESP Color", 44, 100, 41, 255);
-			V::ColorValue* aimbotInRangeColor = new V::ColorValue("Aimbot In Range Color", 41, 85, 100, 255);
+			V::ColorValue* aimbotColor = new V::ColorValue("Aimbot ESP Color", 44, 100, 41, 1);
+			V::ColorValue* aimbotInRangeColor = new V::ColorValue("Aimbot In Range Color", 41, 85, 100, 1);
 			// infected, special infected, witch, tank
 			V::BooleanValue* infected = new V::BooleanValue("Infected", true);
 			// specialInfected has boomer, spitter, charger, smoker, jockey, hunter
