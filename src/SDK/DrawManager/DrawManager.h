@@ -21,7 +21,7 @@ enum class EFonts {
 	MENU_TAB,
 	FONT_LAST,
 	SDK_SC_WEB,
-	Amatic_SC
+	Greycliff_CF
 };
 
 class CGlobal_DrawManager

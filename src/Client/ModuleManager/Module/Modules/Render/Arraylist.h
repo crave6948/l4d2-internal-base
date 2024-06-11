@@ -11,10 +11,8 @@ namespace Client::Module
 			Arraylist()
 			{
 				this->Create("ArrayList", true, VK_NUMPAD0, ModuleCategory::Visuals);
-				vManager = V::ValueManager();
 			};
 			void onRender2D() override;
-			V::ValueManager vManager;
 
 		private:
 			Color HSVtoRGB(float H, float S, float V, int A = 255)

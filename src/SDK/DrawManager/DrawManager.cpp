@@ -1,10 +1,13 @@
 #include "DrawManager.h"
-
+#include "../../Client/None.h"
 void CGlobal_DrawManager::Init()
 {
+	auto fontManager = Client::client.moduleManager.fontManager;
+	int fontSize = fontManager->fontSize->GetValue();
+	m_Fonts.clear();
 	m_Fonts[EFonts::DEBUG] = { "Consolas",  12, FW_DONTCARE, EFontFlags::FONTFLAG_OUTLINE };
 	m_Fonts[EFonts::SDK_SC_WEB]    = { "SDK_SC_Web",  24, FW_HEAVY, EFontFlags::FONTFLAG_ANTIALIAS | EFontFlags::FONTFLAG_GAUSSIANBLUR };
-	m_Fonts[EFonts::Amatic_SC]    = { "Greycliff CF Bold",  32, FW_BOLD, EFontFlags::FONTFLAG_ANTIALIAS | EFontFlags::FONTFLAG_GAUSSIANBLUR };
+	m_Fonts[EFonts::Greycliff_CF]    = { "Greycliff CF Bold",  fontSize, FW_BOLD, EFontFlags::FONTFLAG_ANTIALIAS | EFontFlags::FONTFLAG_GAUSSIANBLUR };
 	m_Fonts[EFonts::ESP]           = { "Tahoma",    11, FW_DONTCARE, EFontFlags::FONTFLAG_OUTLINE };
 	m_Fonts[EFonts::ESP_NAME]      = { "Arial",     14, FW_DONTCARE, EFontFlags::FONTFLAG_OUTLINE };
 	m_Fonts[EFonts::ESP_WEAPON]    = { "Verdana",   12, FW_DONTCARE, EFontFlags::FONTFLAG_OUTLINE };

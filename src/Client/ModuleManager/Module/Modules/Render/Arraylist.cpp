@@ -12,8 +12,8 @@ namespace Client::Module
 			// sort vector by font width with it name
 			std::sort(list.begin(), list.end(), [](Module *a, Module *b)
 					  {
-        int fontWidthA = G::Draw.GetFontWidth(EFonts::Amatic_SC, a->getName().c_str());
-        int fontWidthB = G::Draw.GetFontWidth(EFonts::Amatic_SC, b->getName().c_str());
+        int fontWidthA = G::Draw.GetFontWidth(EFonts::Greycliff_CF, a->getName().c_str());
+        int fontWidthB = G::Draw.GetFontWidth(EFonts::Greycliff_CF, b->getName().c_str());
         return fontWidthA > fontWidthB; });
 
 			int startX = G::Draw.m_nScreenW - 2, startY = 0;
@@ -30,15 +30,15 @@ namespace Client::Module
 				if (isEnabled)
 				{
 					std::string str = name;
-					int getFontWidth = G::Draw.GetFontWidth(EFonts::Amatic_SC, str.c_str());
-					int getFontHeight = G::Draw.GetFontHeight(EFonts::Amatic_SC);
+					int getFontWidth = G::Draw.GetFontWidth(EFonts::Greycliff_CF, str.c_str());
+					int getFontHeight = G::Draw.GetFontHeight(EFonts::Greycliff_CF);
 
 					// Use the HSV to RGB conversion for a rainbow effect
 					Color rainbowColor = HSVtoRGB(hue, 100, 100);
 
 					G::Draw.Rect(startX - getFontWidth - 12 + m->animate, startY, getFontWidth, getFontHeight, Color(0, 0, 0, 170));
 					G::Draw.Rect(startX - 4 + m->animate, startY, 10, getFontHeight, rainbowColor);
-					G::Draw.String(EFonts::Amatic_SC, startX - 12 + m->animate, startY, rainbowColor, TXT_LEFT, str.c_str());
+					G::Draw.String(EFonts::Greycliff_CF, startX - 12 + m->animate, startY, rainbowColor, TXT_LEFT, str.c_str());
 					startY += getFontHeight;
 				}
 				m->updateanimate();

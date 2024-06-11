@@ -12,6 +12,8 @@
 #include "Module/Modules/Combat/AutoShoot/AutoShoot.h"
 #include "Module/Modules/Combat/FastMelee/FastMelee.h"
 
+#include "Module/Modules/Misc/FontManager/FontManager.h"
+
 #include "../Engine/Prediction/EnginePrediction.h"
 namespace Client::Module
 {
@@ -35,10 +37,10 @@ namespace Client::Module
 		ThirdPersonModule::ThirdPerson *thirdPerson = new ThirdPersonModule::ThirdPerson();
 		RotationsModule::Rotations *rotations = new RotationsModule::Rotations();
 
+		FontManagerModule::FontManager *fontManager = new FontManagerModule::FontManager();
+
 		void Init();
 		void onRender2D();
-		void onOverrideView(CViewSetup *view);
-		void onPostOverrideView(CViewSetup *view);
 		void onCreateMove(CUserCmd *cmd, C_TerrorPlayer *pLocal);
 		void onFrameStageNotify(ClientFrameStage_t curStage);
 		void onKey();

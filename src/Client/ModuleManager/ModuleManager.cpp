@@ -24,6 +24,7 @@ namespace Client::Module
         delete clickGui;
         delete thirdPerson;
         delete rotations;
+        delete fontManager;
     }
 
     void ModuleManager::Init()
@@ -40,6 +41,8 @@ namespace Client::Module
         featurelist.push_back(clickGui);
         featurelist.push_back(thirdPerson);
         featurelist.push_back(rotations);
+
+        featurelist.push_back(fontManager);
     }
 
     void ModuleManager::onRender2D()
@@ -86,26 +89,6 @@ namespace Client::Module
                 G::Draw.Line(screen.x, screen.y, screen.x + 4, screen.y + 4, Color(255, 255, 255, 255));
             }
             // G::Draw.Circle(screen.x, screen.y, 2, 8, );
-        }
-    }
-
-    void ModuleManager::onOverrideView(CViewSetup *view)
-    {
-        for (Module *mod : featurelist)
-        {
-            if (!mod->getEnabled())
-                continue;
-            mod->onOverrideView(view);
-        }
-    }
-
-    void ModuleManager::onPostOverrideView(CViewSetup *view)
-    {
-        for (Module *mod : featurelist)
-        {
-            if (!mod->getEnabled())
-                continue;
-            mod->onPostOverrideView(view);
         }
     }
 

@@ -27,9 +27,7 @@ bool __fastcall ClientMode::CreateMove::Detour(void *ecx, void *edx, float input
 
 void __fastcall Hooks::ClientMode::OverrideView::Detour(void *ecx, void *edx, CViewSetup *pSetup)
 {
-	Client::client.moduleManager.onOverrideView(pSetup);
 	Table.Original<FN>(Index)(ecx, edx, pSetup);
-	Client::client.moduleManager.onPostOverrideView(pSetup);
 	// pSetup->fov = 125.0f;
 }
 

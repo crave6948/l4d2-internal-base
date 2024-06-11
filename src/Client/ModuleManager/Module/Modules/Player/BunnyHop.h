@@ -11,9 +11,11 @@ namespace Client::Module
 			{
 				this->Create("Bhop", true, VK_NUMPAD9, ModuleCategory::Player);
 				vManager.AddValue(BhopType);
+				vManager.AddValue(DisableLookDown);
 				vManager.AddValue(Debug);
 			};
 			V::ListValue *BhopType = new V::ListValue("BhopType", std::vector<std::string>{"Normal", "Legit", "Rage"}, std::string("Normal"));
+			V::BooleanValue *DisableLookDown = new V::BooleanValue("Disable When Look Down", false);
 			V::BooleanValue *Debug = new V::BooleanValue("Debug", false);
 
 			void onPrePrediction(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal) override;
@@ -24,6 +26,7 @@ namespace Client::Module
 		private:
 			bool needReset = false;
 			std::string lastMode = "Normal";
+			bool isDisabledLookDown();
 		};
 	};
 };

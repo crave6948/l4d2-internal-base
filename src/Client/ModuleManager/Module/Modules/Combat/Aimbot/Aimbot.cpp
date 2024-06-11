@@ -71,7 +71,11 @@ namespace Client::Module::AimbotModule
 			targetInfo = GetTarget(pLocal, pWeapon, cmd);
 			lastTime = I::GlobalVars->realtime;
 		}
-		if (targetInfo.target == nullptr) return;
+		if (targetInfo.target == nullptr) 
+		{
+			targetInfo = TargetInfo();
+			return;
+		}
 		Vector hitbox = targetInfo.target->As<C_BaseAnimating*>()->GetHitboxPositionByGroup(targetInfo.hitGroup);
 		Vector aimVector = U::Math.GetAngleToPosition(pLocal->Weapon_ShootPosition(), hitbox);
 		targetInfo.aimRotation = Helper::Rotation().toRotation(aimVector);
