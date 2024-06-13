@@ -82,6 +82,11 @@ namespace Client::Module
 			case EClientClass::Charger:
 			{
 				name = "Charger";
+                if (pBaseEntity->As<C_TerrorPlayer*>()->m_dragTarget() != nullptr)
+				{
+					color = Color(255, 0, 0, 255);
+					break;
+				}
 				color = Color(0, 255, 0, 255);
 				break;
 			}
