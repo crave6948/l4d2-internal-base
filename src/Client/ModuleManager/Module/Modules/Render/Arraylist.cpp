@@ -36,9 +36,9 @@ namespace Client::Module
 					// Use the HSV to RGB conversion for a rainbow effect
 					Color rainbowColor = HSVtoRGB(hue, 100, 100);
 
-					G::Draw.Rect(startX - getFontWidth - 12 + m->animate, startY, getFontWidth, getFontHeight, Color(0, 0, 0, 170));
+					G::Draw.Rect(startX - 4 - getFontWidth + m->animate, startY, getFontWidth, getFontHeight, Color(0, 0, 0, 170));
 					G::Draw.Rect(startX - 4 + m->animate, startY, 10, getFontHeight, rainbowColor);
-					G::Draw.String(EFonts::Greycliff_CF, startX - 12 + m->animate, startY, rainbowColor, TXT_LEFT, str.c_str());
+					G::Draw.String(EFonts::Greycliff_CF, startX - 4 + m->animate, startY, rainbowColor, TXT_LEFT, str.c_str());
 					startY += getFontHeight;
 				}
 				m->updateanimate();
