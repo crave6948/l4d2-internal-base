@@ -3,7 +3,7 @@ namespace Client::Module::FastMeleeModule
 {
     bool FastMelee::shouldRun(C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
     {
-        if (!pWeapon || !pLocal  || pLocal->m_isIncapacitated() || !pLocal->CanAttackFull())
+        if (!pWeapon || !pLocal || pLocal->m_isIncapacitated() || !pLocal->CanAttackFull())
             return false;
 
         if (pWeapon->GetWeaponID() != WEAPON_MELEE)
@@ -20,6 +20,11 @@ namespace Client::Module::FastMeleeModule
     }
     void FastMelee::onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal)
     {
+        if (!pLocal || pLocal->m_isIncapacitated())
+        {
+            reset();
+            return;
+        }
         if (nextSwap && stage > 0)
         {
             switch (stage)
@@ -66,10 +71,9 @@ namespace Client::Module::FastMeleeModule
             return;
         }
         // if (!(GetAsyncKeyState(VK_LBUTTON) & 0x8000)) {
-        if (!(buttonstate)) {
-            stage = 0;
-            nextSwap = false;
-            waiting = 0;
+        if (!(buttonstate))
+        {
+            reset();
             return;
         }
         if (!shouldRun(pWeapon, pLocal))
@@ -78,13 +82,14 @@ namespace Client::Module::FastMeleeModule
         stage = 1;
         waiting = waitingTicks->GetValue();
     }
-    void FastMelee::onRender2D()
+    bool FastMelee::isSwaping()
     {
+        return nextSwap && stage > 0;
     }
-    void FastMelee::onEnabled()
+    void FastMelee::reset()
     {
-    }
-    void FastMelee::onDisabled()
-    {
+        stage = 0;
+        nextSwap = false;
+        waiting = 0;
     }
 }
