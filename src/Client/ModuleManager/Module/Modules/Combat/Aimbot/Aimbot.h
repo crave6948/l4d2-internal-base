@@ -40,10 +40,12 @@ namespace Client::Module
                 this->Create("Aimbot", true, VK_NUMPAD7, ModuleCategory::Combat);
                 vManager.AddValue(range);
                 vManager.AddValue(fov);
+                vManager.AddValue(sortModes);
                 vManager.AddValue(silent);
                 vManager.AddValue(switchDelay);
                 vManager.AddValue(melee);
                 vManager.AddValue(meleeRange);
+                vManager.AddValue(meleeFovTrigger);
 
                 vManager.AddValue(infected);
                 vManager.AddValue(boomer);
@@ -60,10 +62,12 @@ namespace Client::Module
             };
             V::FloatValue *range = new V::FloatValue("Range", 1400.f, 100.f, 2000.f);
             V::NumberValue *fov = new V::NumberValue("Fov", 180, 0, 180);
+            V::ListValue *sortModes = new V::ListValue("Sort Mode", { "Distance", "Fov", "Both" }, "Both");
             V::BooleanValue *silent = new V::BooleanValue("Silent", true);
             V::NumberValue *switchDelay = new V::NumberValue("SwitchDelay", 400, 0, 1000, "ms");
             V::BooleanValue *melee = new V::BooleanValue("Melee", true);
             V::FloatValue *meleeRange = new V::FloatValue("MeleeRange", 150.f, 1.f, 400.f);
+            V::NumberValue *meleeFovTrigger = new V::NumberValue("MeleeFovTrigger", 10, 0, 180);
             // infected, special infected, witch, tank
             V::BooleanValue *infected = new V::BooleanValue("Infected", true);
             // specialInfected has boomer, spitter, charger, smoker, jockey, hunter

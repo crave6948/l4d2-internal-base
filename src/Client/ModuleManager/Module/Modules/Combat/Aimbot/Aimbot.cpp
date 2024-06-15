@@ -30,6 +30,9 @@ namespace Client::Module::AimbotModule
 			targetInfo = TargetInfo();
 			return;
 		}
+		auto [_, weaponId] = CheckWeapon(pWeapon);
+		if (!_)
+			return;
 		Vector hitbox = targetInfo.target->As<C_BaseAnimating *>()->GetHitboxPositionByGroup(targetInfo.hitGroup);
 		Vector aimVector = U::Math.GetAngleToPosition(pLocal->Weapon_ShootPosition(), hitbox);
 		targetInfo.aimRotation = Helper::Rotation().toRotation(aimVector);
@@ -40,7 +43,15 @@ namespace Client::Module::AimbotModule
 
 		if (cmd->buttons & IN_ATTACK)
 		{
-			if (!isInCrosshair)
+
+			if (isMelee(weaponId))
+			{
+				Vector serverSide = Helper::rotationManager.getServerRotationVector();
+				float fov = U::Math.GetFovBetween(serverSide, targetInfo.aimRotation.toVector());
+				if (fov > meleeFovTrigger->GetValue())
+					cmd->buttons &= ~IN_ATTACK;
+			}
+			else if (!isInCrosshair)
 			{
 				cmd->buttons &= ~IN_ATTACK;
 			}
@@ -239,7 +250,8 @@ namespace Client::Module::AimbotModule
 	{
 		auto [should, weaponId] = CheckWeapon(pWeapon);
 		float aimRange = this->range->GetValue();
-		if (isMelee(weaponId)) aimRange = meleeRange->GetValue();
+		if (isMelee(weaponId))
+			aimRange = meleeRange->GetValue();
 		IClientEntity *foundTarget = nullptr;
 		// collect all targets and find the best one (compare them by a score)
 		Vector clientViewAngles = Helper::rotationManager.getServerRotationVector();
@@ -250,7 +262,8 @@ namespace Client::Module::AimbotModule
 		{
 			float fovScore = (fov * 100) / this->fov->GetValue();
 			float distanceScore = (distance * 100) / aimRange;
-			float score = fovScore + distanceScore;
+			float score = (sortModes->GetSelected() == "Fov") ? fovScore : (sortModes->GetSelected() == "Distance") ? distanceScore
+																													: distanceScore + fovScore;
 			if (score < currentScore)
 			{
 				foundTarget = target;
