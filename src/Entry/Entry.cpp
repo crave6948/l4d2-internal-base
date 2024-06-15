@@ -1,6 +1,4 @@
 #include "Entry.h"
-#pragma once
-#include "../Client/None.h"
 
 void CGlobal_ModuleEntry::Load()
 {
@@ -8,7 +6,6 @@ void CGlobal_ModuleEntry::Load()
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 
 	U::Offsets.Init();
-	Client::client.initialize();
 	//Interfaces
 	{
 		I::BaseClient       = U::Interface.Get<IBaseClientDLL*>("client.dll", "VClient016");
@@ -31,6 +28,8 @@ void CGlobal_ModuleEntry::Load()
 
 		I::MaterialSystem   = U::Interface.Get<IMaterialSystem*>("materialsystem.dll", "VMaterialSystem080");
 
+		I::Cvar = U::Interface.Get<ICvar*>("vstdlib.dll", "VEngineCvar007");
+
 		{
 			I::ClientMode = **reinterpret_cast<void***>(U::Offsets.m_dwClientMode);
 			XASSERT(I::ClientMode == nullptr);
@@ -40,18 +39,24 @@ void CGlobal_ModuleEntry::Load()
 
 			I::MoveHelper = **reinterpret_cast<IMoveHelper***>(U::Offsets.m_dwMoveHelper);
 			XASSERT(I::MoveHelper == nullptr);
+
+			I::IInput = **reinterpret_cast<IInput_t***>(U::Offsets.m_dwIInput);
+			XASSERT(I::IInput == nullptr);
 		}
 	}
-
+	
+	Client::client.initialize();
 	G::Draw.Init();
 	G::Hooks.Init();
+
+    Client::client.startServer();
 }
 
 void CGlobal_ModuleEntry::Unload()
 {
+	Client::client.shutdown();
 	XASSERT(MH_Uninitialize() != MH_STATUS::MH_OK);
 	Hooks::WndProc::UnInitialize();
-	Client::client.shutdown();
 
 	std::this_thread::sleep_for(std::chrono::seconds(1));
 }

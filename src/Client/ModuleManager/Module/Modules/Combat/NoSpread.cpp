@@ -8,12 +8,12 @@ namespace Client::Module
 			if (!(cmd->buttons & IN_ATTACK) || (cmd->buttons & IN_USE))
 				return false;
 
-			if (pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || !pLocal->CanAttackFull() || pLocal->m_isIncapacitated())
+			if (!pLocal->CanAttackFull() || pLocal->m_isHangingFromLedge() || pLocal->m_isHangingFromTongue() || pLocal->m_isIncapacitated())
 				return false;
 
 			// You could also check if the current spread is -1.0f and not run nospread I guess.
 			// But since I wanted to filter out shotungs and just be sure that it isnt ran for other stuff I check the weaponid.
-			if (!pWeapon)
+			if (!pWeapon || !pWeapon->CanPrimaryAttack())
 				return false;
 			switch (pWeapon->GetWeaponID())
 			{

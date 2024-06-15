@@ -83,6 +83,23 @@ struct Ray_t
 		m_StartOffset.Init();
 		m_Start = vStart;
 	}
+
+	void Init( const Vector& start, const Vector& end, const Vector& mins, const Vector& maxs )
+	{
+		m_Delta = end - start;
+
+		m_pWorldAxisTransform = nullptr;
+		m_IsSwept = m_Delta.LenghtSqr() != 0;
+
+		m_Extents = maxs - mins;
+		m_Extents *= 0.5f;
+		m_IsRay = m_Extents.LenghtSqr() < 1e-6;
+
+		m_StartOffset = mins + maxs;
+		m_StartOffset *= 0.5f;
+		m_Start = start + m_StartOffset;
+		m_StartOffset *= -1.0f;
+	}
 };
 
 class CBaseTrace

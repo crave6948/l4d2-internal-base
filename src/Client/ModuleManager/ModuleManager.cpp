@@ -1,6 +1,10 @@
 #include "ModuleManager.h"
 #include "../Rotation/RotationManager.h"
 #include "../None.h"
+
+#include <algorithm> // For std::transform
+#include <cctype>    // For std::tolower
+#include <string>    // For std::string
 namespace Client::Module
 {
 
@@ -8,18 +12,37 @@ namespace Client::Module
     {
     }
 
+    ModuleManager::~ModuleManager()
+    {
+        delete bhop;
+        delete aimbot;
+        delete noSpread;
+        delete autoShoot;
+        delete fastMelee;
+        delete arraylist;
+        delete espHelper;
+        delete clickGui;
+        delete thirdPerson;
+        delete rotations;
+        delete fontManager;
+    }
+
     void ModuleManager::Init()
     {
-        featurelist.push_back(bhop_ptr);
+        featurelist.push_back(bhop);
 
-        featurelist.push_back(arraylist_ptr);
+        featurelist.push_back(aimbot);
+        featurelist.push_back(autoShoot);
+        featurelist.push_back(noSpread);
+        featurelist.push_back(fastMelee);
 
-        featurelist.push_back(aimbot_ptr);
-        featurelist.push_back(autoShoot_ptr);
-        featurelist.push_back(noSpread_ptr);
-        featurelist.push_back(fastMelee_ptr);
+        featurelist.push_back(arraylist);
+        featurelist.push_back(espHelper);
+        featurelist.push_back(clickGui);
+        featurelist.push_back(thirdPerson);
+        featurelist.push_back(rotations);
 
-        featurelist.push_back(espHelper_ptr);
+        featurelist.push_back(fontManager);
     }
 
     void ModuleManager::onRender2D()
@@ -39,10 +62,13 @@ namespace Client::Module
             return;
         }
         C_TerrorPlayer *pLocal = I::ClientEntityList->GetClientEntity(I::EngineClient->GetLocalPlayer())->As<C_TerrorPlayer *>();
-        if (!Helper::rotationManager.getCurrentRotation().IsZero())
+        if (!Helper::rotationManager.getServerRotationVector().IsZero())
         {
-            Vector vec = U::Math.AngleVectors(Helper::rotationManager.getCurrentRotation());
-            Vector vViewAngleOnWorld = pLocal->Weapon_ShootPosition() + (vec * 1400.0f);
+            Vector vec = U::Math.AngleVectors(Helper::rotationManager.getServerRotationVector());
+            CGameTrace trace;
+            CTraceFilterHitAll filter{pLocal};
+            G::Util.Trace(pLocal->Weapon_ShootPosition(), pLocal->Weapon_ShootPosition() + (vec * 1400.0f), (MASK_SHOT | CONTENTS_GRATE), &filter, &trace);
+            Vector vViewAngleOnWorld = trace.endpos;
             Vector screen;
             G::Util.W2S(vViewAngleOnWorld, screen);
 
@@ -72,19 +98,15 @@ namespace Client::Module
         {
             C_TerrorWeapon *pWeapon = pLocal->GetActiveWeapon()->As<C_TerrorWeapon *>();
             Vector oldViewangles = cmd->viewangles;
-            Utils::target.serverRotation = Helper::rotationManager.DisabledRotation || Helper::rotationManager.getCurrentRotation().IsZero() ? cmd->viewangles : Helper::rotationManager.getCurrentRotation();
             for (Module *mod : featurelist)
             {
                 if (!mod->getEnabled())
                     continue;
                 mod->onPreCreateMove(cmd, pWeapon, pLocal);
             }
-            Helper::rotationManager.onUpdate(pLocal);
-            if (!Helper::rotationManager.getCurrentRotation().IsZero() && !Helper::rotationManager.DisabledRotation)
-            {
-                cmd->viewangles = Helper::rotationManager.getCurrentRotation();
-                // I::EngineClient->SetViewAngles(cmd->viewangles);
-            }
+            Helper::rotationManager.onUpdate();
+            if (!Helper::rotationManager.getServerRotationVector().IsZero() && !Helper::rotationManager.DisabledRotation)
+                cmd->viewangles = Helper::rotationManager.getServerRotationVector();
             for (Module *mod : featurelist)
             {
                 if (!mod->getEnabled())
@@ -119,14 +141,26 @@ namespace Client::Module
             G::Util.FixMovement(oldViewangles, cmd);
         }
     }
+    void ModuleManager::onFrameStageNotify(ClientFrameStage_t curStage)
+    {
+        for (Module *mod : featurelist)
+        {
+            if (!mod->getEnabled())
+                continue;
+            mod->onFrameStageNotify(curStage);
+        }
+    }
     void ModuleManager::onKey()
     {
         // bool isToggled = keyState & 1;
         // bool isDown = keyState & 0x8000;
-        if (GetAsyncKeyState(VK_HOME) & 0x8000 && keyTimeout <= 0) {
+        if (GetAsyncKeyState(VK_HOME) & 0x8000 && keyTimeout <= 0)
+        {
             Client::client.fileManager.load();
             keyTimeout = 1;
-        }else {
+        }
+        else
+        {
             if (keyTimeout > 0)
                 keyTimeout--;
         }
@@ -146,11 +180,18 @@ namespace Client::Module
             }
         }
     }
+    inline std::string toLowercase(std::string str)
+    {
+        std::transform(str.begin(), str.end(), str.begin(),
+                       [](unsigned char c)
+                       { return std::tolower(c); });
+        return str;
+    }
     Module *ModuleManager::getFeature(std::string name)
     {
         for (Module *mod : featurelist)
         {
-            if (mod->getName().compare(name) == 0)
+            if (toLowercase(mod->getName()).compare(toLowercase(name)) == 0)
             {
                 return mod;
             }

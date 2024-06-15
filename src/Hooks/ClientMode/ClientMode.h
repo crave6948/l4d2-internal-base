@@ -16,13 +16,13 @@ namespace Hooks
 			bool __fastcall Detour(void* ecx, void* edx);
 		}
 
-		/*namespace OverrideView
+		namespace OverrideView
 		{
 			using FN = void(__fastcall*)(void*, void*, CViewSetup*);
 			constexpr unsigned int Index = 19u;
 
 			void __fastcall Detour(void* ecx, void* edx, CViewSetup* pSetup);
-		}*/
+		}
 
 		namespace CreateMove
 		{

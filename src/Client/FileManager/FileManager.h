@@ -19,8 +19,10 @@ namespace Client::File
         FileManager();
         void init();
         void load();
+        void loadFromJson(std::string jsonData);
         void save();
         void write_new_file(std::ofstream& file, nlohmann::json data, bool overwrite);
+        nlohmann::json getData();
         void running_auto_save();
     };
 }

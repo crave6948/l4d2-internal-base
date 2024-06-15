@@ -18,14 +18,12 @@ namespace Client::Module
 			bool shouldRun(C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal);
 			void onPreCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal) override;
 			void onPostCreateMove(CUserCmd *cmd, C_TerrorWeapon *pWeapon, C_TerrorPlayer *pLocal) override;
-			void onRender2D() override;
-			void onEnabled() override;
-			void onDisabled() override;
-
+			bool isSwaping();
 		private:
 			bool nextSwap = false, buttonstate = false;
 			// 0 = nothing, 1 = swap to primary or medkit grenade pills, 2 = swap to secondary
 			int stage = 0, waiting = 0;
+			void reset();
 		};
 	}
 };

@@ -1,5 +1,7 @@
 #include "BaseClient.h"
 
+#include "../../Client/None.h"
+
 using namespace Hooks;
 
 void __fastcall BaseClient::LevelInitPreEntity::Detour(void* ecx, void* edx, char const* pMapName)
@@ -32,6 +34,7 @@ void __fastcall BaseClient::FrameStageNotify::Detour(void* ecx, void* edx, Clien
 	case FRAME_NET_UPDATE_POSTDATAUPDATE_END:
 		break;
 	case FRAME_NET_UPDATE_END:
+	    Utils::g_EntityCache.update();
 		break;
 	case FRAME_RENDER_START:
 		break;
@@ -40,6 +43,7 @@ void __fastcall BaseClient::FrameStageNotify::Detour(void* ecx, void* edx, Clien
 	default:
 		break;
 	}
+	Client::client.moduleManager.onFrameStageNotify(curStage);
 	Table.Original<FN>(Index)(ecx, edx, curStage);
 }
 

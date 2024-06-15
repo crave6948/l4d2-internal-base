@@ -19,7 +19,9 @@ enum class EFonts {
 	MENU_VERDANA,
 	MENU_ARIAL,
 	MENU_TAB,
-	FONT_LAST
+	FONT_LAST,
+	SDK_SC_WEB,
+	Greycliff_CF
 };
 
 class CGlobal_DrawManager

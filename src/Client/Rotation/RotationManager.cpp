@@ -1,170 +1,143 @@
 #include "RotationManager.h"
-#include "random"
+
+#include "../None.h"
 namespace Helper
 {
-	inline Vector lastSetTarget = Vector();
-	inline float lastdist = -1;
-	inline double nextGassain(double min, double max)
-	{
-		std::default_random_engine generator;
-		std::uniform_real_distribution<double> distribution(min, max);
-		return distribution(generator);
-	}
-	inline float getAngleDifference(float a, float b)
-	{
-		return (
-				   std::fmod(
-					   std::fmod(a - b, 360.f) + 540.f, 360.f)) -
-			   180.f;
-	}
+    void RotationManager::moveTo(Rotation rotation, float targetDistance, bool isInCrosshair)
+    {
+        this->targetRotation = rotation;
+        this->targetDistance = targetDistance;
+        this->isInCrosshair = isInCrosshair;
+        this->keepTicks = TIME_TO_TICKS(1);
+        this->DisabledRotation = false;
+    }
+    void RotationManager::onUpdate()
+    {
+        if (DisabledRotation || serverRotation.isZero())
+        {
+            Vector viewAngles;
+            I::EngineClient->GetViewAngles(viewAngles);
+            Rotation rotation = Rotation(viewAngles.y, viewAngles.x);
+            serverRotation = rotation;
+            ticksToRotate = 0;
+        }
+        bool isReseting = false;
+        if (this->keepTicks <= 0)
+        {
+            isReseting = true;
+        }
+        else
+        {
+            this->keepTicks--;
+        }
+        if (ticksToRotate > 0)
+        {
+            ticksToRotate--;
+        }
+        else
+        {
+            if (isReseting)
+            {
+                if (DisabledRotation)
+                    return;
+                Vector viewAngles;
+                I::EngineClient->GetViewAngles(viewAngles);
+                Rotation rotation = Rotation(viewAngles.y, viewAngles.x);
+                serverRotation = calculateRotation(serverRotation, rotation, 0.f, false);
+                float rotationDifference = U::Math.GetFovBetween(serverRotation.toVector(), rotation.toVector());
+                if (rotationDifference <= 0.1f)
+                    DisabledRotation = true;
+            }
+            else
+            {
+                serverRotation = calculateRotation(serverRotation, targetRotation, targetDistance, isInCrosshair);
+            }
+            ticksToRotate = TIME_TO_TICKS(0.01);
+        }
+    }
+    Rotation RotationManager::calculateRotation(Rotation currentRotation, Rotation targetRotation, float targetdistance = 0.f, bool isInCrosshair = false)
+    {
+        Rotation angleDifference = getAngleDifference(currentRotation, targetRotation);
+        float rotationDifference = U::Math.GetFovBetween(currentRotation.toVector(), targetRotation.toVector());
+        const auto rotations = Client::client.moduleManager.rotations;
+        TurnSpeed turnSpeed;
+        float straightLineYaw;
+        float straightLinePitch;
+        if (rotations->rotationModes->GetSelected() == "Linear")
+        {
+            auto [minH, maxH] = rotations->linear_horizontalTurnSpeed->GetValue();
+            auto [minV, maxV] = rotations->linear_verticalTurnSpeed->GetValue();
+            float randomYaw = nextGassain(minH, maxH);
+            float randomPitch = nextGassain(minV, maxV);
 
-	inline bool is_lac_detected(float aimdist, float laimdist, float tdelta)
-	{
-		if (laimdist == -1)
-		{
-			return false;
-		}
-		bool detected = false;
-		// Check conditions for AIMBOT_FLAG_SNAP
-		if (aimdist < laimdist * 0.2 && tdelta > 10.0)
-			detected |= true;
+            straightLineYaw = abs(angleDifference.yaw / rotationDifference) * randomYaw;
+            straightLinePitch = abs(angleDifference.pitch / rotationDifference) * randomPitch;
+        }
+        if (rotations->rotationModes->GetSelected() == "Conditional")
+        {
+            // get turnspeed from computeTurnSpeed function
+            turnSpeed = this->computeTurnSpeed(
+                targetdistance,
+                abs(angleDifference.yaw),
+                abs(angleDifference.pitch),
+                isInCrosshair);
+            straightLineYaw = std::max(abs(angleDifference.yaw / rotationDifference) * turnSpeed.yawTurnSpeed, rotations->minimumTurnSpeedH->GetValue());
+            straightLinePitch = std::max(abs(angleDifference.pitch / rotationDifference) * turnSpeed.pitchTurnSpeed, rotations->minimumTurnSpeedV->GetValue());
+        }
+        if (rotations->rotationModes->GetSelected() == "Sigmoid")
+        {
+            // random horizontal and vertical turnspeeds
+            auto [minH, maxH] = rotations->sigmoid_horizontalTurnSpeed->GetValue();
+            auto [minV, maxV] = rotations->sigmoid_verticalTurnSpeed->GetValue();
+            float randomYaw = nextGassain(minH, maxH);
+            float randomPitch = nextGassain(minV, maxV);
 
-		// Check conditions for AIMBOT_FLAG_SNAP2
-		if (aimdist < laimdist * 0.1 && tdelta > 5.0)
-			detected |= true;
-		return detected;
-	}
+            turnSpeed = TurnSpeed(computeFactor(rotationDifference, randomYaw), computeFactor(rotationDifference, randomPitch));
+            straightLineYaw = abs(angleDifference.yaw / rotationDifference) * turnSpeed.yawTurnSpeed;
+            straightLinePitch = abs(angleDifference.pitch / rotationDifference) * turnSpeed.pitchTurnSpeed;
+        }
+        Rotation rotation = clampRotation(Rotation(currentRotation.yaw + U::Math.coerceIn(angleDifference.yaw, -straightLineYaw, straightLineYaw), currentRotation.pitch + U::Math.coerceIn(angleDifference.pitch, -straightLinePitch, straightLinePitch)));
+        return rotation;
+    }
+    void RotationManager::ForceBack()
+    {
+        this->keepTicks = 0;
+    }
+    Rotation RotationManager::clampRotation(Rotation rotation)
+    {
+        // pitch
+        rotation.pitch = U::Math.Max(-89.0f, U::Math.Min(89.0f, U::Math.NormalizeAngle(rotation.pitch)));
+        // yaw
+        rotation.yaw = U::Math.NormalizeAngle(rotation.yaw);
+        return rotation;
+    }
+    Rotation RotationManager::getAngleDifference(Rotation a, Rotation b)
+    {
+        float yaw = b.yaw - a.yaw;
+        float pitch = b.pitch - a.pitch;
+        return clampRotation(Rotation(yaw, pitch));
+    }
+    float RotationManager::computeFactor(float rotationDifference, float turnSpeed)
+    {
+        const auto rotations = Client::client.moduleManager.rotations;
+        // Scale the rotation difference to fit within a reasonable range
+        const float scaledDifference = rotationDifference / 120.f;
 
-	bool RotationManager::hasKeepRotationReachedLimit()
-	{
-		return I::GlobalVars->realtime - lastMS >= keepRotation / 1000;
-	}
+        // Compute the sigmoid function
+        const float sigmoid = 1 / (1 + exp((-rotations->steepness->GetValue() * (scaledDifference - rotations->midpoint->GetValue()))));
 
-	bool RotationManager::ShouldDisabledRotation()
-	{
-		if (!hasKeepRotationReachedLimit())
-			return false;
-		return DisabledRotation || U::Math.GetFovBetween(current, target) <= 1;
-	}
-	bool RotationManager::calcRotation(float lastdist)
-	{
-		if (DisabledRotation)
-		{
-			lastdist = -1;
-			return true;
-		}
+        // Interpolate sigmoid value to fit within the range of turnSpeed
+        float interpolatedSpeed = sigmoid * turnSpeed;
 
-		Vector diffRotation = target - current;
-		U::Math.ClampAngles(diffRotation);
-		float rotationDiff = U::Math.GetFovBetween(current, target);
-
-		float supposedTurnSpeed = nextGassain(80.0, 135.0);
-		float realisticTurnSpeed = calculateRealisticTurnSpeed(rotationDiff, supposedTurnSpeed);
-
-		if (rotationDiff > 30)
-		{
-			realisticTurnSpeed = calculateTurnSpeedWithCurve(rotationDiff);
-		}
-
-		realisticTurnSpeed = round(realisticTurnSpeed * 100.0f) / 100.0f;
-		clampRotation(diffRotation, realisticTurnSpeed);
-
-		Vector pre = current;
-		U::Math.ClampAngles(diffRotation);
-		current += diffRotation;
-		U::Math.ClampAngles(current);
-
-		float aimdist = U::Math.GetFovBetween(pre, current);
-
-		if (is_lac_detected(aimdist, lastdist, rotationDiff))
-		{
-			return false;
-		}
-
-		lastdist = aimdist;
-		return true;
-	}
-
-	float RotationManager::calculateRealisticTurnSpeed(float rotationDiff, float supposedTurnSpeed)
-	{
-		float a1 = 180.0 - (rotationDiff * 18.0f);
-		return rotationDiff * (rotationDiff <= 3 ? a1 / 180.0f : supposedTurnSpeed / 180.0f);
-	}
-
-	float RotationManager::calculateTurnSpeedWithCurve(float rotationDiff)
-	{
-		float a1 = (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f);
-		float a2 = (1.f - (-cos(rotationDiff / 180.f * M_PI) * 0.5f + 0.5f));
-		return pow(a1, 2.0f) * nextGassain(115.0, 135.0) + pow(a2, 2.0f) * nextGassain(10.0, 15.0);
-	}
-
-	void RotationManager::clampRotation(Vector &diffRotation, float realisticTurnSpeed)
-	{
-		diffRotation.x = std::clamp(diffRotation.x, -realisticTurnSpeed, realisticTurnSpeed);
-		diffRotation.y = std::clamp(diffRotation.y, -realisticTurnSpeed, realisticTurnSpeed);
-	}
-
-	void RotationManager::ForceBack()
-	{
-		keepRotation = 500;
-	}
-	void RotationManager::onUpdate(C_TerrorPlayer *pLocal)
-	{
-		if (!I::EngineClient->IsInGame())
-		{
-			current = Vector();
-			target = Vector();
-			keepRotation = 0;
-			lastdist = -1;
-			DisabledRotation = true;
-			return;
-		}
-
-		Vector viewAngles;
-		I::EngineClient->GetViewAngles(viewAngles);
-		if (current.IsZero())
-		{
-			current = viewAngles;
-			return;
-		}
-		if (hasKeepRotationReachedLimit())
-		{
-			target = viewAngles;
-		}
-		bool passed = false;
-		while (passed == false)
-		{
-			passed = calcRotation(lastdist);
-		}
-		DisabledRotation = ShouldDisabledRotation();
-		if (DisabledRotation)
-		{
-			current = viewAngles;
-			return;
-		}
-	}
-
-	void RotationManager::setTargetRotation(Vector rotation, float keepLength)
-	{
-		if (lastSetTarget.IsZero())
-		{
-			lastSetTarget = rotation;
-		}
-		else
-		{
-			if (U::Math.GetFovBetween(lastSetTarget, rotation) > 10)
-			{
-				lastdist = -1;
-			}
-		}
-		target = rotation;
-		lastMS = I::GlobalVars->realtime;
-		keepRotation = keepLength;
-		DisabledRotation = false;
-	}
-
-	Vector RotationManager::getCurrentRotation()
-	{
-		return current;
-	}
+        return U::Math.coerceIn(interpolatedSpeed, 0.f, 180.f);
+    }
+    TurnSpeed RotationManager::computeTurnSpeed(float distance, float diffH, float diffV, bool crosshair)
+    {
+        const auto rotations = Client::client.moduleManager.rotations;
+        float turnSpeedH = rotations->coefDistance->GetValue() * distance + rotations->coefDiffH->GetValue() * diffH +
+                           (crosshair ? rotations->coefCrosshairH->GetValue() : 0.f) + rotations->interceptH->GetValue();
+        float turnSpeedV = rotations->coefDistance->GetValue() * distance + rotations->coefDiffV->GetValue() * std::max(0.f, diffV - diffH) +
+                           (crosshair ? rotations->coefCrosshairV->GetValue() : 0.f) + rotations->interceptV->GetValue();
+        return TurnSpeed(std::max(abs(turnSpeedH), rotations->minimumTurnSpeedH->GetValue()), std::max(abs(turnSpeedV), rotations->minimumTurnSpeedV->GetValue()));
+    }
 }

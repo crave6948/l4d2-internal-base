@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../Client/None.h"
 #include "../Hooks/Hooks.h"
 
 class CGlobal_ModuleEntry
