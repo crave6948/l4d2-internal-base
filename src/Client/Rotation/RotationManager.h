@@ -29,6 +29,7 @@ namespace Helper
         float targetDistance = 0.0f;
         bool isInCrosshair = false;
         int ticksToRotate = 0;
+        int forceFocus = 0;
         float nextGassain(float min, float max)
         {
             std::default_random_engine generator;
@@ -40,23 +41,7 @@ namespace Helper
       
         // returns the turn speed for each axis
         TurnSpeed computeTurnSpeed(float distance, float diffH, float diffV, bool crosshair);
-        // float coefDistance = -0.14f; // aim accuracy
-        // float coefDiffH = 0.3f; // horizontal starting aim speed
-        // float coefDiffV = 0.3f; // vertical starting aim speed
-        // float coefCrosshairH = -13.8f; // horizontal aim jitter while tracking enemy
-        // float coefCrosshairV = -14.4f; // vertical aim jitter while tracking enemy
-        // float interceptH = 12.f; // horizontal rotation speed while attacking
-        // float interceptV = 4.7f; // vertical rotation speed while attacking
-        // float minimumTurnSpeedH = 0; // minimum horizontal rotation speed
-        // float minimumTurnSpeedV = 0; // minimum vertical rotation speed
         float computeFactor(float rotationDifference, float turnSpeed);
-        // float min_horizontalTurnSpeed = 0.2;
-        // float max_horizontalTurnSpeed = 25;
-        // float min_verticalTurnSpeed = 0.2;
-        // float max_verticalTurnSpeed = 45;
-
-        // float steepness = 10.5f;
-        // float midpoint = 0.3f;
     };
     inline RotationManager rotationManager = RotationManager();
 }

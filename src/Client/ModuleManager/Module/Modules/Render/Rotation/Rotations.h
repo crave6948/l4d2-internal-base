@@ -11,6 +11,7 @@ namespace Client::Module
             Rotations()
             {
                 this->Create("Rotations", false, 0, ModuleCategory::Visuals);
+                vManager.AddValue(ForceFocusTicks);
                 vManager.AddValue(rotationModes);
                 // linear
                 vManager.AddValue(linear_horizontalTurnSpeed);
@@ -31,6 +32,7 @@ namespace Client::Module
                 vManager.AddValue(minimumTurnSpeedH); // minimum horizontal rotation speed
                 vManager.AddValue(minimumTurnSpeedV); // minimum vertical rotation speed
             };
+            V::NumberValue *ForceFocusTicks = new V::NumberValue("ForceFocusTicks", 5, 1, 20, "Ticks");
             V::ListValue *rotationModes = new V::ListValue("Rotation Modes", std::vector<std::string>{"Linear", "Sigmoid", "Conditional"}, std::string("Sigmoid"));
             // Linear Values
             V::FloatRangeValue *linear_horizontalTurnSpeed = new V::FloatRangeValue("Linear-HorizontalTurnSpeed", V::Range(180.f, 180.f),

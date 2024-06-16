@@ -50,7 +50,11 @@ namespace Helper
             }
             else
             {
+                const auto rotations = Client::client.moduleManager.rotations;
                 serverRotation = calculateRotation(serverRotation, targetRotation, targetDistance, isInCrosshair);
+                float rotationDifference = U::Math.GetFovBetween(serverRotation.toVector(), targetRotation.toVector());
+                if (rotationDifference <= 0.1f && isInCrosshair)
+                    forceFocus = rotations->ForceFocusTicks->GetValue();
             }
             ticksToRotate = TIME_TO_TICKS(0.01);
         }
