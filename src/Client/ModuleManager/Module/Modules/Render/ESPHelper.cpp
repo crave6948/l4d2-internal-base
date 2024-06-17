@@ -33,16 +33,29 @@ namespace Client::Module
 			}
 			
 			Vector screen;
-			int size = 5;
+			int size = 6;
 			G::Util.W2S(EntityPosition, screen);
-			G::Draw.Line(screen.x - size / 2, screen.y - size / 2, screen.x - size, screen.y - size, boxColor);
-			G::Draw.Line(screen.x + size / 2, screen.y - size / 2, screen.x + size, screen.y - size, boxColor);
-			G::Draw.Line(screen.x + size / 2, screen.y + size / 2, screen.x + size, screen.y + size, boxColor);
-			G::Draw.Line(screen.x - size / 2, screen.y + size / 2, screen.x - size, screen.y + size, boxColor);
+			// G::Draw.Line(screen.x - size / 2, screen.y - size / 2, screen.x - size, screen.y - size, boxColor);
+			// G::Draw.Line(screen.x + size / 2, screen.y - size / 2, screen.x + size, screen.y - size, boxColor);
+			// G::Draw.Line(screen.x + size / 2, screen.y + size / 2, screen.x + size, screen.y + size, boxColor);
+			// G::Draw.Line(screen.x - size / 2, screen.y + size / 2, screen.x - size, screen.y + size, boxColor);
 			// G::Draw.Line(screen.x - size, screen.y - size, screen.x + size, screen.y - size, boxColor);
 			// G::Draw.Line(screen.x + size, screen.y - size, screen.x + size, screen.y + size, boxColor);
 			// G::Draw.Line(screen.x + size, screen.y + size, screen.x - size, screen.y + size, boxColor);
 			// G::Draw.Line(screen.x - size, screen.y + size, screen.x - size, screen.y - size, boxColor);
+			const int half = size / 2;
+			// top left corner
+			G::Draw.Line(screen.x - size, screen.y - size, screen.x - half, screen.y - size, boxColor);
+			G::Draw.Line(screen.x - size, screen.y - size, screen.x - size, screen.y - half, boxColor);
+			// top right corner
+			G::Draw.Line(screen.x + size, screen.y - size, screen.x + half, screen.y - size, boxColor);
+            G::Draw.Line(screen.x + size, screen.y - size, screen.x + size, screen.y - half, boxColor);
+            // bottom left corner
+            G::Draw.Line(screen.x - size, screen.y + size, screen.x - half, screen.y + size, boxColor);
+            G::Draw.Line(screen.x - size, screen.y + size, screen.x - size, screen.y + half, boxColor);
+            // bottom right corner
+            G::Draw.Line(screen.x + size, screen.y + size, screen.x + half, screen.y + size, boxColor);
+			G::Draw.Line(screen.x + size, screen.y + size, screen.x + size, screen.y + half, boxColor);
 			std::string name = "Zombie";
 			Color color = Color(255, 255, 255, 255);
 			switch (pBaseEntity->GetClientClass()->m_ClassID)

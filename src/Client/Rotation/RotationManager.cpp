@@ -48,7 +48,7 @@ namespace Helper
                 if (rotationDifference <= 0.1f)
                     DisabledRotation = true;
             }
-            else
+            else if (forceFocus <= 0)
             {
                 const auto rotations = Client::client.moduleManager.rotations;
                 serverRotation = calculateRotation(serverRotation, targetRotation, targetDistance, isInCrosshair);
