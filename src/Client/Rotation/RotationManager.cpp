@@ -56,6 +56,7 @@ namespace Helper
                 if (rotationDifference <= 0.1f && isInCrosshair)
                     forceFocus = rotations->ForceFocusTicks->GetValue();
             }
+            if (forceFocus > 0) forceFocus--;
             ticksToRotate = TIME_TO_TICKS(0.01);
         }
     }
